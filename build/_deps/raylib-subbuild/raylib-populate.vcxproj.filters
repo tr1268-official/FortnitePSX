@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\22d927d2a1c11da2544c13ac38e118e1\raylib-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\22d927d2a1c11da2544c13ac38e118e1\raylib-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\22d927d2a1c11da2544c13ac38e118e1\raylib-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\22d927d2a1c11da2544c13ac38e118e1\raylib-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\22d927d2a1c11da2544c13ac38e118e1\raylib-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\22d927d2a1c11da2544c13ac38e118e1\raylib-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\22d927d2a1c11da2544c13ac38e118e1\raylib-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\22d927d2a1c11da2544c13ac38e118e1\raylib-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\62a43e72c11c19aceed47f5ccadd8ef4\raylib-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\f54ae95165374eba1fbc9639ce2b9f89\raylib-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\build\_deps\raylib-subbuild\CMakeFiles\raylib-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5218CBF9-7D99-318A-AA66-426A7F20B1AA}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

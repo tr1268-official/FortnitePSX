@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Hud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\IconCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Items.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\MeshBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\VFX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Hud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\IconCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Items.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\MeshBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\VFX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{21DDCE84-0B67-3ACB-BB92-2C1034D411A0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8E2ACFF2-FBA4-3142-986D-05284BC34418}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

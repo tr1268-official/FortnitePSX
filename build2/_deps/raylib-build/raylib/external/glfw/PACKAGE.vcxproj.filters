@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\timje\Downloads\FortnitePSX\FortnitePSX\build2\CMakeFiles\82fa3963cbadba859575ff97da3c9659\PACKAGE_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{57BD01C9-54C0-30F2-AFBB-3F06681CB9EF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

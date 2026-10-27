@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/raylib-populate"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/5b4efafc7ea527c3f51b4bb0eae7f63c/raylib-populate.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/df29cee19af9b827506b0d0323b630b4/raylib-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/7dffe58bc430cfe866c62e30326b9f05/raylib-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/7dffe58bc430cfe866c62e30326b9f05/raylib-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/7dffe58bc430cfe866c62e30326b9f05/raylib-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/7dffe58bc430cfe866c62e30326b9f05/raylib-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/7dffe58bc430cfe866c62e30326b9f05/raylib-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/7dffe58bc430cfe866c62e30326b9f05/raylib-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/7dffe58bc430cfe866c62e30326b9f05/raylib-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/7dffe58bc430cfe866c62e30326b9f05/raylib-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"raylib-populate"
+		],
+		"name" : "raylib-populate"
+	}
+}

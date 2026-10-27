@@ -1,0 +1,2062 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineSystem.cmake:218 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Windows - 10.0.26200 - AMD64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:501 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:538 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCXXCompilerId.cpp.in"
+    candidate_directories:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/"
+    found: "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeCXXCompilerId.cpp.in"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild version 18.9.1+a81b43525 for .NET Framework
+      Build started 26/10/2026 15:38:27.
+      
+      Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\4.4.0\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
+      PrepareForBuild:
+        Creating directory "Debug\\".
+        Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+        Creating directory "Debug\\CompilerIdCXX.tlog\\".
+      InitializeBuildStatus:
+        Creating "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+        Touching "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
+      VcpkgTripletSelection:
+        Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
+        Using normalized configuration "Release"
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc145.pdb" /external:W0 /Gd /TP /FC /errorReport:queue CMakeCXXCompilerId.cpp
+        CMakeCXXCompilerId.cpp
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
+        CompilerIdCXX.vcxproj -> C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\4.4.0\\CompilerIdCXX\\CompilerIdCXX.exe
+      AppLocalFromInstalled:
+        "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\vcpkg.exe" z-applocal --target-binary="C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\4.4.0\\CompilerIdCXX\\CompilerIdCXX.exe" --installed-bin-dir="C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\bin" --tlog-file="Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.write.1u.tlog" --copied-files-log="Debug\\vcpkg.applocal.log"
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_CXX_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Deleting file "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
+        Touching "Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate".
+      Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\4.4.0\\CompilerIdCXX\\CompilerIdCXX.vcxproj" (default targets).
+      
+      Build succeeded.
+          0 Warning(s)
+          0 Error(s)
+      
+      Time Elapsed 00:00:00.53
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+      
+      The CXX compiler identification is MSVC, found in:
+        C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/4.4.0/CompilerIdCXX/CompilerIdCXX.exe
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:64 (__resolve_tool_path)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:102 (__resolve_linker_path)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "link"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/PyManager/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/timje/.grok/bin/"
+      - "C:/Users/timje/AppData/Local/hermes/node/"
+      - "C:/Users/timje/AppData/Local/hermes/bin/"
+      - "C:/Users/timje/.pi/agent/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/"
+      - "C:/Users/timje/.local/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/timje/.cargo/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/timje/AppData/Local/spicetify/"
+      - "C:/Users/timje/.dotnet/tools/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/"
+      - "C:/Users/timje/AppData/Roaming/npm/"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/link.com"
+    found: "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/link.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:64 (__resolve_tool_path)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:103 (__resolve_linker_path)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lld-link"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/PyManager/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/timje/.grok/bin/"
+      - "C:/Users/timje/AppData/Local/hermes/node/"
+      - "C:/Users/timje/AppData/Local/hermes/bin/"
+      - "C:/Users/timje/.pi/agent/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/"
+      - "C:/Users/timje/.local/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/timje/.cargo/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/timje/AppData/Local/spicetify/"
+      - "C:/Users/timje/.dotnet/tools/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/"
+      - "C:/Users/timje/AppData/Roaming/npm/"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/lld-link.com"
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/lld-link.exe"
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/lld-link"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/lld-link.com"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/lld-link.exe"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/lld-link"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/lld-link.com"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/lld-link.exe"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/lld-link"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link.com"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link.exe"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link"
+      - "C:/Windows/System32/lld-link.com"
+      - "C:/Windows/System32/lld-link.exe"
+      - "C:/Windows/System32/lld-link"
+      - "C:/Windows/lld-link.com"
+      - "C:/Windows/lld-link.exe"
+      - "C:/Windows/lld-link"
+      - "C:/Windows/System32/wbem/lld-link.com"
+      - "C:/Windows/System32/wbem/lld-link.exe"
+      - "C:/Windows/System32/wbem/lld-link"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link"
+      - "C:/Windows/System32/OpenSSH/lld-link.com"
+      - "C:/Windows/System32/OpenSSH/lld-link.exe"
+      - "C:/Windows/System32/OpenSSH/lld-link"
+      - "C:/Program Files/dotnet/lld-link.com"
+      - "C:/Program Files/dotnet/lld-link.exe"
+      - "C:/Program Files/dotnet/lld-link"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/lld-link.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/lld-link.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/lld-link"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link"
+      - "C:/Program Files/nodejs/lld-link.com"
+      - "C:/Program Files/nodejs/lld-link.exe"
+      - "C:/Program Files/nodejs/lld-link"
+      - "C:/Program Files/Git/cmd/lld-link.com"
+      - "C:/Program Files/Git/cmd/lld-link.exe"
+      - "C:/Program Files/Git/cmd/lld-link"
+      - "C:/Program Files/CMake/bin/lld-link.com"
+      - "C:/Program Files/CMake/bin/lld-link.exe"
+      - "C:/Program Files/CMake/bin/lld-link"
+      - "C:/Program Files/PyManager/lld-link.com"
+      - "C:/Program Files/PyManager/lld-link.exe"
+      - "C:/Program Files/PyManager/lld-link"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link"
+      - "C:/Users/timje/.grok/bin/lld-link.com"
+      - "C:/Users/timje/.grok/bin/lld-link.exe"
+      - "C:/Users/timje/.grok/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/hermes/node/lld-link.com"
+      - "C:/Users/timje/AppData/Local/hermes/node/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/hermes/node/lld-link"
+      - "C:/Users/timje/AppData/Local/hermes/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/hermes/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/hermes/bin/lld-link"
+      - "C:/Users/timje/.pi/agent/bin/lld-link.com"
+      - "C:/Users/timje/.pi/agent/bin/lld-link.exe"
+      - "C:/Users/timje/.pi/agent/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/lld-link"
+      - "C:/Users/timje/.local/bin/lld-link.com"
+      - "C:/Users/timje/.local/bin/lld-link.exe"
+      - "C:/Users/timje/.local/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/lld-link"
+      - "C:/Users/timje/.cargo/bin/lld-link.com"
+      - "C:/Users/timje/.cargo/bin/lld-link.exe"
+      - "C:/Users/timje/.cargo/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/lld-link"
+      - "C:/Users/timje/AppData/Local/spicetify/lld-link.com"
+      - "C:/Users/timje/AppData/Local/spicetify/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/spicetify/lld-link"
+      - "C:/Users/timje/.dotnet/tools/lld-link.com"
+      - "C:/Users/timje/.dotnet/tools/lld-link.exe"
+      - "C:/Users/timje/.dotnet/tools/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/lld-link"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/lld-link.com"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/lld-link.exe"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/lld-link"
+      - "C:/Users/timje/AppData/Roaming/npm/lld-link.com"
+      - "C:/Users/timje/AppData/Roaming/npm/lld-link.exe"
+      - "C:/Users/timje/AppData/Roaming/npm/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/lld-link"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "link"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/PyManager/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/timje/.grok/bin/"
+      - "C:/Users/timje/AppData/Local/hermes/node/"
+      - "C:/Users/timje/AppData/Local/hermes/bin/"
+      - "C:/Users/timje/.pi/agent/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/"
+      - "C:/Users/timje/.local/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/timje/.cargo/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/timje/AppData/Local/spicetify/"
+      - "C:/Users/timje/.dotnet/tools/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/"
+      - "C:/Users/timje/AppData/Roaming/npm/"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/link.com"
+    found: "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/link.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_MT"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "mt"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/PyManager/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/timje/.grok/bin/"
+      - "C:/Users/timje/AppData/Local/hermes/node/"
+      - "C:/Users/timje/AppData/Local/hermes/bin/"
+      - "C:/Users/timje/.pi/agent/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/"
+      - "C:/Users/timje/.local/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/timje/.cargo/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/timje/AppData/Local/spicetify/"
+      - "C:/Users/timje/.dotnet/tools/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/"
+      - "C:/Users/timje/AppData/Roaming/npm/"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/mt.com"
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/mt.exe"
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/mt"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/mt.com"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/mt.exe"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/mt"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/mt.com"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/mt.exe"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/mt"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/mt.com"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/mt.exe"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/mt"
+      - "C:/Windows/System32/mt.com"
+      - "C:/Windows/System32/mt.exe"
+      - "C:/Windows/System32/mt"
+      - "C:/Windows/mt.com"
+      - "C:/Windows/mt.exe"
+      - "C:/Windows/mt"
+      - "C:/Windows/System32/wbem/mt.com"
+      - "C:/Windows/System32/wbem/mt.exe"
+      - "C:/Windows/System32/wbem/mt"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt"
+      - "C:/Windows/System32/OpenSSH/mt.com"
+      - "C:/Windows/System32/OpenSSH/mt.exe"
+      - "C:/Windows/System32/OpenSSH/mt"
+      - "C:/Program Files/dotnet/mt.com"
+      - "C:/Program Files/dotnet/mt.exe"
+      - "C:/Program Files/dotnet/mt"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/mt.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/mt.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/mt"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/mt.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/mt.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/mt"
+      - "C:/Program Files/nodejs/mt.com"
+      - "C:/Program Files/nodejs/mt.exe"
+      - "C:/Program Files/nodejs/mt"
+      - "C:/Program Files/Git/cmd/mt.com"
+      - "C:/Program Files/Git/cmd/mt.exe"
+      - "C:/Program Files/Git/cmd/mt"
+      - "C:/Program Files/CMake/bin/mt.com"
+      - "C:/Program Files/CMake/bin/mt.exe"
+      - "C:/Program Files/CMake/bin/mt"
+      - "C:/Program Files/PyManager/mt.com"
+      - "C:/Program Files/PyManager/mt.exe"
+      - "C:/Program Files/PyManager/mt"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/mt.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/mt.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/mt"
+      - "C:/Users/timje/.grok/bin/mt.com"
+      - "C:/Users/timje/.grok/bin/mt.exe"
+      - "C:/Users/timje/.grok/bin/mt"
+      - "C:/Users/timje/AppData/Local/hermes/node/mt.com"
+      - "C:/Users/timje/AppData/Local/hermes/node/mt.exe"
+      - "C:/Users/timje/AppData/Local/hermes/node/mt"
+      - "C:/Users/timje/AppData/Local/hermes/bin/mt.com"
+      - "C:/Users/timje/AppData/Local/hermes/bin/mt.exe"
+      - "C:/Users/timje/AppData/Local/hermes/bin/mt"
+      - "C:/Users/timje/.pi/agent/bin/mt.com"
+      - "C:/Users/timje/.pi/agent/bin/mt.exe"
+      - "C:/Users/timje/.pi/agent/bin/mt"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/mt.com"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/mt.exe"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/mt"
+      - "C:/Users/timje/.local/bin/mt.com"
+      - "C:/Users/timje/.local/bin/mt.exe"
+      - "C:/Users/timje/.local/bin/mt"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/mt.com"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/mt.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/mt"
+      - "C:/Users/timje/.cargo/bin/mt.com"
+      - "C:/Users/timje/.cargo/bin/mt.exe"
+      - "C:/Users/timje/.cargo/bin/mt"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/mt.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/mt.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/mt"
+      - "C:/Users/timje/AppData/Local/spicetify/mt.com"
+      - "C:/Users/timje/AppData/Local/spicetify/mt.exe"
+      - "C:/Users/timje/AppData/Local/spicetify/mt"
+      - "C:/Users/timje/.dotnet/tools/mt.com"
+      - "C:/Users/timje/.dotnet/tools/mt.exe"
+      - "C:/Users/timje/.dotnet/tools/mt"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/mt.com"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/mt.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/mt"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/mt.com"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/mt.exe"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/mt"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/mt.com"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/mt.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/mt"
+      - "C:/Users/timje/AppData/Roaming/npm/mt.com"
+      - "C:/Users/timje/AppData/Roaming/npm/mt.exe"
+      - "C:/Users/timje/AppData/Roaming/npm/mt"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/mt.com"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/mt.exe"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/mt"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/mt.com"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/mt.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/mt"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/mt.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/mt.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/mt"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/mt.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/mt.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/mt"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/mt.com"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/mt.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/mt"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/mt.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/mt.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/mt"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/mt.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/mt.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/mt"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/mt.com"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/mt.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/mt"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:247 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_AR"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lib"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/PyManager/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/timje/.grok/bin/"
+      - "C:/Users/timje/AppData/Local/hermes/node/"
+      - "C:/Users/timje/AppData/Local/hermes/bin/"
+      - "C:/Users/timje/.pi/agent/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/"
+      - "C:/Users/timje/.local/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/timje/.cargo/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/timje/AppData/Local/spicetify/"
+      - "C:/Users/timje/.dotnet/tools/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/"
+      - "C:/Users/timje/AppData/Roaming/npm/"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/lib.com"
+    found: "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/lib.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineRCCompiler.cmake:40 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/Platform/Windows-MSVC.cmake:592 (enable_language)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/Platform/Windows-MSVC.cmake:565 (__windows_compiler_msvc_enable_rc)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/Platform/Windows-MSVC-CXX.cmake:6 (__windows_compiler_msvc)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeCXXInformation.cmake:48 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_RC_COMPILER"
+    description: "RC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "rc"
+    candidate_directories:
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/PyManager/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/timje/.grok/bin/"
+      - "C:/Users/timje/AppData/Local/hermes/node/"
+      - "C:/Users/timje/AppData/Local/hermes/bin/"
+      - "C:/Users/timje/.pi/agent/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/"
+      - "C:/Users/timje/.local/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/timje/.cargo/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/timje/AppData/Local/spicetify/"
+      - "C:/Users/timje/.dotnet/tools/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/"
+      - "C:/Users/timje/AppData/Roaming/npm/"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/"
+      - "C:/Program Files/bin/"
+      - "C:/Program Files/sbin/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/bin/"
+      - "C:/Program Files (x86)/sbin/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/CMake/sbin/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files (x86)/FortnitePSX/bin/"
+      - "C:/Program Files (x86)/FortnitePSX/sbin/"
+      - "C:/Program Files (x86)/FortnitePSX/"
+    searched_directories:
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/rc.com"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/rc.exe"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/rc"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/rc.com"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/rc.exe"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/rc"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/rc.com"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/rc.exe"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/rc"
+      - "C:/Windows/System32/rc.com"
+      - "C:/Windows/System32/rc.exe"
+      - "C:/Windows/System32/rc"
+      - "C:/Windows/rc.com"
+      - "C:/Windows/rc.exe"
+      - "C:/Windows/rc"
+      - "C:/Windows/System32/wbem/rc.com"
+      - "C:/Windows/System32/wbem/rc.exe"
+      - "C:/Windows/System32/wbem/rc"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc"
+      - "C:/Windows/System32/OpenSSH/rc.com"
+      - "C:/Windows/System32/OpenSSH/rc.exe"
+      - "C:/Windows/System32/OpenSSH/rc"
+      - "C:/Program Files/dotnet/rc.com"
+      - "C:/Program Files/dotnet/rc.exe"
+      - "C:/Program Files/dotnet/rc"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/rc.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/rc.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/rc"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/rc.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/rc.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/rc"
+      - "C:/Program Files/nodejs/rc.com"
+      - "C:/Program Files/nodejs/rc.exe"
+      - "C:/Program Files/nodejs/rc"
+      - "C:/Program Files/Git/cmd/rc.com"
+      - "C:/Program Files/Git/cmd/rc.exe"
+      - "C:/Program Files/Git/cmd/rc"
+      - "C:/Program Files/CMake/bin/rc.com"
+      - "C:/Program Files/CMake/bin/rc.exe"
+      - "C:/Program Files/CMake/bin/rc"
+      - "C:/Program Files/PyManager/rc.com"
+      - "C:/Program Files/PyManager/rc.exe"
+      - "C:/Program Files/PyManager/rc"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/rc.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/rc.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/rc"
+      - "C:/Users/timje/.grok/bin/rc.com"
+      - "C:/Users/timje/.grok/bin/rc.exe"
+      - "C:/Users/timje/.grok/bin/rc"
+      - "C:/Users/timje/AppData/Local/hermes/node/rc.com"
+      - "C:/Users/timje/AppData/Local/hermes/node/rc.exe"
+      - "C:/Users/timje/AppData/Local/hermes/node/rc"
+      - "C:/Users/timje/AppData/Local/hermes/bin/rc.com"
+      - "C:/Users/timje/AppData/Local/hermes/bin/rc.exe"
+      - "C:/Users/timje/AppData/Local/hermes/bin/rc"
+      - "C:/Users/timje/.pi/agent/bin/rc.com"
+      - "C:/Users/timje/.pi/agent/bin/rc.exe"
+      - "C:/Users/timje/.pi/agent/bin/rc"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/rc.com"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/rc.exe"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/rc"
+      - "C:/Users/timje/.local/bin/rc.com"
+      - "C:/Users/timje/.local/bin/rc.exe"
+      - "C:/Users/timje/.local/bin/rc"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/rc.com"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/rc.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/rc"
+      - "C:/Users/timje/.cargo/bin/rc.com"
+      - "C:/Users/timje/.cargo/bin/rc.exe"
+      - "C:/Users/timje/.cargo/bin/rc"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/rc.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/rc.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/rc"
+      - "C:/Users/timje/AppData/Local/spicetify/rc.com"
+      - "C:/Users/timje/AppData/Local/spicetify/rc.exe"
+      - "C:/Users/timje/AppData/Local/spicetify/rc"
+      - "C:/Users/timje/.dotnet/tools/rc.com"
+      - "C:/Users/timje/.dotnet/tools/rc.exe"
+      - "C:/Users/timje/.dotnet/tools/rc"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/rc.com"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/rc.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/rc"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/rc.com"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/rc.exe"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/rc"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/rc.com"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/rc.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/rc"
+      - "C:/Users/timje/AppData/Roaming/npm/rc.com"
+      - "C:/Users/timje/AppData/Roaming/npm/rc.exe"
+      - "C:/Users/timje/AppData/Roaming/npm/rc"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/rc.com"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/rc.exe"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/rc"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/rc.com"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/rc.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/rc"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/rc.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/rc.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/rc"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/rc.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/rc.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/rc"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/rc.com"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/rc.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/rc"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/rc.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/rc.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/rc"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/rc.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/rc.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/rc"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/rc.com"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/rc.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/rc"
+      - "C:/Program Files/bin/rc.com"
+      - "C:/Program Files/bin/rc.exe"
+      - "C:/Program Files/bin/rc"
+      - "C:/Program Files/sbin/rc.com"
+      - "C:/Program Files/sbin/rc.exe"
+      - "C:/Program Files/sbin/rc"
+      - "C:/Program Files/rc.com"
+      - "C:/Program Files/rc.exe"
+      - "C:/Program Files/rc"
+      - "C:/Program Files (x86)/bin/rc.com"
+      - "C:/Program Files (x86)/bin/rc.exe"
+      - "C:/Program Files (x86)/bin/rc"
+      - "C:/Program Files (x86)/sbin/rc.com"
+      - "C:/Program Files (x86)/sbin/rc.exe"
+      - "C:/Program Files (x86)/sbin/rc"
+      - "C:/Program Files (x86)/rc.com"
+      - "C:/Program Files (x86)/rc.exe"
+      - "C:/Program Files (x86)/rc"
+      - "C:/Program Files/CMake/bin/rc.com"
+      - "C:/Program Files/CMake/bin/rc.exe"
+      - "C:/Program Files/CMake/bin/rc"
+      - "C:/Program Files/CMake/sbin/rc.com"
+      - "C:/Program Files/CMake/sbin/rc.exe"
+      - "C:/Program Files/CMake/sbin/rc"
+      - "C:/Program Files/CMake/rc.com"
+      - "C:/Program Files/CMake/rc.exe"
+      - "C:/Program Files/CMake/rc"
+      - "C:/Program Files (x86)/FortnitePSX/bin/rc.com"
+      - "C:/Program Files (x86)/FortnitePSX/bin/rc.exe"
+      - "C:/Program Files (x86)/FortnitePSX/bin/rc"
+      - "C:/Program Files (x86)/FortnitePSX/sbin/rc.com"
+      - "C:/Program Files (x86)/FortnitePSX/sbin/rc.exe"
+      - "C:/Program Files (x86)/FortnitePSX/sbin/rc"
+      - "C:/Program Files (x86)/FortnitePSX/rc.com"
+      - "C:/Program Files (x86)/FortnitePSX/rc.exe"
+      - "C:/Program Files (x86)/FortnitePSX/rc"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/FortnitePSX"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files (x86)/FortnitePSX"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerABI.cmake:123 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-climf7"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-climf7"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
+      CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: false
+      stdout: |
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-climf7'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_a0e82.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        MSBuild version 18.9.1+a81b43525 for .NET Framework
+        Build started 26/10/2026 15:38:28.
+        
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-climf7\\cmTC_a0e82.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-climf7\\Debug\\".
+          Creating directory "cmTC_a0e82.dir\\Debug\\cmTC_a0e82.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_a0e82.dir\\Debug\\cmTC_a0e82.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_a0e82.dir\\Debug\\cmTC_a0e82.tlog\\unsuccessfulbuild".
+        VcpkgTripletSelection:
+          Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
+          Using normalized configuration "Debug"
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_a0e82.dir\\Debug\\\\" /Fd"cmTC_a0e82.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCXXCompilerABI.cpp"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_a0e82.dir\\Debug\\\\" /Fd"cmTC_a0e82.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCXXCompilerABI.cpp"
+          CMakeCXXCompilerABI.cpp
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-climf7\\Debug\\cmTC_a0e82.exe" /INCREMENTAL /ILK:"cmTC_a0e82.dir\\Debug\\cmTC_a0e82.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-climf7/Debug/cmTC_a0e82.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-climf7/Debug/cmTC_a0e82.lib" /MACHINE:X64  /machine:x64 cmTC_a0e82.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_a0e82.vcxproj -> C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-climf7\\Debug\\cmTC_a0e82.exe
+        AppLocalFromInstalled:
+          "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\vcpkg.exe" z-applocal --target-binary="C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-climf7\\Debug\\cmTC_a0e82.exe" --installed-bin-dir="C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\bin" --tlog-file="cmTC_a0e82.dir\\Debug\\cmTC_a0e82.tlog\\cmTC_a0e82.write.1u.tlog" --copied-files-log="cmTC_a0e82.dir\\Debug\\vcpkg.applocal.log"
+        FinalizeBuildStatus:
+          Deleting file "cmTC_a0e82.dir\\Debug\\cmTC_a0e82.tlog\\unsuccessfulbuild".
+          Touching "cmTC_a0e82.dir\\Debug\\cmTC_a0e82.tlog\\cmTC_a0e82.lastbuildstate".
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-climf7\\cmTC_a0e82.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.53
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerABI.cmake:291 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        link line: [  C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-climf7\\Debug\\cmTC_a0e82.exe" /INCREMENTAL /ILK:"cmTC_a0e82.dir\\Debug\\cmTC_a0e82.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-climf7/Debug/cmTC_a0e82.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-climf7/Debug/cmTC_a0e82.lib" /MACHINE:X64  /machine:x64 cmTC_a0e82.dir\\Debug\\CMakeCXXCompilerABI.obj] ==> linker [C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe]
+        linker tool for 'CXX': C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/HostX64/x64/link.exe 
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/Internal/CMakeDetermineLinkerId.cmake:41 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerABI.cmake:337 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Running the CXX compiler's linker: "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/HostX64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.51.36256.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:501 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:538 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "build2/_deps/raylib-src/CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCCompilerId.c.in"
+    candidate_directories:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/"
+    found: "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeCCompilerId.c.in"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/FortnitePSX"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files (x86)/FortnitePSX"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "build2/_deps/raylib-src/CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild version 18.9.1+a81b43525 for .NET Framework
+      Build started 26/10/2026 15:38:47.
+      
+      Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\4.4.0\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
+      PrepareForBuild:
+        Creating directory "Debug\\".
+        Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+        Creating directory "Debug\\CompilerIdC.tlog\\".
+      InitializeBuildStatus:
+        Creating "Debug\\CompilerIdC.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+        Touching "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
+      VcpkgTripletSelection:
+        Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
+        Using normalized configuration "Release"
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc145.pdb" /external:W0 /Gd /TC /FC /errorReport:queue CMakeCCompilerId.c
+        CMakeCCompilerId.c
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
+        CompilerIdC.vcxproj -> C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\4.4.0\\CompilerIdC\\CompilerIdC.exe
+      AppLocalFromInstalled:
+        "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\vcpkg.exe" z-applocal --target-binary="C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\4.4.0\\CompilerIdC\\CompilerIdC.exe" --installed-bin-dir="C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\bin" --tlog-file="Debug\\CompilerIdC.tlog\\CompilerIdC.write.1u.tlog" --copied-files-log="Debug\\vcpkg.applocal.log"
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_C_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Deleting file "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
+        Touching "Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate".
+      Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\4.4.0\\CompilerIdC\\CompilerIdC.vcxproj" (default targets).
+      
+      Build succeeded.
+          0 Warning(s)
+          0 Error(s)
+      
+      Time Elapsed 00:00:00.53
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+      
+      The C compiler identification is MSVC, found in:
+        C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/4.4.0/CompilerIdC/CompilerIdC.exe
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:64 (__resolve_tool_path)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeFindBinUtils.cmake:103 (__resolve_linker_path)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "build2/_deps/raylib-src/CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lld-link"
+    candidate_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/PyManager/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
+      - "C:/Users/timje/.grok/bin/"
+      - "C:/Users/timje/AppData/Local/hermes/node/"
+      - "C:/Users/timje/AppData/Local/hermes/bin/"
+      - "C:/Users/timje/.pi/agent/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/"
+      - "C:/Users/timje/.local/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/timje/.cargo/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/timje/AppData/Local/spicetify/"
+      - "C:/Users/timje/.dotnet/tools/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/"
+      - "C:/Users/timje/AppData/Roaming/npm/"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/"
+      - "C:/Program Files/bin/"
+      - "C:/Program Files/sbin/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/bin/"
+      - "C:/Program Files (x86)/sbin/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/CMake/sbin/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files (x86)/FortnitePSX/bin/"
+      - "C:/Program Files (x86)/FortnitePSX/sbin/"
+      - "C:/Program Files (x86)/FortnitePSX/"
+    searched_directories:
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/lld-link.com"
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/lld-link.exe"
+      - "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/lld-link"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/lld-link.com"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/lld-link.exe"
+      - "C:/Program Files/Eclipse Adoptium/jdk-8.0.492.9-hotspot/bin/lld-link"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/lld-link.com"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/lld-link.exe"
+      - "C:/Program Files/Common Files/Oracle/Java/javapath/lld-link"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link.com"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link.exe"
+      - "C:/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler/lld-link"
+      - "C:/Windows/System32/lld-link.com"
+      - "C:/Windows/System32/lld-link.exe"
+      - "C:/Windows/System32/lld-link"
+      - "C:/Windows/lld-link.com"
+      - "C:/Windows/lld-link.exe"
+      - "C:/Windows/lld-link"
+      - "C:/Windows/System32/wbem/lld-link.com"
+      - "C:/Windows/System32/wbem/lld-link.exe"
+      - "C:/Windows/System32/wbem/lld-link"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link"
+      - "C:/Windows/System32/OpenSSH/lld-link.com"
+      - "C:/Windows/System32/OpenSSH/lld-link.exe"
+      - "C:/Windows/System32/OpenSSH/lld-link"
+      - "C:/Program Files/dotnet/lld-link.com"
+      - "C:/Program Files/dotnet/lld-link.exe"
+      - "C:/Program Files/dotnet/lld-link"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/lld-link.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/lld-link.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA App/NvDLISR/lld-link"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link"
+      - "C:/Program Files/nodejs/lld-link.com"
+      - "C:/Program Files/nodejs/lld-link.exe"
+      - "C:/Program Files/nodejs/lld-link"
+      - "C:/Program Files/Git/cmd/lld-link.com"
+      - "C:/Program Files/Git/cmd/lld-link.exe"
+      - "C:/Program Files/Git/cmd/lld-link"
+      - "C:/Program Files/CMake/bin/lld-link.com"
+      - "C:/Program Files/CMake/bin/lld-link.exe"
+      - "C:/Program Files/CMake/bin/lld-link"
+      - "C:/Program Files/PyManager/lld-link.com"
+      - "C:/Program Files/PyManager/lld-link.exe"
+      - "C:/Program Files/PyManager/lld-link"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link"
+      - "C:/Users/timje/.grok/bin/lld-link.com"
+      - "C:/Users/timje/.grok/bin/lld-link.exe"
+      - "C:/Users/timje/.grok/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/hermes/node/lld-link.com"
+      - "C:/Users/timje/AppData/Local/hermes/node/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/hermes/node/lld-link"
+      - "C:/Users/timje/AppData/Local/hermes/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/hermes/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/hermes/bin/lld-link"
+      - "C:/Users/timje/.pi/agent/bin/lld-link.com"
+      - "C:/Users/timje/.pi/agent/bin/lld-link.exe"
+      - "C:/Users/timje/.pi/agent/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/OpenAI/Codex/bin/lld-link"
+      - "C:/Users/timje/.local/bin/lld-link.com"
+      - "C:/Users/timje/.local/bin/lld-link.exe"
+      - "C:/Users/timje/.local/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Python/Launcher/lld-link"
+      - "C:/Users/timje/.cargo/bin/lld-link.com"
+      - "C:/Users/timje/.cargo/bin/lld-link.exe"
+      - "C:/Users/timje/.cargo/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WindowsApps/lld-link"
+      - "C:/Users/timje/AppData/Local/spicetify/lld-link.com"
+      - "C:/Users/timje/AppData/Local/spicetify/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/spicetify/lld-link"
+      - "C:/Users/timje/.dotnet/tools/lld-link.com"
+      - "C:/Users/timje/.dotnet/tools/lld-link.exe"
+      - "C:/Users/timje/.dotnet/tools/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/lld-link"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/lld-link.com"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/lld-link.exe"
+      - "C:/Program Files (x86)/MongoDB Atlas CLI/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Fiddler/lld-link"
+      - "C:/Users/timje/AppData/Roaming/npm/lld-link.com"
+      - "C:/Users/timje/AppData/Roaming/npm/lld-link.exe"
+      - "C:/Users/timje/AppData/Roaming/npm/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/cursor/resources/app/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Devin/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Links/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Cua/cua-driver/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe/bin/lld-link"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Microsoft/WinGet/Packages/FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe/lld-link"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/lld-link.com"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/lld-link.exe"
+      - "C:/Users/timje/AppData/Local/Programs/Microsoft VS Code/bin/copilot-shim/lld-link"
+      - "C:/Program Files/bin/lld-link.com"
+      - "C:/Program Files/bin/lld-link.exe"
+      - "C:/Program Files/bin/lld-link"
+      - "C:/Program Files/sbin/lld-link.com"
+      - "C:/Program Files/sbin/lld-link.exe"
+      - "C:/Program Files/sbin/lld-link"
+      - "C:/Program Files/lld-link.com"
+      - "C:/Program Files/lld-link.exe"
+      - "C:/Program Files/lld-link"
+      - "C:/Program Files (x86)/bin/lld-link.com"
+      - "C:/Program Files (x86)/bin/lld-link.exe"
+      - "C:/Program Files (x86)/bin/lld-link"
+      - "C:/Program Files (x86)/sbin/lld-link.com"
+      - "C:/Program Files (x86)/sbin/lld-link.exe"
+      - "C:/Program Files (x86)/sbin/lld-link"
+      - "C:/Program Files (x86)/lld-link.com"
+      - "C:/Program Files (x86)/lld-link.exe"
+      - "C:/Program Files (x86)/lld-link"
+      - "C:/Program Files/CMake/bin/lld-link.com"
+      - "C:/Program Files/CMake/bin/lld-link.exe"
+      - "C:/Program Files/CMake/bin/lld-link"
+      - "C:/Program Files/CMake/sbin/lld-link.com"
+      - "C:/Program Files/CMake/sbin/lld-link.exe"
+      - "C:/Program Files/CMake/sbin/lld-link"
+      - "C:/Program Files/CMake/lld-link.com"
+      - "C:/Program Files/CMake/lld-link.exe"
+      - "C:/Program Files/CMake/lld-link"
+      - "C:/Program Files (x86)/FortnitePSX/bin/lld-link.com"
+      - "C:/Program Files (x86)/FortnitePSX/bin/lld-link.exe"
+      - "C:/Program Files (x86)/FortnitePSX/bin/lld-link"
+      - "C:/Program Files (x86)/FortnitePSX/sbin/lld-link.com"
+      - "C:/Program Files (x86)/FortnitePSX/sbin/lld-link.exe"
+      - "C:/Program Files (x86)/FortnitePSX/sbin/lld-link"
+      - "C:/Program Files (x86)/FortnitePSX/lld-link.com"
+      - "C:/Program Files (x86)/FortnitePSX/lld-link.exe"
+      - "C:/Program Files (x86)/FortnitePSX/lld-link"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.492.9-hotspot\\bin"
+        - "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath"
+        - "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler"
+        - "C:\\WINDOWS\\system32"
+        - "C:\\WINDOWS"
+        - "C:\\WINDOWS\\System32\\Wbem"
+        - "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\WINDOWS\\System32\\OpenSSH\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\CMake\\bin"
+        - "C:\\Program Files\\PyManager\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
+        - "C:\\Users\\timje\\.grok\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\node"
+        - "C:\\Users\\timje\\AppData\\Local\\hermes\\bin"
+        - "C:\\Users\\timje\\.pi\\agent\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin"
+        - "C:\\Users\\timje\\.local\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\timje\\.cargo\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\spicetify"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Program Files (x86)\\MongoDB Atlas CLI\\"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Fiddler"
+        - "C:\\Users\\timje\\AppData\\Roaming\\npm"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\.dotnet\\tools"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Devin\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\ffmpeg-9.0.1-full_build\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\ezwinports.make_Microsoft.Winget.Source_8wekyb3d8bbwe\\bin"
+        - "C:\\Users\\timje\\AppData\\Local\\Microsoft\\WinGet\\Packages\\FiloSottile.mkcert_Microsoft.Winget.Source_8wekyb3d8bbwe"
+        - "C:\\Users\\timje\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/FortnitePSX"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files (x86)/FortnitePSX"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerABI.cmake:123 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "build2/_deps/raylib-src/CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-saspe3"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-saspe3"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: false
+      stdout: |
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-saspe3'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_af554.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        MSBuild version 18.9.1+a81b43525 for .NET Framework
+        Build started 26/10/2026 15:38:47.
+        
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-saspe3\\cmTC_af554.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-saspe3\\Debug\\".
+          Creating directory "cmTC_af554.dir\\Debug\\cmTC_af554.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_af554.dir\\Debug\\cmTC_af554.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_af554.dir\\Debug\\cmTC_af554.tlog\\unsuccessfulbuild".
+        VcpkgTripletSelection:
+          Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
+          Using normalized configuration "Debug"
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_af554.dir\\Debug\\\\" /Fd"cmTC_af554.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCCompilerABI.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_af554.dir\\Debug\\\\" /Fd"cmTC_af554.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCCompilerABI.c"
+          CMakeCCompilerABI.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-saspe3\\Debug\\cmTC_af554.exe" /INCREMENTAL /ILK:"cmTC_af554.dir\\Debug\\cmTC_af554.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-saspe3/Debug/cmTC_af554.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-saspe3/Debug/cmTC_af554.lib" /MACHINE:X64  /machine:x64 cmTC_af554.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_af554.vcxproj -> C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-saspe3\\Debug\\cmTC_af554.exe
+        AppLocalFromInstalled:
+          "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\vcpkg.exe" z-applocal --target-binary="C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-saspe3\\Debug\\cmTC_af554.exe" --installed-bin-dir="C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\bin" --tlog-file="cmTC_af554.dir\\Debug\\cmTC_af554.tlog\\cmTC_af554.write.1u.tlog" --copied-files-log="cmTC_af554.dir\\Debug\\vcpkg.applocal.log"
+        FinalizeBuildStatus:
+          Deleting file "cmTC_af554.dir\\Debug\\cmTC_af554.tlog\\unsuccessfulbuild".
+          Touching "cmTC_af554.dir\\Debug\\cmTC_af554.tlog\\cmTC_af554.lastbuildstate".
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-saspe3\\cmTC_af554.vcxproj" (default targets).
+        
+        Build succeeded.
+            0 Warning(s)
+            0 Error(s)
+        
+        Time Elapsed 00:00:00.51
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerABI.cmake:291 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "build2/_deps/raylib-src/CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        link line: [  C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-saspe3\\Debug\\cmTC_af554.exe" /INCREMENTAL /ILK:"cmTC_af554.dir\\Debug\\cmTC_af554.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-saspe3/Debug/cmTC_af554.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-saspe3/Debug/cmTC_af554.lib" /MACHINE:X64  /machine:x64 cmTC_af554.dir\\Debug\\CMakeCCompilerABI.obj] ==> linker [C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe]
+        linker tool for 'C': C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/HostX64/x64/link.exe 
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/Internal/CMakeDetermineLinkerId.cmake:41 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeDetermineCompilerABI.cmake:337 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "build2/_deps/raylib-src/CMakeLists.txt:2 (project)"
+    message: |
+      Running the C compiler's linker: "C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/HostX64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.51.36256.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/Internal/CheckSourceCompiles.cmake:138 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CheckCCompilerFlag.cmake:105 (cmake_check_compiler_flag)"
+      - "build2/_deps/raylib-src/cmake/AddIfFlagCompiles.cmake:3 (CHECK_C_COMPILER_FLAG)"
+      - "build2/_deps/raylib-src/cmake/CompilerFlags.cmake:5 (add_if_flag_compiles)"
+      - "build2/_deps/raylib-src/CMakeLists.txt:34 (include)"
+    checks:
+      - "Performing Test COMPILER_HAS_THOSE_TOGGLES"
+    directories:
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-74dm9a"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-74dm9a"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-src/cmake"
+    buildResult:
+      variable: "COMPILER_HAS_THOSE_TOGGLES"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-74dm9a'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_bda7e.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        MSBuild version 18.9.1+a81b43525 for .NET Framework
+        Build started 26/10/2026 15:38:48.
+        
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-74dm9a\\cmTC_bda7e.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-74dm9a\\Debug\\".
+          Creating directory "cmTC_bda7e.dir\\Debug\\cmTC_bda7e.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_bda7e.dir\\Debug\\cmTC_bda7e.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_bda7e.dir\\Debug\\cmTC_bda7e.tlog\\unsuccessfulbuild".
+        VcpkgTripletSelection:
+          Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
+          Using normalized configuration "Debug"
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D COMPILER_HAS_THOSE_TOGGLES /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_bda7e.dir\\Debug\\\\" /Fd"cmTC_bda7e.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue  -Werror=pointer-arith "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-74dm9a\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D COMPILER_HAS_THOSE_TOGGLES /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_bda7e.dir\\Debug\\\\" /Fd"cmTC_bda7e.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue  -Werror=pointer-arith "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-74dm9a\\src.c"
+        cl : command line  error D8021: invalid numeric argument '/Werror=pointer-arith' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-74dm9a\\cmTC_bda7e.vcxproj]
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-74dm9a\\cmTC_bda7e.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-74dm9a\\cmTC_bda7e.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          cl : command line  error D8021: invalid numeric argument '/Werror=pointer-arith' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-74dm9a\\cmTC_bda7e.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.24
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/Internal/CheckSourceCompiles.cmake:138 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CheckCSourceCompiles.cmake:103 (cmake_check_source_compiles)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/FindThreads.cmake:160 (check_c_source_compiles)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/FindThreads.cmake:226 (_threads_check_libc)"
+      - "build2/_deps/raylib-src/src/external/glfw/CMakeLists.txt:60 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-ukzn58"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-ukzn58"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-src/cmake;C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-src/src/external/glfw/CMake/modules"
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-ukzn58'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ca205.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        MSBuild version 18.9.1+a81b43525 for .NET Framework
+        Build started 26/10/2026 15:38:49.
+        
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\cmTC_ca205.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\Debug\\".
+          Creating directory "cmTC_ca205.dir\\Debug\\cmTC_ca205.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_ca205.dir\\Debug\\cmTC_ca205.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_ca205.dir\\Debug\\cmTC_ca205.tlog\\unsuccessfulbuild".
+        VcpkgTripletSelection:
+          Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
+          Using normalized configuration "Debug"
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_ca205.dir\\Debug\\\\" /Fd"cmTC_ca205.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\src.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_ca205.dir\\Debug\\\\" /Fd"cmTC_ca205.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\src.c"
+          src.c
+        C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\cmTC_ca205.vcxproj]
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\cmTC_ca205.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\cmTC_ca205.vcxproj" (default target) (1) ->
+        (ClCompile target) -> 
+          C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-ukzn58\\cmTC_ca205.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.34
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CheckLibraryExists.cmake:154 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/FindThreads.cmake:175 (check_library_exists)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/FindThreads.cmake:238 (_threads_check_lib)"
+      - "build2/_deps/raylib-src/src/external/glfw/CMakeLists.txt:60 (find_package)"
+    checks:
+      - "Looking for pthread_create in pthreads"
+    directories:
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-015d06"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-015d06"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-src/cmake;C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-src/src/external/glfw/CMake/modules"
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREADS_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-015d06'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_478b4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        MSBuild version 18.9.1+a81b43525 for .NET Framework
+        Build started 26/10/2026 15:38:49.
+        
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\cmTC_478b4.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\Debug\\".
+          Creating directory "cmTC_478b4.dir\\Debug\\cmTC_478b4.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_478b4.dir\\Debug\\cmTC_478b4.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_478b4.dir\\Debug\\cmTC_478b4.tlog\\unsuccessfulbuild".
+        VcpkgTripletSelection:
+          Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
+          Using normalized configuration "Debug"
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_478b4.dir\\Debug\\\\" /Fd"cmTC_478b4.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\CheckFunctionExists.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_478b4.dir\\Debug\\\\" /Fd"cmTC_478b4.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\CheckFunctionExists.c"
+          CheckFunctionExists.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\Debug\\cmTC_478b4.exe" /INCREMENTAL /ILK:"cmTC_478b4.dir\\Debug\\cmTC_478b4.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-015d06/Debug/cmTC_478b4.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-015d06/Debug/cmTC_478b4.lib" /MACHINE:X64  /machine:x64 cmTC_478b4.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\cmTC_478b4.vcxproj]
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\cmTC_478b4.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\cmTC_478b4.vcxproj" (default target) (1) ->
+        (Link target) -> 
+          LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-015d06\\cmTC_478b4.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.35
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/CheckLibraryExists.cmake:154 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/FindThreads.cmake:175 (check_library_exists)"
+      - "C:/Program Files/CMake/share/cmake-4.4/Modules/FindThreads.cmake:239 (_threads_check_lib)"
+      - "build2/_deps/raylib-src/src/external/glfw/CMakeLists.txt:60 (find_package)"
+    checks:
+      - "Looking for pthread_create in pthread"
+    directories:
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-kx63m5"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-kx63m5"
+    cmakeVariables:
+      CMAKE_CXX_STDLIB_MODULES_JSON: ""
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-src/cmake;C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-src/src/external/glfw/CMake/modules"
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREAD_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-kx63m5'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_525d5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        MSBuild version 18.9.1+a81b43525 for .NET Framework
+        Build started 26/10/2026 15:38:50.
+        
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\cmTC_525d5.vcxproj" on node 1 (default targets).
+        PrepareForBuild:
+          Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\Debug\\".
+          Creating directory "cmTC_525d5.dir\\Debug\\cmTC_525d5.tlog\\".
+        InitializeBuildStatus:
+          Creating "cmTC_525d5.dir\\Debug\\cmTC_525d5.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_525d5.dir\\Debug\\cmTC_525d5.tlog\\unsuccessfulbuild".
+        VcpkgTripletSelection:
+          Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
+          Using normalized configuration "Debug"
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_525d5.dir\\Debug\\\\" /Fd"cmTC_525d5.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\CheckFunctionExists.c"
+          Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_525d5.dir\\Debug\\\\" /Fd"cmTC_525d5.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\CheckFunctionExists.c"
+          CheckFunctionExists.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\Debug\\cmTC_525d5.exe" /INCREMENTAL /ILK:"cmTC_525d5.dir\\Debug\\cmTC_525d5.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-kx63m5/Debug/cmTC_525d5.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/CMakeFiles/CMakeScratch/TryCompile-kx63m5/Debug/cmTC_525d5.lib" /MACHINE:X64  /machine:x64 cmTC_525d5.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\cmTC_525d5.vcxproj]
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\cmTC_525d5.vcxproj" (default targets) -- FAILED.
+        
+        Build FAILED.
+        
+        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\cmTC_525d5.vcxproj" (default target) (1) ->
+        (Link target) -> 
+          LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortnitePSX\\build2\\CMakeFiles\\CMakeScratch\\TryCompile-kx63m5\\cmTC_525d5.vcxproj]
+        
+            0 Warning(s)
+            1 Error(s)
+        
+        Time Elapsed 00:00:00.34
+        
+      exitCode: 1
+...

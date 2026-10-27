@@ -1,0 +1,10 @@
+^C:\USERS\TIMJE\DOWNLOADS\FORTNITEPSX\FORTNITEGAMEPSX\FORTNITEPSX\BUILD\_DEPS\RAYLIB-SUBBUILD\CMAKEFILES\F54AE95165374EBA1FBC9639CE2B9F89\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/_deps/raylib-subbuild -BC:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/_deps/raylib-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/_deps/raylib-subbuild/raylib-populate.slnx
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
