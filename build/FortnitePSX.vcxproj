@@ -382,8 +382,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\IconCache.h" />
     <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Items.cpp" />
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Items.h" />
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\JsonUtil.h" />
     <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\MeshBuilder.cpp" />
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\MeshBuilder.h" />
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Net.cpp" />
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Net.h" />
     <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Renderer.cpp" />
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Renderer.h" />
     <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\VFX.cpp" />

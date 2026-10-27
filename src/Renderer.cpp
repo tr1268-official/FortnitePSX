@@ -124,7 +124,7 @@ Texture2D Renderer::MakeTex(Color a, Color b, int pat) {
     Texture2D tex = LoadTextureFromImage(img);
     UnloadImage(img);
     SetTextureWrap(tex, TEXTURE_WRAP_REPEAT);
-    SetTextureFilter(tex, TEXTURE_FILTER_POINT);
+    SetTextureFilter(tex, TEXTURE_FILTER_BILINEAR);
     return tex;
 }
 

@@ -11,6 +11,8 @@ public:
     const Texture2D* Item(const std::string& itemName);
     const Texture2D* UI(const std::string& uiName);
     const Texture2D* UIItem(const std::string& uiItemName);
+    // Fortnite-style cosmetic icon: assets/items/cosmetics/{CID}.png
+    const Texture2D* Cosmetic(const std::string& cid);
 private:
     Texture2D* Load(const std::string& path);
     std::unordered_map<std::string, Texture2D*> cache;

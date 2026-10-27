@@ -1,3 +1,0 @@
-C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/raylib-populate.dir
-C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/ALL_BUILD.dir
-C:/Users/timje/Downloads/FortnitePSX/FortnitePSX/build2/_deps/raylib-subbuild/CMakeFiles/ZERO_CHECK.dir

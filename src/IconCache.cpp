@@ -61,3 +61,8 @@ const Texture2D* IconCache::UI(const std::string& uiName) {
 const Texture2D* IconCache::UIItem(const std::string& uiItemName) {
     return Load("assets/ui/icons/" + Sanitise(uiItemName) + ".png");
 }
+
+const Texture2D* IconCache::Cosmetic(const std::string& cid) {
+    // Keep underscores/letters only in filename; path is fixed
+    return Load("assets/items/cosmetics/" + Sanitise(cid) + ".png");
+}

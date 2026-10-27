@@ -22,6 +22,9 @@
     <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\MeshBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Net.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,7 +63,13 @@
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Items.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\JsonUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\MeshBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Net.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Renderer.h">
