@@ -96,7 +96,7 @@ events:
       The output was:
       0
       MSBuild version 18.9.1+a81b43525 for .NET Framework
-      Build started 28/10/2026 13:44:59.
+      Build started 28/10/2026 18:09:51.
       
       Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\4.4.0\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -130,7 +130,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:01.10
+      Time Elapsed 00:00:00.55
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -1223,8 +1223,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-tt19gw"
-      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-tt19gw"
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-auctu6"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-auctu6"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -1235,44 +1235,44 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: false
       stdout: |
-        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-tt19gw'
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-auctu6'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_df334.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_a50d9.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         MSBuild version 18.9.1+a81b43525 for .NET Framework
-        Build started 28/10/2026 13:45:00.
+        Build started 28/10/2026 18:09:52.
         
-        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-tt19gw\\cmTC_df334.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-auctu6\\cmTC_a50d9.vcxproj" on node 1 (default targets).
         PrepareForBuild:
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-tt19gw\\Debug\\".
-          Creating directory "cmTC_df334.dir\\Debug\\cmTC_df334.tlog\\".
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-auctu6\\Debug\\".
+          Creating directory "cmTC_a50d9.dir\\Debug\\cmTC_a50d9.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_df334.dir\\Debug\\cmTC_df334.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_df334.dir\\Debug\\cmTC_df334.tlog\\unsuccessfulbuild".
+          Creating "cmTC_a50d9.dir\\Debug\\cmTC_a50d9.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_a50d9.dir\\Debug\\cmTC_a50d9.tlog\\unsuccessfulbuild".
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_df334.dir\\Debug\\\\" /Fd"cmTC_df334.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_a50d9.dir\\Debug\\\\" /Fd"cmTC_a50d9.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_df334.dir\\Debug\\\\" /Fd"cmTC_df334.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GR /Fo"cmTC_a50d9.dir\\Debug\\\\" /Fd"cmTC_a50d9.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-tt19gw\\Debug\\cmTC_df334.exe" /INCREMENTAL /ILK:"cmTC_df334.dir\\Debug\\cmTC_df334.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-tt19gw/Debug/cmTC_df334.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-tt19gw/Debug/cmTC_df334.lib" /MACHINE:X64  /machine:x64 cmTC_df334.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_df334.vcxproj -> C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-tt19gw\\Debug\\cmTC_df334.exe
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-auctu6\\Debug\\cmTC_a50d9.exe" /INCREMENTAL /ILK:"cmTC_a50d9.dir\\Debug\\cmTC_a50d9.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-auctu6/Debug/cmTC_a50d9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-auctu6/Debug/cmTC_a50d9.lib" /MACHINE:X64  /machine:x64 cmTC_a50d9.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_a50d9.vcxproj -> C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-auctu6\\Debug\\cmTC_a50d9.exe
         AppLocalFromInstalled:
-          "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\vcpkg.exe" z-applocal --target-binary="C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-tt19gw\\Debug\\cmTC_df334.exe" --installed-bin-dir="C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\bin" --tlog-file="cmTC_df334.dir\\Debug\\cmTC_df334.tlog\\cmTC_df334.write.1u.tlog" --copied-files-log="cmTC_df334.dir\\Debug\\vcpkg.applocal.log"
+          "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\vcpkg.exe" z-applocal --target-binary="C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-auctu6\\Debug\\cmTC_a50d9.exe" --installed-bin-dir="C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\bin" --tlog-file="cmTC_a50d9.dir\\Debug\\cmTC_a50d9.tlog\\cmTC_a50d9.write.1u.tlog" --copied-files-log="cmTC_a50d9.dir\\Debug\\vcpkg.applocal.log"
         FinalizeBuildStatus:
-          Deleting file "cmTC_df334.dir\\Debug\\cmTC_df334.tlog\\unsuccessfulbuild".
-          Touching "cmTC_df334.dir\\Debug\\cmTC_df334.tlog\\cmTC_df334.lastbuildstate".
-        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-tt19gw\\cmTC_df334.vcxproj" (default targets).
+          Deleting file "cmTC_a50d9.dir\\Debug\\cmTC_a50d9.tlog\\unsuccessfulbuild".
+          Touching "cmTC_a50d9.dir\\Debug\\cmTC_a50d9.tlog\\cmTC_a50d9.lastbuildstate".
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-auctu6\\cmTC_a50d9.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.98
+        Time Elapsed 00:00:00.53
         
       exitCode: 0
   -
@@ -1285,7 +1285,7 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
-        link line: [  C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-tt19gw\\Debug\\cmTC_df334.exe" /INCREMENTAL /ILK:"cmTC_df334.dir\\Debug\\cmTC_df334.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-tt19gw/Debug/cmTC_df334.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-tt19gw/Debug/cmTC_df334.lib" /MACHINE:X64  /machine:x64 cmTC_df334.dir\\Debug\\CMakeCXXCompilerABI.obj] ==> linker [C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe]
+        link line: [  C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-auctu6\\Debug\\cmTC_a50d9.exe" /INCREMENTAL /ILK:"cmTC_a50d9.dir\\Debug\\cmTC_a50d9.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-auctu6/Debug/cmTC_a50d9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-auctu6/Debug/cmTC_a50d9.lib" /MACHINE:X64  /machine:x64 cmTC_a50d9.dir\\Debug\\CMakeCXXCompilerABI.obj] ==> linker [C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe]
         linker tool for 'CXX': C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/HostX64/x64/link.exe 
         implicit libs: []
         implicit objs: []
@@ -1398,7 +1398,7 @@ events:
       The output was:
       0
       MSBuild version 18.9.1+a81b43525 for .NET Framework
-      Build started 28/10/2026 13:45:31.
+      Build started 28/10/2026 18:10:19.
       
       Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\4.4.0\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -1432,7 +1432,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.88
+      Time Elapsed 00:00:00.55
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -1736,8 +1736,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hbj1sq"
-      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hbj1sq"
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-pn9xyg"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-pn9xyg"
     cmakeVariables:
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
@@ -1746,44 +1746,44 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: false
       stdout: |
-        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hbj1sq'
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-pn9xyg'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_bfb0c.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_83874.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         MSBuild version 18.9.1+a81b43525 for .NET Framework
-        Build started 28/10/2026 13:45:32.
+        Build started 28/10/2026 18:10:20.
         
-        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hbj1sq\\cmTC_bfb0c.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pn9xyg\\cmTC_83874.vcxproj" on node 1 (default targets).
         PrepareForBuild:
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hbj1sq\\Debug\\".
-          Creating directory "cmTC_bfb0c.dir\\Debug\\cmTC_bfb0c.tlog\\".
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pn9xyg\\Debug\\".
+          Creating directory "cmTC_83874.dir\\Debug\\cmTC_83874.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_bfb0c.dir\\Debug\\cmTC_bfb0c.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_bfb0c.dir\\Debug\\cmTC_bfb0c.tlog\\unsuccessfulbuild".
+          Creating "cmTC_83874.dir\\Debug\\cmTC_83874.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_83874.dir\\Debug\\cmTC_83874.tlog\\unsuccessfulbuild".
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_bfb0c.dir\\Debug\\\\" /Fd"cmTC_bfb0c.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_83874.dir\\Debug\\\\" /Fd"cmTC_83874.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_bfb0c.dir\\Debug\\\\" /Fd"cmTC_bfb0c.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCCompilerABI.c"
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_83874.dir\\Debug\\\\" /Fd"cmTC_83874.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.4\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hbj1sq\\Debug\\cmTC_bfb0c.exe" /INCREMENTAL /ILK:"cmTC_bfb0c.dir\\Debug\\cmTC_bfb0c.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hbj1sq/Debug/cmTC_bfb0c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hbj1sq/Debug/cmTC_bfb0c.lib" /MACHINE:X64  /machine:x64 cmTC_bfb0c.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_bfb0c.vcxproj -> C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hbj1sq\\Debug\\cmTC_bfb0c.exe
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pn9xyg\\Debug\\cmTC_83874.exe" /INCREMENTAL /ILK:"cmTC_83874.dir\\Debug\\cmTC_83874.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-pn9xyg/Debug/cmTC_83874.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-pn9xyg/Debug/cmTC_83874.lib" /MACHINE:X64  /machine:x64 cmTC_83874.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_83874.vcxproj -> C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pn9xyg\\Debug\\cmTC_83874.exe
         AppLocalFromInstalled:
-          "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\vcpkg.exe" z-applocal --target-binary="C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hbj1sq\\Debug\\cmTC_bfb0c.exe" --installed-bin-dir="C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\bin" --tlog-file="cmTC_bfb0c.dir\\Debug\\cmTC_bfb0c.tlog\\cmTC_bfb0c.write.1u.tlog" --copied-files-log="cmTC_bfb0c.dir\\Debug\\vcpkg.applocal.log"
+          "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\vcpkg.exe" z-applocal --target-binary="C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pn9xyg\\Debug\\cmTC_83874.exe" --installed-bin-dir="C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\bin" --tlog-file="cmTC_83874.dir\\Debug\\cmTC_83874.tlog\\cmTC_83874.write.1u.tlog" --copied-files-log="cmTC_83874.dir\\Debug\\vcpkg.applocal.log"
         FinalizeBuildStatus:
-          Deleting file "cmTC_bfb0c.dir\\Debug\\cmTC_bfb0c.tlog\\unsuccessfulbuild".
-          Touching "cmTC_bfb0c.dir\\Debug\\cmTC_bfb0c.tlog\\cmTC_bfb0c.lastbuildstate".
-        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hbj1sq\\cmTC_bfb0c.vcxproj" (default targets).
+          Deleting file "cmTC_83874.dir\\Debug\\cmTC_83874.tlog\\unsuccessfulbuild".
+          Touching "cmTC_83874.dir\\Debug\\cmTC_83874.tlog\\cmTC_83874.lastbuildstate".
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pn9xyg\\cmTC_83874.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.88
+        Time Elapsed 00:00:00.55
         
       exitCode: 0
   -
@@ -1796,7 +1796,7 @@ events:
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
-        link line: [  C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hbj1sq\\Debug\\cmTC_bfb0c.exe" /INCREMENTAL /ILK:"cmTC_bfb0c.dir\\Debug\\cmTC_bfb0c.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hbj1sq/Debug/cmTC_bfb0c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hbj1sq/Debug/cmTC_bfb0c.lib" /MACHINE:X64  /machine:x64 cmTC_bfb0c.dir\\Debug\\CMakeCCompilerABI.obj] ==> linker [C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe]
+        link line: [  C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pn9xyg\\Debug\\cmTC_83874.exe" /INCREMENTAL /ILK:"cmTC_83874.dir\\Debug\\cmTC_83874.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-pn9xyg/Debug/cmTC_83874.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-pn9xyg/Debug/cmTC_83874.lib" /MACHINE:X64  /machine:x64 cmTC_83874.dir\\Debug\\CMakeCCompilerABI.obj] ==> linker [C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe]
         linker tool for 'C': C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/HostX64/x64/link.exe 
         implicit libs: []
         implicit objs: []
@@ -1827,8 +1827,8 @@ events:
     checks:
       - "Performing Test COMPILER_HAS_THOSE_TOGGLES"
     directories:
-      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-6jumls"
-      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-6jumls"
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-145y1a"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-145y1a"
     cmakeVariables:
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
@@ -1838,41 +1838,41 @@ events:
       variable: "COMPILER_HAS_THOSE_TOGGLES"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-6jumls'
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-145y1a'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_2c1ff.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_7f82a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         MSBuild version 18.9.1+a81b43525 for .NET Framework
-        Build started 28/10/2026 13:45:33.
+        Build started 28/10/2026 18:10:21.
         
-        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jumls\\cmTC_2c1ff.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-145y1a\\cmTC_7f82a.vcxproj" on node 1 (default targets).
         PrepareForBuild:
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jumls\\Debug\\".
-          Creating directory "cmTC_2c1ff.dir\\Debug\\cmTC_2c1ff.tlog\\".
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-145y1a\\Debug\\".
+          Creating directory "cmTC_7f82a.dir\\Debug\\cmTC_7f82a.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_2c1ff.dir\\Debug\\cmTC_2c1ff.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_2c1ff.dir\\Debug\\cmTC_2c1ff.tlog\\unsuccessfulbuild".
+          Creating "cmTC_7f82a.dir\\Debug\\cmTC_7f82a.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_7f82a.dir\\Debug\\cmTC_7f82a.tlog\\unsuccessfulbuild".
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D COMPILER_HAS_THOSE_TOGGLES /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_2c1ff.dir\\Debug\\\\" /Fd"cmTC_2c1ff.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue  -Werror=pointer-arith "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jumls\\src.c"
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D COMPILER_HAS_THOSE_TOGGLES /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_7f82a.dir\\Debug\\\\" /Fd"cmTC_7f82a.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue  -Werror=pointer-arith "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-145y1a\\src.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D COMPILER_HAS_THOSE_TOGGLES /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_2c1ff.dir\\Debug\\\\" /Fd"cmTC_2c1ff.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue  -Werror=pointer-arith "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jumls\\src.c"
-        cl : command line  error D8021: invalid numeric argument '/Werror=pointer-arith' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jumls\\cmTC_2c1ff.vcxproj]
-        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jumls\\cmTC_2c1ff.vcxproj" (default targets) -- FAILED.
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D COMPILER_HAS_THOSE_TOGGLES /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_7f82a.dir\\Debug\\\\" /Fd"cmTC_7f82a.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue  -Werror=pointer-arith "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-145y1a\\src.c"
+        cl : command line  error D8021: invalid numeric argument '/Werror=pointer-arith' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-145y1a\\cmTC_7f82a.vcxproj]
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-145y1a\\cmTC_7f82a.vcxproj" (default targets) -- FAILED.
         
         Build FAILED.
         
-        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jumls\\cmTC_2c1ff.vcxproj" (default target) (1) ->
+        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-145y1a\\cmTC_7f82a.vcxproj" (default target) (1) ->
         (ClCompile target) -> 
-          cl : command line  error D8021: invalid numeric argument '/Werror=pointer-arith' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6jumls\\cmTC_2c1ff.vcxproj]
+          cl : command line  error D8021: invalid numeric argument '/Werror=pointer-arith' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-145y1a\\cmTC_7f82a.vcxproj]
         
             0 Warning(s)
             1 Error(s)
         
-        Time Elapsed 00:00:00.31
+        Time Elapsed 00:00:00.25
         
       exitCode: 1
   -
@@ -1886,8 +1886,8 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hkjtza"
-      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hkjtza"
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-ind1tm"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-ind1tm"
     cmakeVariables:
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
@@ -1897,42 +1897,42 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-hkjtza'
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-ind1tm'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ac16b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_68636.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         MSBuild version 18.9.1+a81b43525 for .NET Framework
-        Build started 28/10/2026 13:45:34.
+        Build started 28/10/2026 18:10:21.
         
-        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\cmTC_ac16b.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\cmTC_68636.vcxproj" on node 1 (default targets).
         PrepareForBuild:
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\Debug\\".
-          Creating directory "cmTC_ac16b.dir\\Debug\\cmTC_ac16b.tlog\\".
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\Debug\\".
+          Creating directory "cmTC_68636.dir\\Debug\\cmTC_68636.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_ac16b.dir\\Debug\\cmTC_ac16b.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_ac16b.dir\\Debug\\cmTC_ac16b.tlog\\unsuccessfulbuild".
+          Creating "cmTC_68636.dir\\Debug\\cmTC_68636.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_68636.dir\\Debug\\cmTC_68636.tlog\\unsuccessfulbuild".
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_ac16b.dir\\Debug\\\\" /Fd"cmTC_ac16b.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\src.c"
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_68636.dir\\Debug\\\\" /Fd"cmTC_68636.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\src.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_ac16b.dir\\Debug\\\\" /Fd"cmTC_ac16b.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\src.c"
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_68636.dir\\Debug\\\\" /Fd"cmTC_68636.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\src.c"
           src.c
-        C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\cmTC_ac16b.vcxproj]
-        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\cmTC_ac16b.vcxproj" (default targets) -- FAILED.
+        C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\cmTC_68636.vcxproj]
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\cmTC_68636.vcxproj" (default targets) -- FAILED.
         
         Build FAILED.
         
-        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\cmTC_ac16b.vcxproj" (default target) (1) ->
+        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\cmTC_68636.vcxproj" (default target) (1) ->
         (ClCompile target) -> 
-          C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hkjtza\\cmTC_ac16b.vcxproj]
+          C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\src.c(1,10): error C1083: Cannot open include file: 'pthread.h': No such file or directory [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ind1tm\\cmTC_68636.vcxproj]
         
             0 Warning(s)
             1 Error(s)
         
-        Time Elapsed 00:00:00.57
+        Time Elapsed 00:00:00.27
         
       exitCode: 1
   -
@@ -1945,8 +1945,8 @@ events:
     checks:
       - "Looking for pthread_create in pthreads"
     directories:
-      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q9ktv9"
-      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q9ktv9"
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q706o5"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q706o5"
     cmakeVariables:
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
@@ -1957,44 +1957,44 @@ events:
       variable: "CMAKE_HAVE_PTHREADS_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q9ktv9'
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q706o5'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_a1d85.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_e98e3.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         MSBuild version 18.9.1+a81b43525 for .NET Framework
-        Build started 28/10/2026 13:45:35.
+        Build started 28/10/2026 18:10:22.
         
-        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\cmTC_a1d85.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\cmTC_e98e3.vcxproj" on node 1 (default targets).
         PrepareForBuild:
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\Debug\\".
-          Creating directory "cmTC_a1d85.dir\\Debug\\cmTC_a1d85.tlog\\".
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\Debug\\".
+          Creating directory "cmTC_e98e3.dir\\Debug\\cmTC_e98e3.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_a1d85.dir\\Debug\\cmTC_a1d85.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_a1d85.dir\\Debug\\cmTC_a1d85.tlog\\unsuccessfulbuild".
+          Creating "cmTC_e98e3.dir\\Debug\\cmTC_e98e3.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_e98e3.dir\\Debug\\cmTC_e98e3.tlog\\unsuccessfulbuild".
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_a1d85.dir\\Debug\\\\" /Fd"cmTC_a1d85.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\CheckFunctionExists.c"
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_e98e3.dir\\Debug\\\\" /Fd"cmTC_e98e3.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\CheckFunctionExists.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_a1d85.dir\\Debug\\\\" /Fd"cmTC_a1d85.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\CheckFunctionExists.c"
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_e98e3.dir\\Debug\\\\" /Fd"cmTC_e98e3.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\CheckFunctionExists.c"
           CheckFunctionExists.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\Debug\\cmTC_a1d85.exe" /INCREMENTAL /ILK:"cmTC_a1d85.dir\\Debug\\cmTC_a1d85.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q9ktv9/Debug/cmTC_a1d85.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q9ktv9/Debug/cmTC_a1d85.lib" /MACHINE:X64  /machine:x64 cmTC_a1d85.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\cmTC_a1d85.vcxproj]
-        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\cmTC_a1d85.vcxproj" (default targets) -- FAILED.
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\Debug\\cmTC_e98e3.exe" /INCREMENTAL /ILK:"cmTC_e98e3.dir\\Debug\\cmTC_e98e3.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q706o5/Debug/cmTC_e98e3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-q706o5/Debug/cmTC_e98e3.lib" /MACHINE:X64  /machine:x64 cmTC_e98e3.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\cmTC_e98e3.vcxproj]
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\cmTC_e98e3.vcxproj" (default targets) -- FAILED.
         
         Build FAILED.
         
-        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\cmTC_a1d85.vcxproj" (default target) (1) ->
+        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\cmTC_e98e3.vcxproj" (default target) (1) ->
         (Link target) -> 
-          LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q9ktv9\\cmTC_a1d85.vcxproj]
+          LINK : fatal error LNK1104: cannot open file 'pthreads.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-q706o5\\cmTC_e98e3.vcxproj]
         
             0 Warning(s)
             1 Error(s)
         
-        Time Elapsed 00:00:00.68
+        Time Elapsed 00:00:00.37
         
       exitCode: 1
   -
@@ -2007,8 +2007,8 @@ events:
     checks:
       - "Looking for pthread_create in pthread"
     directories:
-      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-f1oi90"
-      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-f1oi90"
+      source: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-yrd2ak"
+      binary: "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-yrd2ak"
     cmakeVariables:
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
@@ -2019,44 +2019,44 @@ events:
       variable: "CMAKE_HAVE_PTHREAD_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-f1oi90'
+        Change Dir: 'C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-yrd2ak'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_06094.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/18/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_39a87.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         MSBuild version 18.9.1+a81b43525 for .NET Framework
-        Build started 28/10/2026 13:45:36.
+        Build started 28/10/2026 18:10:23.
         
-        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\cmTC_06094.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\cmTC_39a87.vcxproj" on node 1 (default targets).
         PrepareForBuild:
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\Debug\\".
-          Creating directory "cmTC_06094.dir\\Debug\\cmTC_06094.tlog\\".
+          Creating directory "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\Debug\\".
+          Creating directory "cmTC_39a87.dir\\Debug\\cmTC_39a87.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_06094.dir\\Debug\\cmTC_06094.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_06094.dir\\Debug\\cmTC_06094.tlog\\unsuccessfulbuild".
+          Creating "cmTC_39a87.dir\\Debug\\cmTC_39a87.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_39a87.dir\\Debug\\cmTC_39a87.tlog\\unsuccessfulbuild".
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_06094.dir\\Debug\\\\" /Fd"cmTC_06094.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\CheckFunctionExists.c"
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\CL.exe /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_39a87.dir\\Debug\\\\" /Fd"cmTC_39a87.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\CheckFunctionExists.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36256 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_06094.dir\\Debug\\\\" /Fd"cmTC_06094.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\CheckFunctionExists.c"
+          cl /c /I"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_39a87.dir\\Debug\\\\" /Fd"cmTC_39a87.dir\\Debug\\vc145.pdb" /external:W1 /TC /errorReport:queue "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\CheckFunctionExists.c"
           CheckFunctionExists.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\Debug\\cmTC_06094.exe" /INCREMENTAL /ILK:"cmTC_06094.dir\\Debug\\cmTC_06094.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-f1oi90/Debug/cmTC_06094.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-f1oi90/Debug/cmTC_06094.lib" /MACHINE:X64  /machine:x64 cmTC_06094.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\cmTC_06094.vcxproj]
-        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\cmTC_06094.vcxproj" (default targets) -- FAILED.
+          C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\Debug\\cmTC_39a87.exe" /INCREMENTAL /ILK:"cmTC_39a87.dir\\Debug\\cmTC_39a87.ilk" /NOLOGO /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib" /LIBPATH:"C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\manual-link" pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\\Users\\timje\\Downloads\\minecraft-alpha-cpp\\minecraft-alpha-cpp\\vcpkg\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-yrd2ak/Debug/cmTC_39a87.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/build/CMakeFiles/CMakeScratch/TryCompile-yrd2ak/Debug/cmTC_39a87.lib" /MACHINE:X64  /machine:x64 cmTC_39a87.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\cmTC_39a87.vcxproj]
+        Done Building Project "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\cmTC_39a87.vcxproj" (default targets) -- FAILED.
         
         Build FAILED.
         
-        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\cmTC_06094.vcxproj" (default target) (1) ->
+        "C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\cmTC_39a87.vcxproj" (default target) (1) ->
         (Link target) -> 
-          LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f1oi90\\cmTC_06094.vcxproj]
+          LINK : fatal error LNK1104: cannot open file 'pthread.lib' [C:\\Users\\timje\\Downloads\\FortnitePSX\\FortniteGamePSX\\FortnitePSX\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yrd2ak\\cmTC_39a87.vcxproj]
         
             0 Warning(s)
             1 Error(s)
         
-        Time Elapsed 00:00:00.65
+        Time Elapsed 00:00:00.35
         
       exitCode: 1
 ...

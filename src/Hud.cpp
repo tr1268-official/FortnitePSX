@@ -20,13 +20,49 @@ static float gU = 1.0f;
 static inline int U(float v) { return (int)lroundf(v * gU); }
 static inline int U1(float v) { int r = U(v); return r < 1 ? 1 : r; }   // never collapses to 0 px
 
-static void Txt(const char* s, int x, int y, int sz, Color c) {
-    float fs = (float)sz * gU;
-    float sh = fmaxf(1.0f, gU * 0.5f);
-    DrawTextEx(gFont, s, {(float)x + sh, (float)y + sh}, fs, 1.0f, Color{0, 0, 0, 180});
-    DrawTextEx(gFont, s, {(float)x, (float)y}, fs, 1.0f, c);
+// Prefer Burbank Small Black for HUD numbers / killfeed / inventory text (Season 0/1)
+static Font gFontSmall = {};
+static bool gFontSmallOk = false;
+static void EnsureSmallFont() {
+    if (gFontSmallOk) return;
+    const char* paths[] = {
+        "assets/fonts/Burbank Small Black.ttf",
+        "assets/fonts/BurbankSmallBlack.ttf",
+        "assets/fonts/Burbank Small Black.otf",
+        "Burbank Small Black.ttf"
+    };
+    for (const char* p : paths) {
+        if (FileExists(p)) {
+            gFontSmall = LoadFontEx(p, 64, 0, 250);
+            if (gFontSmall.glyphCount > 0) {
+                SetTextureFilter(gFontSmall.texture, TEXTURE_FILTER_BILINEAR);
+                gFontSmallOk = true;
+                return;
+            }
+        }
+    }
+    gFontSmall = gFont; // fallback
+    gFontSmallOk = true;
 }
-static float TxtW(const char* s, int sz) { return MeasureTextEx(gFont, s, (float)sz * gU, 1.0f).x; }
+static Font& HudFont() {
+    EnsureSmallFont();
+    return gFontSmallOk ? gFontSmall : gFont;
+}
+
+// Season 0/1 HUD text is much smaller than the old PSX-scale sizes.
+// kTextScale ~0.48 makes the numbers roughly half the previous size.
+static const float kTextScale = 0.48f;
+
+static void Txt(const char* s, int x, int y, int sz, Color c) {
+    Font& f = HudFont();
+    float fs = (float)sz * gU * kTextScale;
+    float sh = fmaxf(1.0f, gU * kTextScale * 0.45f);
+    DrawTextEx(f, s, {(float)x + sh, (float)y + sh}, fs, 0.5f, Color{0, 0, 0, 180});
+    DrawTextEx(f, s, {(float)x, (float)y}, fs, 0.5f, c);
+}
+static float TxtW(const char* s, int sz) {
+    return MeasureTextEx(HudFont(), s, (float)sz * gU * kTextScale, 0.5f).x;
+}
 static void CTxt(const char* s, int cx, int y, int sz, Color c) {
     Txt(s, cx - (int)(TxtW(s, sz) / 2), y, sz, c);
 }
@@ -362,110 +398,165 @@ void DrawHud(const Actor& a, const World& w, int W, int H, const HudInfo& info) 
         Compass(a, W);
         Minimap(a, w, W, info);
 
-        // Info row flush under the minimap (no background): [phase icon + time] [players left] [kills]
+        // Info row under minimap (Season 0/1): phase + timer | players | kills
         char buf[32];
         {
             const MapRect mr = MinimapRect(W);
-            const int rl = mr.x0 - mr.over, rw = mr.S + 2 * mr.over, ry = mr.bottom, rh = U(12), isz = U(9), fsz = 9;
+            const int rl = mr.x0 - mr.over, rw = mr.S + 2 * mr.over;
+            const int ry = mr.bottom + U(1);
+            const int isz = U(10), fsz = 10;
             const char* phaseIco; float secs = info.stormT;
-            if (gSkyHud.onBus)         { phaseIco = "assets/ui/phase/T_Bus.png"; secs = gSkyHud.busSecs; }    // riding the bus: time until it leaves
-            else if (gSkyHud.airborne) phaseIco = "assets/ui/phase/T_Jump.png";                              // skydiving / gliding
-            else if (info.shrinking)   phaseIco = "assets/ui/phase/T_StormMoving.png";                        // storm closing in
-            else                       phaseIco = "assets/ui/phase/T_StormHolding.png";                       // storm waiting
+            if (gSkyHud.onBus)         { phaseIco = "assets/ui/phase/T_Bus.png"; secs = gSkyHud.busSecs; }
+            else if (gSkyHud.airborne) phaseIco = "assets/ui/phase/T_Jump.png";
+            else if (info.shrinking)   phaseIco = "assets/ui/phase/T_StormMoving.png";
+            else                       phaseIco = "assets/ui/phase/T_StormHolding.png";
             Color pc = (info.shrinking && !gSkyHud.onBus) ? Color{210, 140, 255, 255} : WHITE;
-            const int iy = ry + (rh - isz) / 2, ty = ry + (rh - (int)(fsz * gU)) / 2 - U1(1);
+            const int iy = ry;
+            const int ty = ry + (isz - (int)(fsz * gU)) / 2;
 
-            int c1 = rl + U(2);                                                                      // cell 1: phase + countdown
-            int t = (int)ceilf(fmaxf(0.0f, secs)); snprintf(buf, sizeof buf, "%d:%02d", t / 60, t % 60);
+            int c1 = rl + U(1);
+            int t = (int)ceilf(fmaxf(0.0f, secs));
+            snprintf(buf, sizeof buf, "%d:%02d", t / 60, t % 60);
             if (!TexIcon(phaseIco, c1, iy, isz, pc))
-                DrawRectangle(c1, iy + U1(1), U(7), U(7), info.shrinking ? Color{200, 100, 255, 255} : Color{140, 200, 255, 255});
+                DrawRectangle(c1, iy + U1(1), U(8), U(8), info.shrinking ? Color{200, 100, 255, 255} : Color{140, 200, 255, 255});
             Txt(buf, c1 + isz + U(2), ty, fsz, WHITE);
 
-            int c2 = rl + (int)(rw * 0.40f);                                                         // cell 2: players left
-            if (!TexIcon("assets/ui/icons/AliveIco.png", c2, iy, isz)) DrawCircle(c2 + U(4), iy + U(4), (float)U(3), WHITE);
-            snprintf(buf, sizeof buf, "%d", info.alive); Txt(buf, c2 + isz + U(2), ty, fsz, WHITE);
+            int c2 = rl + (int)(rw * 0.38f);
+            if (!TexIcon("assets/ui/icons/AliveIco.png", c2, iy, isz))
+                DrawCircle(c2 + isz / 2, iy + isz / 2, (float)U(3), WHITE);
+            snprintf(buf, sizeof buf, "%d", info.alive);
+            Txt(buf, c2 + isz + U(2), ty, fsz, WHITE);
 
-            int c3 = rl + (int)(rw * 0.68f);                                                         // cell 3: kills
-            if (!TexIcon("assets/ui/icons/KillsIco.png", c3, iy, isz)) DrawCircleLines(c3 + U(4), iy + U(4), (float)U(3), WHITE);
-            snprintf(buf, sizeof buf, "%d", a.kills); Txt(buf, c3 + isz + U(2), ty, fsz, WHITE);
+            int c3 = rl + (int)(rw * 0.68f);
+            if (!TexIcon("assets/ui/icons/KillsIco.png", c3, iy, isz))
+                DrawCircleLines(c3 + isz / 2, iy + isz / 2, (float)U(3), WHITE);
+            snprintf(buf, sizeof buf, "%d", a.kills);
+            Txt(buf, c3 + isz + U(2), ty, fsz, WHITE);
         }
 
-        // Health / Shield (Bottom Left)
-        int bw = U(108), bx = (W - bw) / 2 + U(8), by = H - U(26);   // centred (the icon sits 16 units left of the bar)
+        // ------------------------------------------------------------------
+        // HEALTH + SHIELD  (Season 0/1 reference)
+        // Dark bars, blue shield on top, green health below.
+        // Icon left of bar, "current  max" numbers overlaid on the left of the bar.
+        // ------------------------------------------------------------------
+        {
+            const int bw = U(118);
+            const int bh = U(8);
+            const int bx = (W - bw) / 2 + U(4);
+            const int by = H - U(30);
+            const int iconSz = U(14);
 
-        DrawRectangle(bx, by, bw, U(8), Color{20, 20, 20, 190});
-        DrawRectangle(bx, by, (int)(bw * a.shield / 100.0f), U(8), Color{80, 160, 255, 255});
-        snprintf(buf, sizeof buf, "%d", (int)a.shield);
-        Txt(buf, bx + U(4), by - U(2), 12, WHITE);
-        StatIcon("Shield", bx - U(16), by - U(2), U(14));
-
-        int hy = by + U(12);
-        DrawRectangle(bx, hy, bw, U(9), Color{20, 20, 20, 190});
-        DrawRectangle(bx, hy, (int)(bw * a.health / 100.0f), U(9), Color{80, 200, 60, 255});
-        snprintf(buf, sizeof buf, "%d", (int)ceilf(a.health));
-        Txt(buf, bx + U(4), hy - U(2), 12, WHITE);
-        StatIcon("Health", bx - U(16), hy - U(2), U(14));
-
-        // Hotbar (Bottom Right)
-        const int S = U(20), gap = U(2); int hx = W - U(6) - 6 * (S + gap), hy2 = H - S - U(5);
-        for (int i = 0; i < 6; i++) {
-            int x = hx + i * (S + gap);
-
-            if (!a.slots[i].Empty()) {
-                Color rc = RarityColor(a.slots[i].rar);
-                Color mid = { (unsigned char)(rc.r * 0.6f), (unsigned char)(rc.g * 0.6f), (unsigned char)(rc.b * 0.6f), 220 };
-                Color dark = { (unsigned char)(rc.r * 0.15f), (unsigned char)(rc.g * 0.15f), (unsigned char)(rc.b * 0.15f), 220 };
-                DrawRectangleGradientV(x, hy2, S, S / 2, rc, mid);
-                DrawRectangleGradientV(x, hy2 + S / 2, S, S / 2, mid, dark);
-            } else {
-                DrawRectangle(x, hy2, S, S, Color{40, 60, 80, 170});
+            // Shield row
+            DrawRectangle(bx, by, bw, bh, Color{8, 10, 14, 220});
+            float sf = Clamp(a.shield / 100.0f, 0.0f, 1.0f);
+            if (sf > 0.0f) {
+                DrawRectangle(bx, by, (int)(bw * sf), bh, Color{55, 145, 255, 255});
+                DrawRectangle(bx, by, (int)(bw * sf), U1(1), Color{130, 195, 255, 200}); // top sheen
+            }
+            StatIcon("Shield", bx - iconSz - U(2), by - U(3), iconSz);
+            {
+                char cur[8], mx[8];
+                snprintf(cur, sizeof cur, "%d", (int)a.shield);
+                snprintf(mx,  sizeof mx,  "%d", 100);
+                Txt(cur, bx + U(4), by - U(1), 11, WHITE);
+                float cw = TxtW(cur, 11);
+                Txt(mx,  bx + U(4) + (int)cw + U(4), by - U(1), 11, Color{170, 185, 210, 210});
             }
 
-            Box(x, hy2, S, S, (i == a.sel && !a.buildMode) ? Color{255, 255, 255, 255} : Color{200, 215, 235, 100});
+            // Health row
+            const int hy = by + U(12);
+            DrawRectangle(bx, hy, bw, bh + 1, Color{8, 10, 14, 220});
+            float hf = Clamp(a.health / 100.0f, 0.0f, 1.0f);
+            if (hf > 0.0f) {
+                DrawRectangle(bx, hy, (int)(bw * hf), bh + 1, Color{55, 195, 45, 255});
+                DrawRectangle(bx, hy, (int)(bw * hf), U1(1), Color{130, 255, 110, 200});
+            }
+            StatIcon("Health", bx - iconSz - U(2), hy - U(2), iconSz);
+            {
+                char cur[8], mx[8];
+                snprintf(cur, sizeof cur, "%d", (int)ceilf(a.health));
+                snprintf(mx,  sizeof mx,  "%d", 100);
+                Txt(cur, bx + U(4), hy - U(1), 11, WHITE);
+                float cw = TxtW(cur, 11);
+                Txt(mx,  bx + U(4) + (int)cw + U(4), hy - U(1), 11, Color{170, 185, 210, 210});
+            }
+        }
 
-            if (!a.slots[i].Empty()) {
-                ItemIcon(a.slots[i], x, hy2, S);
-                const ItemDef& d = GetItemDef(a.slots[i].id);
-                if (d.kind == K_WEAPON) {
-                    snprintf(buf, sizeof buf, "%d", a.slots[i].mag);
-                    Txt(buf, x + U(2), hy2 + S - U(9), 10, Color{255, 255, 255, 230});
+        // ------------------------------------------------------------------
+        // INVENTORY  (Season 0/1 reference)
+        // Materials (wood/brick/metal) at top of the block
+        // Build pieces (wall/floor/stairs/pyramid) with blue outlines
+        // 6 hotbar slots underneath, pickaxe in slot 0
+        // ------------------------------------------------------------------
+        {
+            const int S    = U(22);
+            const int gap  = U(3);
+            const int hx   = W - U(10) - 6 * (S + gap);
+            const int hy2  = H - S - U(7);
+
+            // --- Materials row (above everything) ---
+            const int my = hy2 - S - U(5) - S - U(22);
+            const char* matNames[3] = { "Wood", "Brick", "Metal" };
+            for (int i = 0; i < 3; i++) {
+                int x = hx + U(12) + i * U(30);
+                DrawRectangle(x, my, U(18), U(18), Color{0, 0, 0, 140});
+                const Texture2D* matTex = gIcons.UIItem(matNames[i]);
+                if (matTex && matTex->id != 0) {
+                    DrawTexturePro(*matTex,
+                        Rectangle{0, 0, (float)matTex->width, (float)matTex->height},
+                        Rectangle{(float)(x + U1(1)), (float)(my + U1(1)), (float)U(16), (float)U(16)},
+                        {0, 0}, 0, WHITE);
+                } else {
+                    DrawRectangle(x + U(3), my + U(3), U(12), U(12), kMatColor[i]);
                 }
-                else if (d.kind != K_PICKAXE) {
-                    snprintf(buf, sizeof buf, "%d", a.slots[i].count);
-                    Txt(buf, x + S - (int)TxtW(buf, 10) - U(2), hy2 + S - U(9), 10, WHITE);
+                if (a.buildMode && a.mat == i)
+                    Box(x - U1(1), my - U1(1), U(20), U(20), WHITE);
+                snprintf(buf, sizeof buf, "%d", a.mats[i]);
+                Txt(buf, x + U(9) - (int)(TxtW(buf, 11) / 2), my + U(19), 11, WHITE);
+            }
+
+            // --- Build pieces row ---
+            const int by2 = hy2 - S - U(5);
+            for (int i = 0; i < 4; i++) {
+                int x = hx + i * (S + gap) + (S + gap) / 2;
+                DrawRectangle(x, by2, S, S, Color{15, 40, 70, 170});
+                bool selp = a.buildMode && i == (int)a.piece;
+                Box(x, by2, S, S, selp ? Color{255, 255, 255, 255} : Color{90, 170, 255, 160});
+                Icon((PieceType)i, x, by2, S, Color{150, 215, 255, 240});
+            }
+
+            // --- Hotbar (6 slots) ---
+            for (int i = 0; i < 6; i++) {
+                int x = hx + i * (S + gap);
+
+                if (!a.slots[i].Empty()) {
+                    Color rc = RarityColor(a.slots[i].rar);
+                    Color mid  = { (unsigned char)(rc.r * 0.55f), (unsigned char)(rc.g * 0.55f), (unsigned char)(rc.b * 0.55f), 230 };
+                    Color dark = { (unsigned char)(rc.r * 0.12f), (unsigned char)(rc.g * 0.12f), (unsigned char)(rc.b * 0.12f), 230 };
+                    DrawRectangleGradientV(x, hy2, S, S / 2, rc, mid);
+                    DrawRectangleGradientV(x, hy2 + S / 2, S, S / 2, mid, dark);
+                } else {
+                    DrawRectangle(x, hy2, S, S, Color{22, 32, 48, 190});
                 }
+
+                Color border = (i == a.sel && !a.buildMode) ? Color{255, 255, 255, 255} : Color{150, 175, 210, 100};
+                Box(x, hy2, S, S, border);
+
+                if (!a.slots[i].Empty()) {
+                    ItemIcon(a.slots[i], x + U1(1), hy2 + U1(1), S - U(2));
+                    const ItemDef& d = GetItemDef(a.slots[i].id);
+                    if (d.kind == K_WEAPON) {
+                        snprintf(buf, sizeof buf, "%d", a.slots[i].mag);
+                        Txt(buf, x + U(2), hy2 + S - U(11), 10, Color{255, 255, 255, 240});
+                    } else if (d.kind != K_PICKAXE) {
+                        snprintf(buf, sizeof buf, "%d", a.slots[i].count);
+                        Txt(buf, x + S - (int)TxtW(buf, 10) - U(2), hy2 + S - U(11), 10, WHITE);
+                    }
+                }
+                // slot number
+                snprintf(buf, sizeof buf, "%d", i + 1);
+                Txt(buf, x + U(2), hy2 + U1(1), 9, Color{255, 255, 255, 140});
             }
-            snprintf(buf, sizeof buf, "%d", i + 1); Txt(buf, x + U(2), hy2 + U1(1), 9, Color{255, 255, 255, 140});
-        }
-
-        // Build pieces row
-        int by2 = hy2 - S - U(4);
-        for (int i = 0; i < 5; i++) {
-            int x = hx + i * (S + gap) + (S + gap) / 2 - U(2);
-            DrawRectangle(x, by2, S, S, Color{40, 90, 130, 170});
-            bool selp = a.buildMode && i == (int)a.piece;
-            Box(x, by2, S, S, selp ? Color{255, 255, 255, 255} : Color{200, 215, 235, 100});
-            if (i < 4) Icon((PieceType)i, x, by2, S, Color{180, 225, 255, 230});
-        }
-
-        // Materials
-        int my = by2 - U(28);
-        const char* matNames[3] = {"Wood", "Brick", "Metal"};
-        for (int i = 0; i < 3; i++) {
-            int x = hx + U(8) + i * U(26);
-            DrawRectangle(x, my, U(14), U(14), Color{0, 0, 0, 110});
-
-            const Texture2D* matTex = gIcons.UIItem(matNames[i]);
-            if (matTex && matTex->id != 0) {
-                Rectangle src = {0, 0, (float)matTex->width, (float)matTex->height};
-                Rectangle dst = {(float)(x + U1(1)), (float)(my + U1(1)), (float)U(12), (float)U(12)};
-                DrawTexturePro(*matTex, src, dst, {0, 0}, 0, WHITE);
-            } else {
-                DrawRectangle(x + U(2), my + U(2), U(10), U(10), kMatColor[i]);
-            }
-
-            if (a.buildMode && a.mat == i) Box(x - U1(1), my - U1(1), U(16), U(16), WHITE);
-            snprintf(buf, sizeof buf, "%d", a.mats[i]); Txt(buf, x + U(7) - (int)(TxtW(buf, 12) / 2), my + U(15), 12, WHITE);
         }
 
         // Centre prompts
@@ -482,9 +573,22 @@ void DrawHud(const Actor& a, const World& w, int W, int H, const HudInfo& info) 
         if (a.toastT > 0) CTxt(a.toast.c_str(), W / 2, H / 2 - U(40), 12, Color{255, 255, 255, 230});
     }
 
-    // Kill feed
-    int fy = U(20);
-    for (const auto& m : *info.feed) { if (m.t > 0) { Txt(m.s.c_str(), U(6), fy, 11, WHITE); fy += U(13); } }
+    // ------------------------------------------------------------------
+    // KILL FEED  (Season 0/1 reference)
+    // Top-left, small Burbank, white text, slight drop shadow, tight line spacing
+    // ------------------------------------------------------------------
+    {
+        int fy = U(18);
+        for (const auto& m : *info.feed) {
+            if (m.t <= 0) continue;
+            // fade near the end of life
+            unsigned char alpha = 255;
+            if (m.t < 0.6f) alpha = (unsigned char)(255 * (m.t / 0.6f));
+            Color col = {255, 255, 255, alpha};
+            Txt(m.s.c_str(), U(8), fy, 11, col);
+            fy += U(13);
+        }
+    }
 
     if (info.over) {
         DrawRectangle(0, H / 2 - U(30), W, U(60), Color{0, 0, 0, 170});

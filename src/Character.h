@@ -1,29 +1,67 @@
 #pragma once
 #include "Common.h"
-#include "Items.h"
+#include <string>
 
-constexpr int kLookCount = 12;
-struct Look {
-    const char* name; Color skin, hair, top, vest, pants, boots, gloves, accent; bool female, ponytail, hasVest;
+// Number of outfit looks (must match Game.cpp kOutfitNames[])
+#ifndef kLookCount
+#define kLookCount 12
+#endif
+
+// Display names used by the locker UI (Game.cpp references kLooks[i].name)
+struct LookInfo {
+    const char* name;
+    const char* id;   // internal id / file stem
 };
-extern const Look kLooks[kLookCount];
+extern const LookInfo kLooks[kLookCount];
 
-struct CharacterModel {
-    Model head{}, hair{}, tail{}, torso{}, armU[2]{}, armL[2]{}, legU[2]{}, legL[2]{};
-    int look = 0;
-};
-struct HeldModels { Model guns[I_COUNT]{}, pick{}; };   // one unique model per weapon, indexed by ItemId
-
+// Pose state passed into CharacterDraw each frame
 struct Pose {
-    float phase = 0, moveAmt = 0, swing = -1, pitch = 0, idle = 0;
-    bool airborne = false, gun = false, pick = false;
-    bool ads = false;
-    float gunScale = 1.0f; Color gunTint = WHITE;
-    int weapon = -1;            // ItemId of the held weapon (selects its model)
+    float phase   = 0;     // walk cycle
+    float moveAmt = 0;     // 0 idle .. 1 running
+    float swing   = -1;    // pickaxe swing timer (<0 = idle)
+    float pitch   = 0;     // look pitch (radians)
+    float idle    = 0;
+    bool  airborne = false;
+    bool  pick    = false; // holding pickaxe
+    bool  gun     = false; // holding a gun
+    bool  ads     = false; // aiming down sights
+    Color gunTint = WHITE;
+    float gunScale = 1.0f;
+    int   weapon  = 0;     // ItemId for held gun model
 };
 
-void CharacterBuild(CharacterModel& cm, int look);
-void CharacterUnload(CharacterModel& cm);
+// AirPose lives in Skydive.h — forward declare only (avoids C2011 redefinition)
+struct AirPose;
+
+// One character look: either a loaded GLB/GLTF Model, or empty (procedural fallback)
+struct CharacterModel {
+    Model  model{};
+    bool   loaded = false;
+    float  scale  = 1.0f;   // world scale applied when drawing
+    Vector3 offset{0, 0, 0}; // extra translation (e.g. feet to origin)
+    // Optional: first animation clip if the GLB has any
+    ModelAnimation* anims = nullptr;
+    int animCount = 0;
+    int animFrame = 0;
+};
+
+// Held items (guns / pickaxe) – still procedural or separate models
+struct HeldModels {
+    Model guns[16]{};   // index by ItemId
+    Model pick{};
+    bool  ready = false;
+};
+
+// ---- API used by Game.cpp ----
+void CharacterBuild(CharacterModel& c, int lookIndex);
+void CharacterUnload(CharacterModel& c);
+void CharacterDraw(const CharacterModel& c, const HeldModels& held,
+                   Vector3 pos, float yaw, const Pose& p, Color tint);
+Matrix CharacterDrawAir(const CharacterModel& c, Vector3 pos, float yaw,
+                        const AirPose& p, Color tint);
+
 void HeldBuild(HeldModels& h);
 void HeldUnload(HeldModels& h);
-void CharacterDraw(const CharacterModel& cm, const HeldModels& held, Vector3 pos, float yaw, const Pose& p, Color tint);
+
+// Load a single GLB/GLTF from disk (searches assets/models/, assets/characters/, cwd)
+bool LoadCharacterGLB(CharacterModel& c, const char* filename, float scale = 1.0f);

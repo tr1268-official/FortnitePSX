@@ -213,11 +213,6 @@ private:
     int netLocalId = -1;
     std::vector<int> actorNetIds;
 
-    // Lobby music
-    void UpdateLobbyMusic(float dt);
-    bool  lobbyMusicLoaded = false;
-    float lobbyMusicVol = 0.0f;
-
     CharacterModel chars[kLookCount];
     HeldModels held;
     SkyModels skyModels;                 // battle bus + gliders

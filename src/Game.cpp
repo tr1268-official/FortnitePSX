@@ -10,7 +10,7 @@
 static const float kWait[4] = {80, 50, 40, 30}, kShrink[4] = {50, 40, 30, 25}, kRad[5] = {85, 52, 32, 16, 4};
 static const char* kTabNames[] = { "LOBBY", "BATTLE PASS", "LOCKER", "ITEM SHOP", "PROFILE" };
 static const char* kModeNames[] = { "SOLO", "DUO", "1V1 PRIVATE", "2V2 PRIVATE" };
-static const bool kUseBattleBus = true;
+static const bool kUseBattleBus = true;     // false = spawn on the ground like before
 
 static const char* ItemIdToWeaponName(ItemId id) {
     switch (id) {
@@ -38,6 +38,8 @@ static ItemId WeaponNameToItemId(const std::string& w) {
     return I_PICKAXE;
 }
 
+
+
 static void Present(RenderTexture2D& rt, Rectangle dest) {
     Rectangle src = {0, 0, (float)rt.texture.width, -(float)rt.texture.height};
     DrawTexturePro(rt.texture, src, dest, {0, 0}, 0, WHITE);
@@ -47,8 +49,6 @@ Game::Game() {
     gR.Init();
     InitAudioDevice();
     gAudio.Init();
-    lobbyMusicLoaded = gAudio.LoadMusic("music/lobby_theme");
-    if (lobbyMusicLoaded) gAudio.SetMusicVolume(0.0f);
     gIcons.Init();
     SetExitKey(KEY_NULL);
     for (int i = 0; i < kLookCount; i++) CharacterBuild(chars[i], i);
@@ -90,11 +90,9 @@ Game::~Game() {
 void Game::Run() {
     while (!WindowShouldClose() && !quit) {
         float dt = fminf(GetFrameTime(), 0.05f);
-
-        UpdateLobbyMusic(dt);
-
-        static float presenceT = 0, friendsT = 0, partyT = 0;
-        presenceT += dt; friendsT += dt; partyT += dt;
+        // Heartbeat presence so other clients see us online / in lobby / in match
+        static float presenceT = 0, friendsT = 0;
+        presenceT += dt; friendsT += dt;
         if (account.loggedIn && presenceT > 2.0f) {
             presenceT = 0;
             if (state == State::Lobby)
@@ -102,13 +100,12 @@ void Game::Run() {
             else if (state == State::Match || state == State::Over)
                 SetPresence("online", "match", false);
         }
-        if (account.loggedIn && state == State::Lobby && friendsT > 2.5f) {
-            friendsT = 0;
-            RefreshFriends();
-        }
-        if (account.loggedIn && state == State::Lobby && inParty && partyT > 0.4f) {
-            partyT = 0;
-            RefreshFriends();
+        if (account.loggedIn && state == State::Lobby) {
+            float pollEvery = inParty ? 0.75f : 2.5f;  // party: fast replication of mode/ready
+            if (friendsT > pollEvery) {
+                friendsT = 0;
+                RefreshFriends();
+            }
         }
         if (state == State::Login) { UpdateLogin(dt); DrawLogin(); }
         else if (state == State::Lobby) { UpdateLobby(dt); DrawLobby(); }
@@ -119,44 +116,41 @@ void Game::Run() {
     DisconnectMatchmaker();
 }
 
-// =====================================================================
-//  LOBBY MUSIC
-// =====================================================================
-void Game::UpdateLobbyMusic(float dt) {
-    if (!lobbyMusicLoaded) return;
-    const bool wantOn = (state == State::Lobby);
-    const float fadeInSpeed  = 1.0f;
-    const float fadeOutSpeed = 2.5f;
-    if (wantOn) {
-        if (!gAudio.MusicPlaying()) gAudio.PlayMusic();
-        lobbyMusicVol = fminf(1.0f, lobbyMusicVol + fadeInSpeed * dt);
-    } else {
-        lobbyMusicVol = fmaxf(0.0f, lobbyMusicVol - fadeOutSpeed * dt);
-        if (lobbyMusicVol <= 0.0f) gAudio.StopMusic();
-    }
-    gAudio.SetMusicVolume(lobbyMusicVol);
-    gAudio.UpdateMusic();
-}
 
 // =====================================================================
 //  LOGIN / ACCOUNT
 // =====================================================================
+
+// Canonical outfit names in the SAME ORDER as kLooks[] / chars[] / outfitCid[].
+// Used for name<->index mapping when saving/loading equipped outfits.
 static const char* kOutfitNames[kLookCount] = {
-    "jonesy", "ramirez", "headhunter", "wildcat",
-    "arial_assault_trooper", "renegade_raider", "ghoul_trooper", "skull_trooper",
-    "brite_bomber", "punk_funk", "ginge", "merry_maruader"
+    "jonesy",                 // 0
+    "ramirez",                // 1
+    "headhunter",             // 2
+    "wildcat",                // 3
+    "arial_assault_trooper",  // 4
+    "renegade_raider",        // 5
+    "ghoul_trooper",          // 6
+    "skull_trooper",          // 7
+    "brite_bomber",           // 8
+    "punk_funk",              // 9
+    "ginge",                  // 10
+    "merry_maruader"          // 11
 };
 
+// Convert an outfit name (with a few legacy aliases) to a look index in [0, kLookCount).
 static int OutfitNameToIndex(const std::string& name) {
     if (name.empty()) return 0;
     for (int i = 0; i < kLookCount; i++)
         if (name == kOutfitNames[i]) return i;
+    // legacy aliases seen in older JSON
     if (name == "ranger")  return 1;
     if (name == "scout")   return 2;
     if (name == "medic")   return 3;
     return 0;
 }
 
+// Minimal JSON string-array reader: finds "key":[ "a", "b", ... ] and returns the strings.
 static std::vector<std::string> JsonGetStringArray(const std::string& json, const std::string& key) {
     std::vector<std::string> out;
     std::string pat = "\"" + key + "\"";
@@ -170,7 +164,7 @@ static std::vector<std::string> JsonGetStringArray(const std::string& json, cons
                (json[i]==' '||json[i]==','||json[i]=='\n'||json[i]=='\r'||json[i]=='\t'))
             i++;
         if (i >= json.size() || json[i] == ']') break;
-        if (json[i] != '"') break;
+        if (json[i] != '"') break;                 // not a string array
         size_t end = json.find('"', i + 1);
         if (end == std::string::npos) break;
         out.push_back(json.substr(i + 1, end - i - 1));
@@ -194,17 +188,21 @@ void Game::LoadAccountFromJson(const std::string& json) {
     account.battlePassOwned = JsonGetBool(json, "battlePassOwned");
     account.loggedIn = !account.id.empty();
 
+    // --- owned cosmetics ---
     account.owned.clear();
     for (auto& s : JsonGetStringArray(json, "owned"))
         account.owned.push_back(s);
+    // Always own the four defaults + anything the server omitted
     for (int i = 0; i < 4; i++)
         if (std::find(account.owned.begin(), account.owned.end(), kOutfitNames[i]) == account.owned.end())
             account.owned.push_back(kOutfitNames[i]);
 
+    // --- equipped outfit ---
     std::string eq = JsonGetObject(json, "equipped");
     std::string outfit = JsonGetString(eq, "outfit");
     int idx = OutfitNameToIndex(outfit);
 
+    // Guard: if the mapped index isn't actually owned, fall back to jonesy (0).
     bool ownsEquipped = false;
     for (auto& o : account.owned)
         if (o == kOutfitNames[idx]) { ownsEquipped = true; break; }
@@ -213,6 +211,7 @@ void Game::LoadAccountFromJson(const std::string& json) {
     p1Look = idx;
     account.outfit = kOutfitNames[p1Look];
 
+    // Optional: also honor equipped glider/pickaxe/emote/banner if present in JSON.
     if (!eq.empty()) {
         std::string g = JsonGetString(eq, "glider");
         std::string pk = JsonGetString(eq, "pickaxe");
@@ -229,7 +228,6 @@ void Game::LoadAccountFromJson(const std::string& json) {
         if (!bn.empty()) account.banner = bn;
     }
 }
-
 void Game::TryLogin() {
     authError.clear();
     if (loginUser[0] == 0 || loginPass[0] == 0) { authError = "Enter username and password"; authMsgT = 3; return; }
@@ -257,6 +255,7 @@ void Game::TryLogin() {
             return;
         }
     }
+    // Offline fallback for demo
     if (strcmp(loginUser, "Player1") == 0 && strcmp(loginPass, "password") == 0) {
         account.id = "user_default"; account.username = "Player1"; account.displayName = "Player1";
         account.vbucks = 2500; account.level = 15; account.xp = 3200; account.wins = 3; account.kills = 47; account.matches = 28;
@@ -302,6 +301,7 @@ void Game::RefreshShop() {
     int st = 0;
     std::string resp = HttpGet("/api/shop", &st);
     if (st != 200 || resp.empty()) {
+        // offline demo stock
         shopFeatured.push_back({"ghoul_trooper","Ghoul Trooper","outfit","epic","Nightmares.","CID_029_Athena_Commando_F_Halloween",1200});
         shopFeatured.push_back({"skull_trooper","Skull Trooper","outfit","legendary","Skulls.","CID_030_Athena_Commando_M_Halloween",2000});
         shopDaily.push_back({"raider_revenge","Raider's Revenge","pickaxe","uncommon","Swing with style.","Pickaxe_Lockjaw",800});
@@ -376,6 +376,7 @@ void Game::RefreshBattlePass() {
         for (auto& obj : JsonGetArrayObjects(resp, "tiers")) {
             BpTier t;
             t.tier = JsonGetInt(obj, "tier");
+            // paid / free may be nested objects
             std::string paid = JsonGetObject(obj, "paid");
             std::string free = JsonGetObject(obj, "free");
             t.paid = parseReward(paid);
@@ -384,6 +385,7 @@ void Game::RefreshBattlePass() {
         }
     }
     if (bpTiers.empty()) {
+        // offline fallback matching the reference layout
         auto R = [](const char* id, const char* n, const char* ty, const char* rar, const char* d, const char* img, const char* cid, int amt=0) {
             BpReward r; r.id=id; r.name=n; r.type=ty; r.rarity=rar; r.desc=d; r.image=img; r.cid=cid?cid:img; r.amount=amt; r.valid=true; return r;
         };
@@ -399,8 +401,10 @@ void Game::RefreshBattlePass() {
     bpSelRow = 0;
 }
 
+
 void Game::SaveCredentials() {
     if (!rememberMe || !account.loggedIn) return;
+    // simple local file next to cwd
     FILE* f = fopen("save_credentials.txt", "w");
     if (!f) return;
     fprintf(f, "%s\n%s\n%s\n", account.username.c_str(), loginPass, account.id.c_str());
@@ -412,6 +416,7 @@ void Game::LoadCredentials() {
     if (!f) return;
     char u[64] = {}, pw[64] = {}, id[64] = {};
     if (fgets(u, sizeof u, f)) {
+        // strip newline
         size_t n = strlen(u); while (n && (u[n-1]=='\n'||u[n-1]=='\r')) u[--n]=0;
         strncpy(loginUser, u, 31);
     }
@@ -423,6 +428,10 @@ void Game::LoadCredentials() {
         size_t n = strlen(id); while (n && (id[n-1]=='\n'||id[n-1]=='\r')) id[--n]=0;
     }
     fclose(f);
+    // auto-attempt login once at startup (called from ctor before window loop is fine)
+    if (loginUser[0] && loginPass[0]) {
+        // deferred: flag; actual TryLogin in first frame via empty check in UpdateLogin
+    }
 }
 
 void Game::RefreshFriends() {
@@ -462,26 +471,51 @@ void Game::RefreshFriends() {
             seenReq = r.id;
         }
     }
+    // Party sync — only if server still has a valid party with an online member
     std::string party = JsonGetObject(resp, "party");
     bool hadParty = inParty;
     if (!party.empty() && party != "null" && party.find("leader") != std::string::npos) {
         std::string leader = JsonGetString(party, "leader");
         std::string member = JsonGetString(party, "member");
-        std::string other = (leader == account.username) ? member : leader;
+        auto ieq = [](const std::string& a, const std::string& b) {
+            if (a.size() != b.size()) return false;
+            for (size_t i = 0; i < a.size(); i++) {
+                char ca = a[i], cb = b[i];
+                if (ca >= 'A' && ca <= 'Z') ca = (char)(ca - 'A' + 'a');
+                if (cb >= 'A' && cb <= 'Z') cb = (char)(cb - 'A' + 'a');
+                if (ca != cb) return false;
+            }
+            return true;
+        };
+        std::string other = ieq(leader, account.username) ? member : leader;
+        // Keep party if other is online (match activity still ok for waiting)
         bool otherOk = false;
         for (auto& f : friends) {
-            if (f.username == other && f.status == "online" && f.activity != "match") {
+            if (ieq(f.username, other) && f.status == "online") {
                 otherOk = true;
-                partyMemberUser = other;
+                partyMemberUser = f.username;
                 partyMemberName = f.displayName;
                 partyMemberLook = f.lookIndex;
                 if (partyMemberLook < 0 || partyMemberLook >= kLookCount) partyMemberLook = 0;
                 break;
             }
         }
+        // Fallback: trust party payload even if friends list miss
+        if (!otherOk && !other.empty()) {
+            otherOk = true;
+            partyMemberUser = other;
+            partyMemberName = JsonGetString(party, ieq(leader, account.username) ? "memberDisplay" : "leaderDisplay");
+            if (partyMemberName.empty()) partyMemberName = other;
+            partyMemberLook = JsonGetInt(party, ieq(leader, account.username) ? "memberLook" : "leaderLook", 0);
+        }
+        // fallback to party payload display if friend list missing but presence ok
+        if (!otherOk) {
+            // treat as invalid — don't restore
+            otherOk = false;
+        }
         if (otherOk) {
             inParty = true;
-            isPartyLeader = (leader == account.username);
+            isPartyLeader = ieq(leader, account.username);
             p2Joined = true;
             p2Look = partyMemberLook;
             SyncPartyFromJson(party);
@@ -492,19 +526,28 @@ void Game::RefreshFriends() {
             partyMemberUser.clear();
             partyMemberName.clear();
             localReady = false; partyMemberReady = false; partyQueuing = false;
+            // clear stale server party
             char body[128];
             snprintf(body, sizeof body, "{\"username\":\"%s\"}", account.username.c_str());
             int st2 = 0;
             HttpPost("/api/party/clear", body, &st2);
         }
     } else {
+        // No party from server
+        if (hadParty) {
+            // keep local party only if we just created it this session; otherwise clear
+        }
         inParty = false;
         isPartyLeader = true;
         localReady = false; partyMemberReady = false; partyQueuing = false;
-        if (hadParty) {
-            p2Joined = false;
-            partyMemberUser.clear();
-            partyMemberName.clear();
+        if (!inParty) {
+            // don't force-clear p2Joined if local split-screen
+            // only clear if it was a network party
+            if (hadParty) {
+                p2Joined = false;
+                partyMemberUser.clear();
+                partyMemberName.clear();
+            }
         }
     }
 }
@@ -531,8 +574,9 @@ void Game::DrawNotifications(int W) {
     for (int i = (int)notifications.size() - 1; i >= 0; --i) {
         auto& n = notifications[i];
         float alpha = n.life > 0.4f ? 1.0f : n.life / 0.4f;
+        // slide in from left based on remaining life near start
         float slide = 0;
-        if (n.life > 3.4f) slide = (n.life - 3.4f) / 0.4f;
+        if (n.life > 3.4f) slide = (n.life - 3.4f) / 0.4f; // 0..1 early
         float x = -180.0f * slide;
         Color bg = Color{20, 28, 50, (unsigned char)(230 * alpha)};
         Color titleC = Color{250, 200, 40, (unsigned char)(255 * alpha)};
@@ -606,7 +650,7 @@ void Game::JoinParty(const FriendEntry& f) {
         if (partyMemberLook < 0 || partyMemberLook >= kLookCount) partyMemberLook = 0;
         p2Joined = true;
         p2Look = partyMemberLook;
-        isPartyLeader = true;
+        isPartyLeader = true; // inviter is leader
         if (gameMode == GameMode::Solo) gameMode = GameMode::Duo;
         localReady = false; partyMemberReady = false; partyQueuing = false;
         PushPartyState();
@@ -642,6 +686,9 @@ void Game::AwardMatchRewards() {
     int k = matchKills;
     bool win = victory;
     int gain = k * 10 + (win ? 50 : 0);
+    if (gain <= 0 && !win) {
+        // still count match
+    }
     account.vbucks += gain;
     account.kills += k;
     account.matches += 1;
@@ -666,20 +713,25 @@ void Game::AwardMatchRewards() {
     matchKills = 0;
 }
 
+
+
 const char* Game::ModeToApiName(GameMode m) {
     switch (m) {
         case GameMode::Solo:       return "SOLO";
         case GameMode::Duo:        return "DUO";
-        case GameMode::Private1v1: return "1V1 PRIVATE";
-        case GameMode::Private2v2: return "2V2 PRIVATE";
+        case GameMode::Private1v1:  return "1V1 PRIVATE";
+        case GameMode::Private2v2:  return "2V2 PRIVATE";
         default:                   return "SOLO";
     }
 }
 
-GameMode Game::ModeFromApiName(const std::string& s) {
-    if (s == "DUO" || s == "Duo") return GameMode::Duo;
-    if (s == "1V1 PRIVATE" || s == "1v1" || s == "PRIVATE1V1") return GameMode::Private1v1;
-    if (s == "2V2 PRIVATE" || s == "2v2" || s == "PRIVATE2V2") return GameMode::Private2v2;
+GameMode Game::ModeFromApiName(const std::string& sIn) {
+    std::string s = sIn;
+    for (char& c : s) if (c >= 'a' && c <= 'z') c = (char)(c - 'a' + 'A');
+    if (s == "DUO" || s == "DUOS") return GameMode::Duo;
+    if (s == "1V1 PRIVATE" || s == "1V1" || s == "PRIVATE1V1" || s == "PRIVATE 1V1") return GameMode::Private1v1;
+    if (s == "2V2 PRIVATE" || s == "2V2" || s == "PRIVATE2V2" || s == "PRIVATE 2V2") return GameMode::Private2v2;
+    if (s == "SOLO" || s == "SOLOS" || s.empty()) return GameMode::Solo;
     return GameMode::Solo;
 }
 
@@ -704,27 +756,56 @@ void Game::PushPartyState() {
 
 void Game::SyncPartyFromJson(const std::string& party) {
     if (party.empty() || party == "null") return;
-    std::string modeStr = JsonGetString(party, "mode");
-    if (!modeStr.empty() && !isPartyLeader)
-        gameMode = ModeFromApiName(modeStr);
-    std::string pt = JsonGetString(party, "playType");
-    if (!pt.empty() && !isPartyLeader)
-        playType = (pt == "ONLINE" || pt == "Online") ? PlayType::Online : PlayType::Local;
 
-    bool hasLR = party.find("leaderReady") != std::string::npos;
-    bool hasMR = party.find("memberReady") != std::string::npos;
-    bool lr = JsonGetBool(party, "leaderReady");
-    bool mr = JsonGetBool(party, "memberReady");
-    if (hasLR || hasMR) {
-        if (isPartyLeader) {
-            partyMemberReady = mr;
-        } else {
-            partyMemberReady = lr;
+    // Shared mode + play type (member always follows server; leader only if not editing picker)
+    std::string modeStr = JsonGetString(party, "mode");
+    if (!modeStr.empty()) {
+        GameMode synced = ModeFromApiName(modeStr);
+        if (!isPartyLeader) {
+            gameMode = synced;
+        } else if (!modePickerOpen && synced != gameMode) {
+            // leader still accepts server if out of date (e.g. after rejoin)
+            // keep leader's local selection while picker open
         }
+        if (!isPartyLeader) gameMode = synced;
+    }
+    std::string pt = JsonGetString(party, "playType");
+    if (!pt.empty() && !isPartyLeader) {
+        std::string ptu = pt;
+        for (char& c : ptu) if (c >= 'a' && c <= 'z') c = (char)(c - 'a' + 'A');
+        playType = (ptu == "LOCAL") ? PlayType::Local : PlayType::Online;
     }
 
-    bool q = JsonGetBool(party, "queuing");
-    if (!isPartyLeader && q && !matchmaking && state == State::Lobby) {
+    // Ready flags from server (always trust for the *other* player)
+    bool lr = JsonGetBool(party, "leaderReady");
+    bool mr = JsonGetBool(party, "memberReady");
+    if (isPartyLeader) {
+        partyMemberReady = mr;
+        // echo our own ready from server if present (keeps multi-client consistent)
+        if (party.find("leaderReady") != std::string::npos)
+            localReady = lr;
+    } else {
+        partyMemberReady = lr; // "party member ready" UI = the other person (leader)
+        if (party.find("memberReady") != std::string::npos)
+            localReady = mr;
+    }
+
+    bool both = localReady && partyMemberReady;
+    bool q = JsonGetBool(party, "queuing") || JsonGetBool(party, "allReady");
+
+    // When both ready (or server says queuing), auto-start matchmaking for everyone still in lobby
+    if (both && !matchmaking && state == State::Lobby) {
+        partyQueuing = true;
+        matchmaking = true;
+        matchmakeT = 0;
+        matchmakeAttempts = 0;
+        matchmakeRetryT = 0;
+        matchmakeStatus = (playType == PlayType::Online)
+            ? "Both ready — connecting..."
+            : "Both ready — starting...";
+        statusMsg = "Party ready — starting match";
+        statusMsgT = 2.0f;
+    } else if (q && !isPartyLeader && !matchmaking && state == State::Lobby) {
         partyQueuing = true;
         localReady = true;
         matchmaking = true;
@@ -733,10 +814,12 @@ void Game::SyncPartyFromJson(const std::string& party) {
         matchmakeRetryT = 0;
         matchmakeStatus = "Joining party match...";
     }
-    if (!q && !matchmaking) partyQueuing = false;
+    if (!q && !both && !matchmaking) partyQueuing = false;
 }
 
 void Game::ToggleReady() {
+    // Same as PLAY when in a party
+    if (inParty) { TryStartMatchmaking(); return; }
     localReady = !localReady;
     PushPartyState();
     statusMsg = localReady ? "Ready!" : "Not ready";
@@ -757,36 +840,52 @@ void Game::CancelMatchmaking() {
 }
 
 void Game::TryStartMatchmaking() {
+    // PLAY while already searching = cancel
     if (matchmaking) { CancelMatchmaking(); return; }
+
     if (inParty) {
-        if (!isPartyLeader) {
-            statusMsg = "Only the party leader can start — press Y to Ready";
-            statusMsgT = 2.5f;
-            return;
-        }
-        if (!localReady) {
-            statusMsg = "Press Y to Ready first";
-            statusMsgT = 2.0f;
-            return;
-        }
-        if (!partyMemberReady) {
-            statusMsg = "Waiting for " + (partyMemberName.empty() ? std::string("teammate") : partyMemberName) + " to Ready";
-            statusMsgT = 2.5f;
-            matchmakeStatus = "Waiting for party to Ready...";
-            PushPartyState();
-            return;
-        }
+        // PLAY = toggle ready (replicated via /api/party/update)
+        localReady = !localReady;
         if (gameMode == GameMode::Solo) gameMode = GameMode::Duo;
-    } else {
-        localReady = true;
+        PushPartyState();
+
+        if (!localReady) {
+            partyQueuing = false;
+            matchmakeStatus.clear();
+            statusMsg = "Not ready";
+            statusMsgT = 1.5f;
+            return;
+        }
+
+        if (!partyMemberReady) {
+            matchmakeStatus = "Waiting for " + (partyMemberName.empty() ? std::string("teammate") : partyMemberName) + "...";
+            statusMsg = matchmakeStatus;
+            statusMsgT = 2.5f;
+            // stay in lobby — SyncPartyFromJson will auto-start when both are ready
+            return;
+        }
+
+        // Both ready already (other pressed PLAY first) — start now
+        matchmaking = true;
+        matchmakeT = 0;
+        matchmakeAttempts = 0;
+        matchmakeRetryT = 0;
+        partyQueuing = true;
+        matchmakeStatus = (playType == PlayType::Online) ? "Both ready — connecting..." : "Both ready — starting...";
+        PushPartyState(); // sets queuing so partner also starts
+        statusMsg = "Party ready — starting match";
+        statusMsgT = 2.0f;
+        return;
     }
+
+    // Solo / no party: go straight in
+    localReady = true;
     matchmaking = true;
     matchmakeT = 0;
     matchmakeAttempts = 0;
     matchmakeRetryT = 0;
-    partyQueuing = true;
+    partyQueuing = false;
     matchmakeStatus = (playType == PlayType::Online) ? "Connecting to game server..." : "Starting local match...";
-    PushPartyState();
     statusMsg = "Searching...";
     statusMsgT = 1.5f;
 }
@@ -819,8 +918,11 @@ void Game::DisconnectMatchmaker() {
     netLocalId = -1;
 }
 
+
 void Game::DrawLobbyBackground(int W, int H, float t) {
+    // Deep blue gradient matching the geometric network reference
     DrawRectangleGradientV(0, 0, W, H, Color{10, 40, 90, 255}, Color{2, 6, 20, 255});
+    // Animated network mesh
     const int cols = 14, rows = 10;
     float cw = W / (float)(cols - 1);
     float ch = H / (float)(rows - 1);
@@ -829,6 +931,7 @@ void Game::DrawLobbyBackground(int W, int H, float t) {
         float oy = cosf(t * 0.28f + i * 0.5f + j * 0.6f) * 5.0f;
         return { i * cw + ox, j * ch + oy + 20 };
     };
+    // edges
     for (int j = 0; j < rows; j++) {
         for (int i = 0; i < cols; i++) {
             Vector2 a = node(i, j);
@@ -848,6 +951,7 @@ void Game::DrawLobbyBackground(int W, int H, float t) {
             }
         }
     }
+    // nodes
     for (int j = 0; j < rows; j++) {
         for (int i = 0; i < cols; i++) {
             Vector2 p = node(i, j);
@@ -855,9 +959,11 @@ void Game::DrawLobbyBackground(int W, int H, float t) {
             DrawCircleV(p, r, Color{80, 170, 255, 160});
         }
     }
+    // soft vignette bottom
     DrawRectangleGradientV(0, H * 2 / 3, W, H / 3, Color{0, 0, 0, 0}, Color{0, 0, 0, 160});
 }
 
+// ---- Friends panel (centred on screen) ----
 struct FriendsGeo { int px, py, pw, ph, listY, rowH, visible, fieldX, fieldY, fieldW, fieldH; };
 static FriendsGeo FriendsLayout(int W, int H) {
     FriendsGeo g;
@@ -922,6 +1028,7 @@ void Game::DrawFriendsPanel(int W, int H) {
     if (nFr == 0 && nReq == 0)
         DrawTextEx(gFont, "No friends yet - add one below", {(float)(g.px + 24), (float)(g.listY + g.rowH + 8)}, 13, 1, Color{150, 165, 190, 255});
 
+    // Add friend field
     DrawTextEx(gFont, "ADD FRIEND", {(float)g.fieldX, (float)(g.fieldY - 18)}, 12, 1, Color{160, 175, 200, 255});
     DrawRectangle(g.fieldX, g.fieldY, g.fieldW, g.fieldH, addFriendFocus ? C(40, 60, 100) : C(25, 35, 60));
     DrawRectangleLines(g.fieldX, g.fieldY, g.fieldW, g.fieldH, addFriendFocus ? C(250, 200, 40) : C(70, 90, 130));
@@ -950,6 +1057,7 @@ void Game::DrawModePicker(int W, int H) {
         DrawTextEx(gFont, modes[i], {(float)(px + 36), (float)(y + 6)}, 16, 1, sel ? BLACK : WHITE);
     }
 
+    // Local / Online — always available here
     int y2 = py + 210;
     DrawTextEx(gFont, "PLAY TYPE", {(float)(px + 20), (float)y2}, 14, 1, Color{160, 175, 200, 255});
     bool loc = playType == PlayType::Local;
@@ -966,6 +1074,7 @@ void Game::DrawModePicker(int W, int H) {
 }
 
 Vector2 Game::LobbyMouse() const {
+    // Lobby canvas covers the whole window; map window pixels to canvas coords.
     int W = LobbyW(), H = LobbyH();
     int sw = GetScreenWidth(), sh = GetScreenHeight();
     Vector2 m = GetMousePosition();
@@ -973,6 +1082,7 @@ Vector2 Game::LobbyMouse() const {
 }
 
 void Game::BeginLobbyCanvas() {
+    // Keep the lobby render target in step with the window's aspect ratio
     int lw = LobbyW(), lh = LobbyH();
     if (rtLobby.texture.width != lw || rtLobby.texture.height != lh) {
         if (rtLobby.id) UnloadRenderTexture(rtLobby);
@@ -986,16 +1096,19 @@ void Game::BeginLobbyCanvas() {
 void Game::EndLobbyCanvas() {
     EndTextureMode();
     int sw = GetScreenWidth(), sh = GetScreenHeight();
+    // Native full-window draw — no letterbox, no black bars.
     Rectangle dest = { 0, 0, (float)sw, (float)sh };
     Rectangle src = { 0, 0, (float)rtLobby.texture.width, -(float)rtLobby.texture.height };
     DrawTexturePro(rtLobby.texture, src, dest, {0, 0}, 0, WHITE);
 }
 
 int Game::HumansForMode() const {
+    // Online: always 1 local human — party friends are other clients via the game server
+    if (playType == PlayType::Online) return 1;
     switch (gameMode) {
         case GameMode::Solo: return 1;
         case GameMode::Duo: return p2Joined ? 2 : 1;
-        case GameMode::Private1v1: return 1;
+        case GameMode::Private1v1: return p2Joined ? 2 : 1;
         case GameMode::Private2v2: return p2Joined ? 2 : 1;
         default: return 1;
     }
@@ -1009,6 +1122,7 @@ void Game::UpdateLogin(float dt) {
         TryLogin();
         if (account.loggedIn) return;
     }
+    // text input
     int key = GetCharPressed();
     while (key > 0) {
         char* buf = (loginFocus == 0) ? loginUser : (loginFocus == 1) ? loginPass : loginDisplay;
@@ -1032,6 +1146,7 @@ void Game::DrawLogin() {
     BeginDrawing();
     ClearBackground(C(8, 12, 28));
     int sw = GetScreenWidth(), sh = GetScreenHeight();
+    // centred card
     int cw = 360, ch = signupMode ? 320 : 280;
     int cx = (sw - cw) / 2, cy = (sh - ch) / 2;
     DrawRectangle(cx, cy, cw, ch, C(18, 24, 48));
@@ -1063,9 +1178,13 @@ void Game::DrawLogin() {
     EndDrawing();
 }
 
+// =====================================================================
+//  LOBBY TABS
+// =====================================================================
 void Game::UpdateLobby(float dt) {
     if (statusMsgT > 0) statusMsgT -= dt;
 
+    // Matchmaking state machine: wait for party + game server before loading
     if (matchmaking) {
         matchmakeT += dt;
         if (playType == PlayType::Local) {
@@ -1133,11 +1252,13 @@ void Game::UpdateLobby(float dt) {
         return false;
     };
 
+    // Tabs: controller LB/RB
     if (padPressed(GAMEPAD_BUTTON_LEFT_TRIGGER_1))
         tab = (LobbyTab)(((int)tab + (int)LobbyTab::COUNT - 1) % (int)LobbyTab::COUNT);
     if (padPressed(GAMEPAD_BUTTON_RIGHT_TRIGGER_1))
         tab = (LobbyTab)(((int)tab + 1) % (int)LobbyTab::COUNT);
 
+    // Left stick digital
     static int stickDir = 0;
     float sx = 0, sy = 0;
     for (int gpad = 0; gpad < 4; gpad++) {
@@ -1158,6 +1279,7 @@ void Game::UpdateLobby(float dt) {
     stickDir = dir;
     (void)stickUp; (void)stickDown;
 
+    // Friends panel: F / controller Menu button opens a friends list in the centre of the screen
     {
         const int fw = LobbyW(), fh = LobbyH();
         if (!friendsOpen) {
@@ -1228,11 +1350,12 @@ void Game::UpdateLobby(float dt) {
                     }
                 }
             }
-            return;
+            return;   // panel swallows all other lobby input
         }
     }
 
     if (tab == LobbyTab::Play) {
+        // Shared mouse coords for mode picker + play button
         Vector2 m = LobbyMouse();
         int W = LobbyW(), H = LobbyH();
         int bx = W - 170, by = H - 88;
@@ -1255,6 +1378,7 @@ void Game::UpdateLobby(float dt) {
         };
 
         if (modePickerOpen) {
+            // --- keyboard / pad while picker is open ---
             if (IsKeyPressed(KEY_ONE)) setGameMode(GameMode::Solo);
             if (IsKeyPressed(KEY_TWO)) setGameMode(GameMode::Duo);
             if (IsKeyPressed(KEY_THREE)) setGameMode(GameMode::Private1v1);
@@ -1264,10 +1388,12 @@ void Game::UpdateLobby(float dt) {
             if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S) || stickDown)
                 setGameMode((GameMode)(((int)gameMode + 1) % (int)GameMode::COUNT));
 
+            // Local / Online: L or A or LEFT = Local; O or D or RIGHT = Online
             if (IsKeyPressed(KEY_L) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT) || stickLeft)
                 setPlayType(PlayType::Local);
             if (IsKeyPressed(KEY_O) || IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT) || stickRight)
                 setPlayType(PlayType::Online);
+            // Also allow LB/RB on pad for play type
             if (padPressed(GAMEPAD_BUTTON_LEFT_TRIGGER_1)) setPlayType(PlayType::Local);
             if (padPressed(GAMEPAD_BUTTON_RIGHT_TRIGGER_1)) setPlayType(PlayType::Online);
 
@@ -1275,6 +1401,7 @@ void Game::UpdateLobby(float dt) {
                 || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
                 modePickerOpen = false;
 
+            // --- mouse clicks while picker is open (was broken before: lived in else branch) ---
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 int pw = 380, ph = 320;
                 int px = (W - pw) / 2, py = (H - ph) / 2;
@@ -1296,6 +1423,7 @@ void Game::UpdateLobby(float dt) {
             if (!inParty && IsKeyPressed(KEY_J))
                 p2Joined = !p2Joined;
 
+            // Quick L/O or A/D even with picker closed
             if (IsKeyPressed(KEY_L) || IsKeyPressed(KEY_A)) setPlayType(PlayType::Local);
             if (IsKeyPressed(KEY_O) || IsKeyPressed(KEY_D)) setPlayType(PlayType::Online);
 
@@ -1354,7 +1482,7 @@ void Game::UpdateLobby(float dt) {
             }
         } else {
             int count = (lockerCat == 0) ? kLookCount : 3;
-            const int COLS = 6;
+            const int COLS = 6;                                   // 6 items per row
             if (IsKeyPressed(KEY_LEFT) || stickLeft || padPressed(GAMEPAD_BUTTON_LEFT_FACE_LEFT))
                 lockerSel = (lockerSel + count - 1) % count;
             if (IsKeyPressed(KEY_RIGHT) || stickRight || padPressed(GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
@@ -1435,7 +1563,7 @@ void Game::DrawLobbyNav(int W, int H) {
     total += gaps * ((int)LobbyTab::COUNT - 1);
 
     float x = (W - total) * 0.5f;
-    Vector2 mouse = GetMousePosition();
+        Vector2 mouse = GetMousePosition();
     int sw = GetScreenWidth(), sh = GetScreenHeight();
     float mx = mouse.x * (W / (float)sw);
     float my = mouse.y * (H / (float)sh);
@@ -1457,6 +1585,7 @@ void Game::DrawLobbyNav(int W, int H) {
         x += tw + gaps;
     }
 
+    // V-Bucks chip top-right (always visible)
     char vb[32]; snprintf(vb, sizeof vb, "%d", account.vbucks);
     float vbw = MeasureTextEx(gFont, vb, 16, 1).x;
     int chipW = (int)vbw + 40;
@@ -1472,6 +1601,7 @@ void Game::DrawLobbyNav(int W, int H) {
         DrawTexturePro(*vbIcon, {0,0,(float)vbIcon->width,(float)vbIcon->height},
             {(float)(chipX + 6), 10, 18, 18}, {0,0}, 0, WHITE);
     else {
+        // fallback coin
         DrawCircle(chipX + 15, chipY + 14, 8, Color{40, 160, 255, 255});
         DrawCircleLines(chipX + 15, chipY + 14, 8, Color{180, 230, 255, 255});
         DrawTextEx(gFont, "V", {(float)(chipX + 11), (float)(chipY + 7)}, 12, 1, WHITE);
@@ -1479,12 +1609,15 @@ void Game::DrawLobbyNav(int W, int H) {
     DrawTextEx(gFont, vb, {(float)(chipX + 28), (float)(chipY + 6)}, 16, 1, Color{120, 210, 255, 255});
 }
 
+
 void Game::DrawProgressionWidget(int W, int H) {
-    int x = 20, y = 96;
+    // Season 1 level widget (bottom-left style reference)
+    int x = 20, y = 96;   // sits under the LOCAL/ONLINE + "F / Menu: Friends" text
     int ww = 220, hh = 78;
     DrawRectangle(x, y, ww, hh, Color{12, 28, 55, 235});
     DrawRectangleLines(x, y, ww, hh, Color{50, 90, 150, 255});
     DrawTextEx(gFont, "SEASON 1", {(float)(x + 12), (float)(y + 8)}, 14, 1, Color{140, 180, 230, 255});
+    // banner icon
     const Texture2D* ban = gIcons.Cosmetic(account.banner.empty() ? "Banner_Default" : account.banner.c_str());
     DrawRectangle(x + 12, y + 28, 36, 36, Color{8, 12, 24, 255});
     DrawRectangleLines(x + 12, y + 28, 36, 36, Color{80, 140, 220, 255});
@@ -1492,10 +1625,12 @@ void Game::DrawProgressionWidget(int W, int H) {
         DrawTexturePro(*ban, {0,0,(float)ban->width,(float)ban->height},
             {(float)(x+14),(float)(y+30),32,32}, {0,0}, 0, WHITE);
     else {
+        // chevron fallback like reference
         DrawTriangle({(float)(x+30),(float)(y+34)}, {(float)(x+20),(float)(y+54)},
                      {(float)(x+40),(float)(y+54)}, Color{200, 220, 255, 255});
     }
     DrawTextEx(gFont, TextFormat("LEVEL %d", account.level), {(float)(x + 56), (float)(y + 30)}, 18, 1, WHITE);
+    // XP bar
     int xpNeed = 100;
     int xp = account.xp % xpNeed;
     float pct = (float)xp / (float)xpNeed;
@@ -1508,6 +1643,7 @@ void Game::DrawTabPlay(int W, int H) {
     float t = (float)GetTime();
     DrawLobbyBackground(W, H, t);
 
+    // 3D characters — camera further back for progression UI space
     Camera3D cam = {};
     cam.position = {0, 1.35f, 9.2f};
     cam.target = {0, 1.05f, 0};
@@ -1517,6 +1653,7 @@ void Game::DrawTabPlay(int W, int H) {
     gR.SetResolution((float)W, (float)H);
     BeginMode3D(cam);
     float x1 = -1.55f, x2 = 1.55f;
+    // Solid grey floor across the whole bottom of the screen; the animated background shows above the horizon
     DrawPlane({0, -0.01f, -20.0f}, {200.0f, 120.0f}, Color{96, 99, 107, 255});
     DrawModelEx(padOn, {x1, 0, 0}, {0, 1, 0}, 0, {1.1f, 1.1f, 1.1f}, WHITE);
     DrawModelEx((p2Joined || inParty) ? padOn : padOff, {x2, 0, 0}, {0, 1, 0}, 0, {1.1f, 1.1f, 1.1f}, WHITE);
@@ -1534,21 +1671,9 @@ void Game::DrawTabPlay(int W, int H) {
     const char* n2 = inParty ? partyMemberName.c_str() : (p2Joined ? "Player 2" : "Invite");
     DrawTextEx(gFont, n2, {l2.x - MeasureTextEx(gFont, n2, 18, 1).x / 2, l2.y}, 18, 1, showP2 ? WHITE : C(160, 160, 180));
 
-    if (inParty || p2Joined) {
-        if (localReady) {
-            const char* r = "READY";
-            DrawTextEx(gFont, r, {l1.x - MeasureTextEx(gFont, r, 14, 1).x / 2, l1.y + 22}, 14, 1,
-                       Color{80, 220, 120, 255});
-        }
-        if (inParty && partyMemberReady && showP2) {
-            const char* r = "READY";
-            DrawTextEx(gFont, r, {l2.x - MeasureTextEx(gFont, r, 14, 1).x / 2, l2.y + 22}, 14, 1,
-                       Color{80, 220, 120, 255});
-        }
-    }
-
     DrawProgressionWidget(W, H);
 
+    // Mode label above PLAY (clickable)
     const char* modeLabel = kModeNames[(int)gameMode];
     float mw = MeasureTextEx(gFont, modeLabel, 16, 1).x;
     int bx = W - 170, by = H - 88;
@@ -1556,10 +1681,22 @@ void Game::DrawTabPlay(int W, int H) {
     int modeY = by - 28;
     DrawTextEx(gFont, modeLabel, {(float)modeX, (float)modeY}, 16, 1, Color{250, 200, 40, 255});
 
-    Color btnCol = matchmaking ? Color{180, 60, 50, 255} : Color{250, 200, 30, 255};
+    // Ready status (PLAY toggles ready when in a party)
+    if (inParty) {
+        Color c1 = localReady ? Color{80, 200, 100, 255} : Color{180, 90, 90, 255};
+        Color c2 = partyMemberReady ? Color{80, 200, 100, 255} : Color{180, 90, 90, 255};
+        DrawTextEx(gFont, TextFormat("You: %s", localReady ? "READY" : "NOT READY"), {20, 92}, 13, 1, c1);
+        DrawTextEx(gFont, TextFormat("%s: %s", partyMemberName.empty() ? "Teammate" : partyMemberName.c_str(),
+                   partyMemberReady ? "READY" : "NOT READY"), {20, 108}, 13, 1, c2);
+        DrawTextEx(gFont, "Press PLAY to ready — match starts when both are ready", {20, 124}, 12, 1, Color{160, 175, 200, 255});
+    }
+
+    // PLAY / CANCEL button
+    Color btnCol = matchmaking ? Color{180, 60, 50, 255}
+                 : (inParty && localReady ? Color{80, 200, 100, 255} : Color{250, 200, 30, 255});
     DrawRectangle(bx, by, 140, 42, btnCol);
     DrawRectangleLines(bx, by, 140, 42, Color{255, 240, 150, 255});
-    const char* btnTxt = matchmaking ? "CANCEL" : "PLAY";
+    const char* btnTxt = matchmaking ? "CANCEL" : (inParty && localReady ? "READY" : "PLAY");
     float btw = MeasureTextEx(gFont, btnTxt, 22, 1).x;
     DrawTextEx(gFont, btnTxt, {(float)(bx + (140 - btw) / 2), (float)(by + 8)}, 22, 1, matchmaking ? WHITE : BLACK);
     if (matchmaking || !matchmakeStatus.empty()) {
@@ -1595,6 +1732,7 @@ static const Texture2D* LockerIcon(const char* cid) {
     if (!cid || !cid[0]) return nullptr;
     return gIcons.Cosmetic(cid);
 }
+
 
 static void DrawBpTile(int x, int y, int s, int tierNum, const BpReward& r, bool unlocked, bool selected, bool isPaidRow) {
     Color bg = Color{22, 28, 48, 255};
@@ -1763,20 +1901,23 @@ void Game::DrawTabLocker(int W, int H) {
         }
     };
 
+    // Selection grid layout: 6 items per row
     const int COLS = 6;
-    const int slot = 50;
-    const int gapX = 8;
-    const int rowGap = 18;
+    const int slot = 50;      // icon tile size
+    const int gapX = 8;       // horizontal gap between tiles
+    const int rowGap = 18;    // extra vertical gap to leave room for labels
     int count = (lockerCat == 0) ? kLookCount : 3;
     int rows = lockerBrowsing ? ((count + COLS - 1) / COLS) : 0;
 
+    // Dynamic panel height so a 6-wide grid always fits (2 rows for outfits)
     int panelW = (int)(W * 0.50f);
     int baseHeader = 40;
     int baseFooter = 22;
     int gridH = lockerBrowsing
         ? (rows * (slot + rowGap))
-        : 54 + 16;
+        : 54 + 16;               // single preview row when not browsing
     int panelH = baseHeader + gridH + baseFooter;
+    // Keep it from growing taller than the screen
     if (panelH > H - 60) panelH = H - 60;
     int panelX = 18;
     int panelY = H - panelH - 18;
@@ -1816,6 +1957,7 @@ void Game::DrawTabLocker(int W, int H) {
             int row = i / COLS;
             int x = startX + col * (slot + gapX);
             int y = startY + row * (slot + rowGap);
+            // Bail if this row would overflow the panel (clamp panel already prevents most cases)
             if (y + slot > panelY + panelH - 18) break;
             drawIcon(cids[i], x, y, slot, i == lockerSel, i == equippedIdx);
             const char* nm = (lockerCat == 0) ? kLooks[i].name : names[i];
@@ -1829,6 +1971,7 @@ void Game::DrawTabLocker(int W, int H) {
 void Game::DrawTabShop(int W, int H) {
     DrawRectangle(0, 40, W, H - 40, Color{16, 22, 40, 255});
     DrawTextEx(gFont, "ITEM SHOP", {24, 52}, 24, 1, WHITE);
+    // V-Bucks
     const Texture2D* vb = gIcons.Cosmetic("VBucks");
     if (vb && vb->id)
         DrawTexturePro(*vb, {0,0,(float)vb->width,(float)vb->height}, { (float)(W - 120), 52, 22, 22}, {0,0}, 0, WHITE);
@@ -1890,6 +2033,7 @@ void Game::DrawTabProfile(int W, int H) {
     DrawTextEx(gFont, TextFormat("Matches: %d", account.matches), {24, 250}, 17, 1, WHITE);
     DrawTextEx(gFont, TextFormat("V-Bucks: %d", account.vbucks), {24, 286}, 17, 1, C(100, 200, 255));
 
+    // Logout button
     int bx = 24, by = H - 70, bw = 160, bh = 36;
     DrawRectangle(bx, by, bw, bh, Color{180, 50, 50, 255});
     DrawRectangleLines(bx, by, bw, bh, Color{255, 120, 120, 255});
@@ -1922,9 +2066,6 @@ void Game::DrawLobby() {
     EndDrawing();
 }
 
-// =====================================================================
-//  MATCH: start / loading / end
-// =====================================================================
 void Game::StartMatch() {
     friendsOpen = false; addFriendFocus = false;
     world.Build(map);
@@ -1933,26 +2074,41 @@ void Game::StartMatch() {
     actors.clear(); grenades.clear(); fx.clear(); feed.clear();
     gVFX.Clear();
 
+    // LOCAL humans only on THIS machine.
+    // Online party members are separate clients — they appear via Net snapshots, never as split-screen.
+    const bool onlineNet = (playType == PlayType::Online);
     humans = 1;
-    if (inParty || p2Joined) humans = 2;
-    if (gameMode == GameMode::Solo && !inParty && !p2Joined) humans = 1;
+    if (!onlineNet) {
+        // Local/split-screen only: second pad or local party-on-same-PC
+        if (p2Joined) humans = 2;
+        if (gameMode == GameMode::Solo) humans = 1;
+    }
 
+    // How many total actor slots to spawn on this client
     int total = 8;
     bool allowBots = true;
-    if (gameMode == GameMode::Private1v1) {
+    if (onlineNet) {
+        // One local human; remotes are added by OnlineApplySnapshot from the game server.
+        // Bots optional for public modes; private modes = humans only (remotes fill in).
+        humans = 1;
+        allowBots = !(gameMode == GameMode::Private1v1 || gameMode == GameMode::Private2v2);
+        if (gameMode == GameMode::Private1v1 || gameMode == GameMode::Private2v2)
+            total = 1;          // only self; party friend replicates from server
+        else if (gameMode == GameMode::Solo)
+            total = allowBots ? 8 : 1;
+        else
+            total = allowBots ? 8 : 1; // Duo online: still 1 local + bots; friend is remote
+    } else if (gameMode == GameMode::Private1v1) {
         total = humans;
         allowBots = false;
     } else if (gameMode == GameMode::Private2v2) {
-        total = 4;
-        allowBots = false;
-        if (playType == PlayType::Local) total = humans;
-        else if (!mmConnected) total = humans;
         total = humans;
+        allowBots = false;
     } else if (gameMode == GameMode::Solo) {
         total = allowBots ? 8 : 1;
         humans = 1;
     } else if (gameMode == GameMode::Duo) {
-        humans = (inParty || p2Joined) ? 2 : 1;
+        humans = p2Joined ? 2 : 1;
         total = allowBots ? 8 : humans;
     }
 
@@ -1965,13 +2121,18 @@ void Game::StartMatch() {
     for (int i = 0; i < total; i++) {
         Actor a;
         a.isBot = allowBots && (i >= humans);
-        a.device = (i == 0) ? 0 : (i == 1 && humans >= 2 ? 1 : -1);
+        // Online: only actor 0 is local (device 0). Never split-screen a network party member.
+        if (onlineNet) {
+            a.device = (i == 0) ? 0 : -1;
+        } else {
+            a.device = (i == 0) ? 0 : (i == 1 && humans >= 2 ? 1 : -1);
+        }
         if (i == 0) {
             a.look = p1Look;
             a.name = account.displayName.empty() ? "Player 1" : account.displayName;
-        } else if (i == 1 && humans >= 2) {
+        } else if (!onlineNet && i == 1 && humans >= 2) {
             a.look = p2Look;
-            a.name = inParty && !partyMemberName.empty() ? partyMemberName : "Player 2";
+            a.name = "Player 2";
         } else {
             a.look = RandI(0, kLookCount - 1);
             a.name = a.isBot ? TextFormat("Bot%d", i) : TextFormat("Player %d", i + 1);
@@ -1983,6 +2144,7 @@ void Game::StartMatch() {
         actors.push_back(a);
     }
 
+    // ---- Battle bus: everyone starts aboard and jumps over the map
     air.assign(actors.size(), AirState());
     bus = BattleBus();
     if (kUseBattleBus) {
@@ -1996,26 +2158,32 @@ void Game::StartMatch() {
             s.prevYaw = bus.yaw;
             a.pos = bus.Seat(i);
             a.yaw = bus.yaw; a.pitch = -0.18f; a.grounded = false;
-            if (a.isBot && !world.chests.empty()) a.goal = world.chests[RandI(0, (int)world.chests.size() - 1)].pos;
+            if (a.isBot && !world.chests.empty()) a.goal = world.chests[RandI(0, (int)world.chests.size() - 1)].pos;   // bots drop on loot
         }
     }
 
     stormR = kRad[0] * ms; stormT = kWait[0]; stormPhase = 0; shrinking = false; matchT = 0; victory = false; humanPlacement = 0;
+    // Online: only local player is mapped; remotes are added in OnlineApplySnapshot
     actorNetIds.assign(actors.size(), -1);
-    if (playType == PlayType::Online && mmConnected) {
+    if (onlineNet && mmConnected) {
         if (!actors.empty()) actorNetIds[0] = netLocalId;
-        if (IsPrivateMode()) {
-            while ((int)actors.size() > humans) {
-                actors.pop_back();
-                if (!air.empty()) air.pop_back();
-            }
-            actorNetIds.resize(actors.size(), -1);
-            if (!actors.empty()) actorNetIds[0] = netLocalId;
-            if (humans >= 2 && (int)actors.size() >= 2) actorNetIds[1] = -2;
+        // Strip any accidental second local human in online private modes
+        while ((int)actors.size() > 1 && !actors.back().isBot && actors.back().device >= 0) {
+            actors.pop_back();
+            if (!air.empty()) air.pop_back();
         }
+        actorNetIds.resize(actors.size(), -1);
+        if (!actors.empty()) actorNetIds[0] = netLocalId;
+        humans = 1; // force single view for the rest of the match
     }
+    // The loading screen (UpdateLoading) switches to State::Match once the first frames have rendered.
 }
 
+// =====================================================================
+//  LOADING SCREEN
+//  stage 0: check the connection   stage 1: build the world   stage 2: warm-up render (shaders / textures / GPU buffers)
+//  stage 3: hold until the bar is full, then drop in
+// =====================================================================
 static const float kMinLoadTime = 2.5f;
 
 void Game::BeginMatchLoad() {
@@ -2051,27 +2219,29 @@ void Game::UpdateLoading(float dt) {
     };
     const bool back = IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
 
+    // Smooth progress bar
     static const float kTarget[4] = {0.15f, 0.40f, 0.70f, 1.0f};
     float target = kTarget[loadStage < 0 ? 0 : (loadStage > 3 ? 3 : loadStage)];
     if (loadStage == 2) target += 0.08f * (float)loadWarm;
     loadShown += (fminf(target, 1.0f) - loadShown) * fminf(1.0f, dt * 5.0f);
 
-    if (loadFailed) {
+    if (loadFailed) {                                    // error screen: wait for the player
         if (back || loadT > 12.0f) AbortLoad("lobby");
         return;
     }
-    if (IsKeyPressed(KEY_ESCAPE) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) { AbortLoad("lobby"); return; }
+    if (IsKeyPressed(KEY_ESCAPE) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) { AbortLoad("lobby"); return; }   // cancel
 
+    // Let every stage's status text reach the screen once before its (blocking) work runs
     if (loadStageFrames < 1) { loadStageFrames++; return; }
 
     switch (loadStage) {
-    case 0: {
+    case 0: {   // ---- connection check
         std::string err;
         if (playType == PlayType::Online) {
             if (!mmConnected) err = "The game server connection was lost.";
             else {
                 int st = 0;
-                HttpGet("/api/shop", &st);
+                HttpGet("/api/shop", &st);               // cheap request just to prove the backend is still answering
                 if (st != 200) err = "The backend is not responding. Make sure it is running and try again.";
             }
         }
@@ -2085,7 +2255,7 @@ void Game::UpdateLoading(float dt) {
         loadStage = 1; loadStageFrames = 0; loadStatus = "Building the island...";
         break;
     }
-    case 1: {
+    case 1: {   // ---- build world, actors, bus
         StartMatch();
         loadBuilt = true;
         if (world.spawns.empty() || actors.empty()) {
@@ -2093,13 +2263,13 @@ void Game::UpdateLoading(float dt) {
             loadErrTitle = "FAILED TO LOAD MATCH"; loadErr = "The map did not load correctly (no spawn points).";
             return;
         }
-        for (int k = 0; k < humans && k < (int)actors.size(); k++) {
+        for (int k = 0; k < humans && k < (int)actors.size(); k++) {          // give the warm-up render a valid camera
             if (air[k].phase == DropPhase::Bus) ComputeBusCamera(actors[k]); else ComputeCamera(actors[k]);
         }
         loadStage = 2; loadStageFrames = 0; loadWarm = 0; loadStatus = "Rendering the world...";
         break;
     }
-    case 2: {
+    case 2: {   // ---- DrawLoading renders the match view offscreen each frame; here we only count + validate
         if (loadWarm >= 3) {
             bool ok = rtFull.id != 0 && rtFull.texture.id != 0;
             if (humans > 1) ok = ok && rtHalf[0].id != 0 && rtHalf[1].id != 0;
@@ -2112,7 +2282,7 @@ void Game::UpdateLoading(float dt) {
         }
         break;
     }
-    case 3: {
+    case 3: {   // ---- drop in once the bar has filled
         if (loadShown > 0.985f && loadT >= kMinLoadTime) {
             state = State::Match;
             DisableCursor();
@@ -2129,12 +2299,13 @@ void Game::DrawLoading() {
     const int sw = GetScreenWidth(), sh = GetScreenHeight();
     const float k = sh / 720.0f;
 
-    if (loadStage == 2 && !loadFailed && loadBuilt) {
-        if (humans == 1) RenderView(rtFull, 1920, 1080, 0);
+    if (loadStage == 2 && !loadFailed && loadBuilt) {    // warm-up: render the real match view (not shown) so the first in-game frame is smooth
+        if (humans <= 1 || playType == PlayType::Online) RenderView(rtFull, 1920, 1080, 0);
         else { RenderView(rtHalf[0], 960, 1080, 0); RenderView(rtHalf[1], 960, 1080, 1); }
         loadWarm++;
     }
 
+    // Background art, scaled to cover the whole window
     const Texture2D* bg = UiTex("assets/ui/loadingscreens/FORT_Load_BattleRoyale.png");
     if (bg) {
         float sc = fmaxf((float)sw / bg->width, (float)sh / bg->height);
@@ -2152,19 +2323,23 @@ void Game::DrawLoading() {
     };
 
     if (!loadFailed) {
+        // ---- Layout follows the reference screenshot (1327 x 733): black diagonal panel on the left, art on the right,
+        //      yellow tag top-right, purple tip bar along the bottom, white loading bar bottom-left.
         const float fx = sw / 1327.0f, fy = sh / 733.0f, fk = sh / 733.0f;
         auto P = [&](float x, float y) { return Vector2{x * fx, y * fy}; };
         auto Tri2 = [](Vector2 a, Vector2 b, Vector2 c2, Color col) { DrawTriangle(a, b, c2, col); DrawTriangle(a, c2, b, col); };
         auto Quad2 = [&](Vector2 a, Vector2 b, Vector2 c2, Vector2 d, Color col) { Tri2(a, b, c2, col); Tri2(a, c2, d, col); };
-        auto Bold = [&](const char* s, float x, float y, float fs, Color col) {
+        auto Bold = [&](const char* s, float x, float y, float fs, Color col) {        // heavy weight: draw twice, nudged
             DrawTextEx(gFont, s, {x + 0.8f * fk, y}, fs, 1.0f, col);
             DrawTextEx(gFont, s, {x, y}, fs, 1.0f, col);
         };
 
+        // yellow "EARLY ACCESS" tag
         Quad2(P(888, 38), P(1278, 26), P(1290, 124), P(890, 132), Color{255, 214, 20, 255});
         { const char* tag = "EARLY ACCESS"; float fs = 40 * fk; Vector2 m = MeasureTextEx(gFont, tag, fs, 1.0f);
           Bold(tag, 1086 * fx - m.x / 2, 80 * fy - m.y / 2, fs, Color{12, 12, 16, 255}); }
 
+        // purple tip bar (slanted top-left corner is hidden by the black panel's lower piece)
         Quad2(P(495, 610), P(1327, 628), P(1327, 733), P(505, 733), Color{84, 78, 170, 255});
         {
             static const char* kTips[6] = {
@@ -2177,13 +2352,16 @@ void Game::DrawLoading() {
             T(kTips[loadTip < 0 ? 0 : (loadTip > 5 ? 5 : loadTip)], 609 * fx, 672 * fy - 8 * fk, 15 * fk, WHITE, false);
         }
 
+        // black left panel: upper piece with the diagonal edge + lower piece under the tip bar
         Quad2(P(0, 0), P(580, 0), P(785, 612), P(0, 612), BLACK);
         Quad2(P(0, 612), P(495, 612), P(505, 733), P(0, 733), BLACK);
 
+        // titles
         static const char* kLoadMode[4] = {"Solo", "Duo", "Private 1v1", "Private 2v2"};
         T(kLoadMode[(int)gameMode], 80 * fx, 59 * fy, 14 * fk, WHITE, false);
         Bold("Battle Royale", 80 * fx, 92 * fy, 42 * fk, WHITE);
 
+        // the three objective rows
         struct Row { const char* head; const char* body; const char* icon; float y; };
         static const Row rows[3] = {
             {"Drop In & Load Up", "Pick a landing spot and search for gear.", "assets/ui/loadingscreens/Icons/FORT_Load_Missions_PH1-256.png", 240},
@@ -2195,11 +2373,12 @@ void Game::DrawLoading() {
             if (ic) {
                 float isz = 110 * fk;
                 DrawTexturePro(*ic, Rectangle{0, 0, (float)ic->width, (float)ic->height}, Rectangle{cx2 - isz / 2, cy2 - isz / 2, isz, isz}, {0, 0}, 0, WHITE);
-            } else {
+            } else {   // hand-drawn style circle fallback
                 DrawRing({cx2, cy2}, 40 * fk, 44 * fk, 20, 380, 48, WHITE);
                 DrawRing({cx2 + 2 * fk, cy2 - 1 * fk}, 38 * fk, 41 * fk, 200, 520, 48, WHITE);
             }
             Bold(r.head, 202 * fx, cy2 - 32 * fk, 25 * fk, WHITE);
+            // word-wrapped description
             const float fs = 14 * fk, maxW = 385 * fx; float ly = cy2 + 2 * fk;
             std::string line, word, text = r.body;
             auto flush = [&]() { if (!line.empty()) { Bold(line.c_str(), 202 * fx, ly, fs, WHITE); ly += fs * 1.35f; line.clear(); } };
@@ -2214,6 +2393,7 @@ void Game::DrawLoading() {
             flush();
         }
 
+        // LOADING. + white progress bar
         Bold("LOADING.", 65 * fx, 645 * fy, 26 * fk, WHITE);
         const float bx = 52 * fx, by = 688 * fy, bw = 416 * fx, bh = fmaxf(4.0f, 8 * fy);
         DrawRectangle((int)bx, (int)by, (int)bw, (int)bh, Color{255, 255, 255, 60});
@@ -2268,6 +2448,7 @@ Input Game::ReadInput(int device, float dt) {
         in.jump = IsKeyDown(KEY_SPACE); in.reload = IsKeyPressed(KEY_R); in.interact = IsKeyPressed(KEY_E);
         in.toggleBuild = IsKeyPressed(KEY_Q); in.cycleMat = IsKeyPressed(KEY_G);
         in.drop = IsKeyPressed(KEY_X);
+        
         float wh = GetMouseWheelMove();
         if (actors[device].buildMode) {
             if (wh > 0) in.piece = ((int)actors[device].piece == 0) ? 3 : (int)actors[device].piece - 1;
@@ -2278,6 +2459,7 @@ Input Game::ReadInput(int device, float dt) {
         for (int i = 0; i < 6; i++) if (IsKeyPressed(KEY_ONE + i)) in.slot = i;
         if (IsKeyPressed(KEY_Z)) in.piece = 0; if (IsKeyPressed(KEY_X)) in.piece = 1; if (IsKeyPressed(KEY_C)) in.piece = 2; if (IsKeyPressed(KEY_V)) in.piece = 3;
     } else {
+        // Works across Xbox 360/One/Series and PlayStation-style pads via raylib/SDL mapping
         int g = device - 1;
         if (!IsGamepadAvailable(g)) return in;
         auto dz = [](float v) { return fabsf(v) < 0.18f ? 0.0f : v; };
@@ -2287,11 +2469,14 @@ Input Game::ReadInput(int device, float dt) {
         in.move.x = dz(GetGamepadAxisMovement(g, GAMEPAD_AXIS_LEFT_X));
         in.move.y = -dz(GetGamepadAxisMovement(g, GAMEPAD_AXIS_LEFT_Y));
         in.look = {GetGamepadAxisMovement(g, GAMEPAD_AXIS_RIGHT_X) * 4.2f * dt, GetGamepadAxisMovement(g, GAMEPAD_AXIS_RIGHT_Y) * 4.2f * dt};
+        // R2 / RT (axis or digital) — PSX/PS2/PS3/PS4/PS5 + Xbox
         float rt = GetGamepadAxisMovement(g, GAMEPAD_AXIS_RIGHT_TRIGGER);
         float lt = GetGamepadAxisMovement(g, GAMEPAD_AXIS_LEFT_TRIGGER);
+        // Combat Pro: LT aim, RT fire (analog thresholds)
         in.fire = rt > 0.25f;
         in.aim  = lt > 0.25f;
         if (g < 4) { in.firePressed = in.fire && !prevFire[g]; prevFire[g] = in.fire; }
+        // Face buttons: Cross/A jump, Square/X reload, Circle/B interact, Triangle/Y build
         in.jump = held(GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
         in.reload = pressed(GAMEPAD_BUTTON_RIGHT_FACE_LEFT);
         in.interact = pressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT);
@@ -2322,6 +2507,10 @@ void Game::UpdateStorm(float dt) {
     stormR = shrinking ? Lerp(kRad[stormPhase + 1] * ms, kRad[stormPhase] * ms, fmaxf(0.0f, stormT) / kShrink[stormPhase]) : kRad[stormPhase] * ms;
 }
 
+
+// =====================================================================
+//  ONLINE REPLICATION
+// =====================================================================
 std::string Game::WeaponNameForNet(const Actor& a) const {
     if (a.sel >= 0 && a.sel < 6 && !a.slots[a.sel].Empty())
         return ItemIdToWeaponName(a.slots[a.sel].id);
@@ -2344,45 +2533,113 @@ void Game::OnlineApplySnapshot() {
         stormT = snap.stormT;
         shrinking = snap.shrinking;
     }
+
+    // Battle bus from server
+    if (snap.bus.active) {
+        bus.active = true;
+        bus.pos = {snap.bus.x, snap.bus.y, snap.bus.z};
+        // progress-driven optional fields if Bus struct has them - keep pos synced
+    } else if (bus.active && !snap.bus.active) {
+        bus.active = false;
+    }
+
     if (NetLocalId() >= 0) netLocalId = NetLocalId();
+
+    // Resolve local id by name if welcome was missed
+    if (netLocalId < 0 && !actors.empty()) {
+        const std::string& myName = actors[0].name;
+        for (const NetRemotePlayer& rp : snap.players) {
+            if (!rp.isBot && !myName.empty() && rp.name == myName) {
+                netLocalId = rp.id;
+                break;
+            }
+        }
+        // Fallback: only one non-bot that we control — pick lowest human id we're not sure
+        if (netLocalId < 0) {
+            for (const NetRemotePlayer& rp : snap.players) {
+                if (!rp.isBot) { netLocalId = rp.id; break; }
+            }
+        }
+    }
+
     if ((int)actorNetIds.size() < (int)actors.size())
         actorNetIds.resize(actors.size(), -1);
-    if (netLocalId >= 0 && !actors.empty() && !actors[0].isBot)
+    if (netLocalId >= 0 && !actors.empty())
         actorNetIds[0] = netLocalId;
 
     for (const NetRemotePlayer& rp : snap.players) {
-        if (rp.id == netLocalId) {
-            if (!actors.empty() && !actors[0].isBot) {
+        if (rp.id < 0) continue;
+
+        // Local player: apply HP / air state only (position is client-authoritative for now)
+        if (netLocalId >= 0 && rp.id == netLocalId) {
+            if (!actors.empty()) {
                 actors[0].health = rp.health;
                 actors[0].shield = rp.shield;
                 if (!rp.alive && actors[0].alive) { actors[0].alive = false; actors[0].health = 0; }
+                if ((int)air.size() > 0) {
+                    if (rp.onBus) air[0].phase = DropPhase::Bus;
+                    else if (rp.skydiving) air[0].phase = DropPhase::Freefall;
+                    else if (rp.gliding) air[0].phase = DropPhase::Glide;
+                    else if (air[0].phase == DropPhase::Bus || air[0].phase == DropPhase::Freefall || air[0].phase == DropPhase::Glide)
+                        air[0].phase = DropPhase::Landed;
+                }
             }
             continue;
         }
+
         int idx = ActorIndexFromNetId(rp.id);
+        if (idx == 0) {
+            // Don't treat actor 0 as remote
+            continue;
+        }
         if (idx < 0) {
-            Actor a;
-            a.isBot = false; a.device = -1;
-            a.look = RandI(0, kLookCount - 1);
-            a.name = rp.name.empty() ? TextFormat("Player%d", rp.id) : rp.name;
+            // Spawn remote human or bot from server
+            Actor a{};
+            a.isBot = rp.isBot;
+            a.device = -1;                     // not locally controlled
+            a.look = (rp.look >= 0 && rp.look < kLookCount) ? rp.look : 0;
+            a.name = rp.name.empty() ? TextFormat("%s%d", rp.isBot ? "Bot" : "Player", rp.id) : rp.name;
             a.pos = {rp.x, rp.y, rp.z};
             a.yaw = rp.yaw; a.pitch = rp.pitch;
             a.health = rp.health; a.shield = rp.shield; a.alive = rp.alive;
             a.slots[0].id = WeaponNameToItemId(rp.weapon); a.slots[0].count = 1; a.sel = 0;
+            // Seed camera so they render correctly
+            a.camPos = {rp.x, rp.y + 1.6f, rp.z};
+            a.camFwd = {sinf(rp.yaw), 0, cosf(rp.yaw)};
             actors.push_back(a);
             actorNetIds.push_back(rp.id);
             air.push_back(AirState());
-            air.back().phase = DropPhase::Landed;
+            if (rp.onBus) air.back().phase = DropPhase::Bus;
+            else if (rp.skydiving) air.back().phase = DropPhase::Freefall;
+            else if (rp.gliding) air.back().phase = DropPhase::Glide;
+            else air.back().phase = DropPhase::Landed;
             idx = (int)actors.size() - 1;
         }
+
+        if (idx < 0 || idx >= (int)actors.size()) continue;
         Actor& a = actors[idx];
-        a.pos.x = a.pos.x * 0.3f + rp.x * 0.7f;
-        a.pos.y = a.pos.y * 0.3f + rp.y * 0.7f;
-        a.pos.z = a.pos.z * 0.3f + rp.z * 0.7f;
+        // Smooth toward server pose
+        a.pos.x = a.pos.x * 0.25f + rp.x * 0.75f;
+        a.pos.y = a.pos.y * 0.25f + rp.y * 0.75f;
+        a.pos.z = a.pos.z * 0.25f + rp.z * 0.75f;
         a.yaw = rp.yaw; a.pitch = rp.pitch;
         a.health = rp.health; a.shield = rp.shield; a.alive = rp.alive;
+        a.isBot = rp.isBot;
+        a.device = -1;
+        if (rp.look >= 0 && rp.look < kLookCount) a.look = rp.look;
+        if (!rp.name.empty()) a.name = rp.name;
         ItemId wid = WeaponNameToItemId(rp.weapon);
         if (a.slots[a.sel].id != wid) { a.slots[0].id = wid; a.slots[0].count = 1; a.sel = 0; }
+        a.camPos = {a.pos.x, a.pos.y + 1.6f, a.pos.z};
+        a.camFwd = {sinf(a.yaw), 0, cosf(a.yaw)};
+
+        if (idx < (int)air.size()) {
+            // Keep remote aerial state in sync so they render (and leave the bus)
+            if (rp.onBus) air[idx].phase = DropPhase::Bus;
+            else if (rp.skydiving) air[idx].phase = DropPhase::Freefall;
+            else if (rp.gliding) air[idx].phase = DropPhase::Glide;
+            else air[idx].phase = DropPhase::Landed;
+        }
     }
 }
 
@@ -2439,7 +2696,15 @@ void Game::OnlineTick(float dt) {
     if (sendAcc >= 0.05f && !actors.empty() && !actors[0].isBot && actors[0].alive) {
         sendAcc = 0;
         Actor& a = actors[0];
-        NetSendInput(a.pos.x, a.pos.y, a.pos.z, a.yaw, a.pitch, WeaponNameForNet(a), a.fireCd > 0.01f);
+        bool skydive = (0 < (int)air.size() && (air[0].phase == DropPhase::Freefall));
+        bool glide = (0 < (int)air.size() && (air[0].phase == DropPhase::Glide));
+        NetSendInput(a.pos.x, a.pos.y, a.pos.z, a.yaw, a.pitch, WeaponNameForNet(a), a.fireCd > 0.01f,
+                     p1Look, account.outfit, skydive, glide);
+        // Jump off bus when local leaves DropPhase::Bus
+        static bool wasOnBus = false;
+        bool onBusNow = (0 < (int)air.size() && air[0].phase == DropPhase::Bus);
+        if (wasOnBus && !onBusNow) NetSendBusJump();
+        wasOnBus = onBusNow;
     }
     std::string kickReason;
     if (NetWasKicked(&kickReason)) {
@@ -2464,6 +2729,7 @@ void Game::UpdateMatch(float dt) {
             pauseMenuOpen = false;
             DisableCursor();
         }
+        // Leave match
         if (IsKeyPressed(KEY_L) || IsKeyPressed(KEY_BACKSPACE) || padDown(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) {
             pauseMenuOpen = false;
             EndMatch();
@@ -2478,7 +2744,7 @@ void Game::UpdateMatch(float dt) {
     UpdateBus(dt);
     if (state == State::Match && !bus.active) {
         if (playType != PlayType::Online)
-            UpdateStorm(dt);
+            UpdateStorm(dt);       // online: storm comes from server snapshots
     }
     for (int i = 0; i < (int)actors.size(); i++) {
         Input in;
@@ -2506,11 +2772,11 @@ void Game::UpdateMatch(float dt) {
     }
     for (int i = (int)fx.size() - 1; i >= 0; i--) { fx[i].t += dt; if (fx[i].t > fx[i].life) fx.erase(fx.begin() + i); }
     for (auto& m : feed) m.t -= dt;
-
+    
     Camera3D mainCam = {};
     for (const auto& a : actors) if (!a.isBot && a.alive) { mainCam.position = a.camPos; mainCam.target = Vector3Add(a.camPos, a.camFwd); }
     gVFX.Update(dt, mainCam);
-
+    
     world.Update(dt);
     if (state == State::Match) {
         bool humanAlive = false; for (const auto& a : actors) if (!a.isBot && a.alive) humanAlive = true;
@@ -2528,7 +2794,7 @@ void Game::UpdateMatch(float dt) {
 void Game::ComputeCamera(Actor& a) {
     Vector3 head = {a.pos.x, a.pos.y + 1.55f, a.pos.z};
     Vector3 fwd = Fwd(a.yaw, a.pitch), right = RightOf(a.yaw);
-    if (a.isAiming) { a.camPos = Vector3Add(head, Vector3Scale(fwd, 0.25f)); a.camFwd = fwd; return; }
+    if (a.isAiming) { a.camPos = Vector3Add(head, Vector3Scale(fwd, 0.25f)); a.camFwd = fwd; return; }   // looking down a scope: eye view
     Vector3 want = Vector3Add(Vector3Subtract(head, Vector3Scale(fwd, 3.0f)), Vector3Add(Vector3Scale(right, 0.9f), Vector3{0, 0.3f, 0}));
     Vector3 d = Vector3Subtract(want, head); float L = Vector3Length(d);
     if (L > 0.01f) {
@@ -2539,10 +2805,15 @@ void Game::ComputeCamera(Actor& a) {
     a.camPos = want; a.camFwd = fwd;
 }
 
+// =====================================================================
+//  BATTLE BUS / SKYDIVE
+//  Phases per actor (AirState::phase): Bus -> Freefall -> Glide -> Landed.
+//  While an actor is not Landed, UpdateActor hands over to UpdateAerial.
+// =====================================================================
 void Game::UpdateBus(float dt) {
     if (!bus.active) return;
     bus.Update(dt);
-    if (bus.MapProgress() >= 1.0f)
+    if (bus.MapProgress() >= 1.0f)                       // bus is leaving the map: everyone still aboard is dropped
         for (int i = 0; i < (int)actors.size(); i++)
             if (air[i].phase == DropPhase::Bus && actors[i].alive) EjectFromBus(i);
     if (bus.Finished()) bus.active = false;
@@ -2551,20 +2822,20 @@ void Game::UpdateBus(float dt) {
 void Game::EjectFromBus(int idx) {
     Actor& a = actors[idx]; AirState& s = air[idx];
     s.phase = DropPhase::Freefall; s.t = 0; s.open = 0; s.fold = 0; s.tilt = 0.5f; s.roll = 0; s.prevYaw = a.yaw;
-    s.hvel = Vector3Scale(bus.dir, bus.speed * 0.8f);
+    s.hvel = Vector3Scale(bus.dir, bus.speed * 0.8f);            // keep some of the bus's momentum
     a.pos = {bus.pos.x + RandF(-0.8f, 0.8f), bus.pos.y - 0.5f, bus.pos.z + RandF(-0.8f, 0.8f)};
     a.vel = {0, -4.0f, 0};
     a.grounded = false;
 }
 
-void Game::ComputeBusCamera(Actor& a) {
+void Game::ComputeBusCamera(Actor& a) {       // orbit the bus + balloon; mouse / right stick rotates the view
     Vector3 target = {bus.pos.x, bus.pos.y + 6.5f, bus.pos.z};
     Vector3 fwd = Fwd(a.yaw, a.pitch);
     a.camPos = Vector3Subtract(target, Vector3Scale(fwd, 26.0f));
     a.camFwd = fwd;
 }
 
-void Game::ComputeAirCamera(Actor& a, float dist) {
+void Game::ComputeAirCamera(Actor& a, float dist) {       // third person, further back than on the ground
     Vector3 head = {a.pos.x, a.pos.y + 1.3f, a.pos.z};
     Vector3 fwd = Fwd(a.yaw, a.pitch), right = RightOf(a.yaw);
     Vector3 want = Vector3Add(Vector3Subtract(head, Vector3Scale(fwd, dist)), Vector3Add(Vector3Scale(right, 0.6f), Vector3{0, 0.6f, 0}));
@@ -2577,6 +2848,7 @@ void Game::ComputeAirCamera(Actor& a, float dist) {
     a.camPos = want; a.camFwd = fwd;
 }
 
+// Bots: steer towards their goal (a chest / landing spot). Dive when over it, glide level when far.
 void Game::BotAerial(int i, float dt, Input& in) {
     Actor& b = actors[i]; AirState& s = air[i];
     float dx = b.goal.x - b.pos.x, dz = b.goal.z - b.pos.z;
@@ -2596,9 +2868,10 @@ void Game::UpdateAerial(int idx, const Input& inIn, float dt) {
     s.t += dt;
     a.isAiming = false; a.useT = 0; a.prompt.clear();
 
-    const bool jumpPress = in.jump && !s.jumpPrev;
+    const bool jumpPress = in.jump && !s.jumpPrev;     // jump / deploy is edge-triggered
     s.jumpPrev = in.jump;
 
+    // ---- riding the bus: invisible, camera orbits the bus, jump when it is over the map
     if (s.phase == DropPhase::Bus) {
         a.pos = bus.Seat(idx); a.vel = {0, 0, 0}; a.grounded = false;
         if (a.isBot) a.yaw = bus.yaw;
@@ -2620,7 +2893,7 @@ void Game::UpdateAerial(int idx, const Input& inIn, float dt) {
     };
     float gy = 0.0f;
     auto land = [&]() {
-        s.fold = s.open > 0.1f ? 1.0f : 0.0f;
+        s.fold = s.open > 0.1f ? 1.0f : 0.0f;          // glider folds away
         s.phase = DropPhase::Landed; s.open = 0; s.t = 0; s.hvel = {0, 0, 0};
         a.pos.y = gy; a.vel = {0, 0, 0}; a.grounded = true;
         a.pitch = Clamp(a.pitch, -0.6f, 0.6f);
@@ -2628,6 +2901,7 @@ void Game::UpdateAerial(int idx, const Input& inIn, float dt) {
     const float yawRate = WrapPi(a.yaw - s.prevYaw) / fmaxf(dt, 0.0001f);
     s.prevYaw = a.yaw;
 
+    // ---- freefall: look down to dive (fast, short range), look up / level to cover distance
     if (s.phase == DropPhase::Freefall) {
         const float k = Clamp(-a.pitch / 1.1f, -0.5f, 1.0f), kd = fmaxf(k, 0.0f);
         const float vDown = 32.0f + 26.0f * k;
@@ -2647,6 +2921,7 @@ void Game::UpdateAerial(int idx, const Input& inIn, float dt) {
         return;
     }
 
+    // ---- glider: steady descent, steer with the camera; look down to speed up, up to flare
     s.open = fminf(1.0f, s.open + dt / 0.45f);
     const float k = Clamp(-a.pitch / 0.9f, -1.0f, 1.0f);
     const float vDown = fmaxf(3.0f, 8.0f + 5.5f * k);
@@ -2721,7 +2996,7 @@ void Game::FireWeapon(int i, Slot& s, const ItemDef& d) {
     Vector3 aim = ah.kind ? ah.p : Vector3Add(a.camPos, Vector3Scale(a.camFwd, 300));
     Vector3 muzzle = Vector3Add(Vector3{a.pos.x, a.pos.y + 1.35f, a.pos.z}, Vector3Scale(Fwd(a.yaw, 0), 0.5f));
     Vector3 base = Vector3Normalize(Vector3Subtract(aim, muzzle));
-
+    
     std::string sndFolder = "Weapons/SMG/sfx_smg_singlefire_close";
     if (s.id == I_PISTOL) sndFolder = "Weapons/Pistol_SixShooter/Sixshooter_Fire_Medium_01";
     else if (s.id == I_PUMP) sndFolder = "Weapons/Scoped_AR/sfx_scopedAR_close";
@@ -2729,28 +3004,28 @@ void Game::FireWeapon(int i, Slot& s, const ItemDef& d) {
     else if (s.id == I_AR) sndFolder = "Weapons/Striker_Auto/Single_Shot/sfx_striker_singlefire_close";
     else if (s.id == I_SMG) sndFolder = "Weapons/Tactical_SMG/sfx_tacsmg_singlefire_close";
     else if (s.id == I_SNIPER || s.id == I_HUNTING) sndFolder = "Weapons/AMR/sfx_amr_fire_thunder_02";
-
+    
     gAudio.PlayRandomAt(sndFolder, muzzle, a.camPos, 1.0f, RandF(0.95f, 1.05f));
-
+    
     for (int p = 0; p < d.pellets; p++) {
         Vector3 j = {RandF(-1, 1), RandF(-1, 1), RandF(-1, 1)};
         Vector3 dir = Vector3Normalize(Vector3Add(base, Vector3Scale(j, d.spread)));
         Hit3 h = TraceRay(Ray{muzzle, dir}, d.range, i);
         float dmg = d.dmg * RarityMult(s.rar);
-
-        if (h.kind == 3) {
-            if (h.head && d.pellets == 1) dmg *= 1.5f;
+        
+        if (h.kind == 3) { 
+            if (h.head && d.pellets == 1) dmg *= 1.5f; 
             Actor& v = actors[h.idx];
             bool hittingShield = v.shield > 0;
-            Damage(h.idx, dmg, i);
+            Damage(h.idx, dmg, i); 
             if (playType == PlayType::Online && MatchmakerIsConnected()) {
-                Vector3 dir2 = Vector3Normalize(Vector3Subtract(h.p, muzzle));
-                NetSendFire(muzzle.x, muzzle.y, muzzle.z, dir2.x, dir2.y, dir2.z, WeaponNameForNet(a));
+                Vector3 dir = Vector3Normalize(Vector3Subtract(h.p, muzzle));
+                NetSendFire(muzzle.x, muzzle.y, muzzle.z, dir.x, dir.y, dir.z, WeaponNameForNet(a));
                 int targetNet = (h.idx < (int)actorNetIds.size()) ? actorNetIds[h.idx] : -1;
                 if (targetNet >= 0 && targetNet != netLocalId)
                     NetSendDamage(targetNet, dmg);
             }
-            if (!a.isBot) {
+            if (!a.isBot) { 
                 if (h.head) { gVFX.SpawnHitMarker(2); gAudio.Play("HitNotifications/sfx_hitmarker_notification_critical_layer", 0.6f); }
                 else if (hittingShield) { gVFX.SpawnHitMarker(1); gAudio.Play("HitNotifications/sfx_hitmarker_bighit", 0.4f); }
                 else { gVFX.SpawnHitMarker(0); gAudio.Play("HitNotifications/sfx_hitmarker_bighit", 0.4f); }
@@ -2758,8 +3033,8 @@ void Game::FireWeapon(int i, Slot& s, const ItemDef& d) {
             gVFX.SpawnDamage(h.p, dmg, h.head);
             gAudio.PlayRandomAt("Impacts/sniper_body_impact_01", h.p, a.camPos, 0.8f);
         }
-        else if (h.kind == 2) {
-            Piece& pc = world.pieces[h.idx]; pc.hp -= dmg; if (pc.hp <= 0) pc.alive = false;
+        else if (h.kind == 2) { 
+            Piece& pc = world.pieces[h.idx]; pc.hp -= dmg; if (pc.hp <= 0) pc.alive = false; 
             gVFX.SpawnImpact(h.p, Vector3Negate(dir), kMatColor[pc.mat]);
             gAudio.PlayRandomAt("Weapons/BulletWhips/bullet_whip", h.p, a.camPos, 0.6f);
         }
@@ -2767,7 +3042,7 @@ void Game::FireWeapon(int i, Slot& s, const ItemDef& d) {
             gVFX.SpawnImpact(h.p, Vector3Negate(dir), WHITE);
             gAudio.PlayRandomAt("Weapons/BulletWhips/bullet_whip", h.p, a.camPos, 0.6f);
         }
-
+        
         if (d.explosive) Explode(h.p, d.radius, dmg, i);
         if (p == 0) { a.tA = muzzle; a.tB = h.p; a.tracerT = 0.06f; }
     }
@@ -2778,20 +3053,20 @@ void Game::Harvest(int i) {
     Hit3 h = TraceRay(Ray{a.camPos, a.camFwd}, 50, i);
     Vector3 head = {a.pos.x, a.pos.y + 1.5f, a.pos.z};
     if (h.kind == 0 || h.kind == 4 || Vector3Distance(head, h.p) > 3.8f) return;
-
+    
     gAudio.PlayRandomAt("Weapons/Fire_Axe_Swing", h.p, a.camPos, 0.8f);
-
+    
     if (h.kind == 1) {
         Solid& s = world.solids[h.idx];
-        if (s.kind == SK_CRATE || s.kind == SK_TREE) {
-            s.hp -= 34; a.mats[MAT_WOOD] = std::min(999, a.mats[MAT_WOOD] + 10);
-            if (s.hp <= 0) s.alive = false;
+        if (s.kind == SK_CRATE || s.kind == SK_TREE) { 
+            s.hp -= 34; a.mats[MAT_WOOD] = std::min(999, a.mats[MAT_WOOD] + 10); 
+            if (s.hp <= 0) s.alive = false; 
             gAudio.PlayRandomAt("Weapons/BulletWhips/bullet_whip_heavy", h.p, a.camPos, 0.8f);
         } else {
             gAudio.PlayRandomAt("Weapons/BulletWhips/bullet_whip_heavy", h.p, a.camPos, 0.8f);
         }
     } else if (h.kind == 2) {
-        Piece& p = world.pieces[h.idx]; p.hp -= 34; a.mats[p.mat] = std::min(999, a.mats[p.mat] + 10);
+        Piece& p = world.pieces[h.idx]; p.hp -= 34; a.mats[p.mat] = std::min(999, a.mats[p.mat] + 10); 
         if (p.hp <= 0) p.alive = false;
         gAudio.PlayRandomAt("Weapons/BulletWhips/bullet_whip_heavy", h.p, a.camPos, 0.8f);
     } else if (h.kind == 3) {
@@ -2803,7 +3078,7 @@ void Game::Harvest(int i) {
 void Game::Explode(Vector3 p, float radius, float dmg, int owner) {
     fx.push_back(Fx{p, 0, 0.35f, radius});
     gAudio.PlayRandomAt("Weapons/Smoke_Grenade/sfx_SmokeGrenade_Explode", p, (owner >= 0 ? actors[owner].camPos : Vector3{0,0,0}), 1.5f);
-
+    
     for (int j = 0; j < (int)actors.size(); j++) {
         if (!actors[j].alive) continue;
         Vector3 c = {actors[j].pos.x, actors[j].pos.y + 1.0f, actors[j].pos.z};
@@ -2836,7 +3111,7 @@ void Game::Eliminate(int victim, int attacker) {
     if (attacker >= 0 && attacker != victim) actors[attacker].kills++;
     feed.push_back(FeedMsg{msg, 6.0f});
     if (feed.size() > 5) feed.erase(feed.begin());
-
+    
     gAudio.Play("Character/SFX_PlayerKilled_UILayer", 1.0f);
 }
 
@@ -2884,14 +3159,14 @@ void Game::UpdateActor(int idx, const Input& in, float dt) {
     a.hitFlash = fmaxf(0, a.hitFlash - dt); a.toastT -= dt; a.tracerT -= dt;
     if (!a.alive) return;
     if (!a.isBot) { a.yaw -= in.look.x; a.pitch = Clamp(a.pitch - in.look.y, -1.3f, 1.3f); }
-    {
+    {   // drop state: glider fold-away timer, and the whole bus / freefall / glide flight until landed
         AirState& as = air[idx];
         if (as.fold > 0) as.fold = fmaxf(0.0f, as.fold - dt / 0.55f);
         if (as.phase != DropPhase::Landed) { UpdateAerial(idx, in, dt); return; }
     }
     a.fireCd = fmaxf(0, a.fireCd - dt); a.placeCd -= dt; a.idle += dt;
     if (a.swing >= 0) { a.swing += dt / 0.32f; if (a.swing >= 1) a.swing = -1; }
-
+    
     if (in.drop && a.sel > 0) {
         Slot& s = a.slots[a.sel];
         if (!s.Empty()) {
@@ -2908,9 +3183,9 @@ void Game::UpdateActor(int idx, const Input& in, float dt) {
     if (in.next) select((a.sel + 1) % 6);
     if (in.prev) select((a.sel + 5) % 6);
     if (in.toggleBuild) a.buildMode = !a.buildMode;
-    if (in.piece >= 0) {
-        if (a.buildMode) a.piece = (PieceType)in.piece;
-        else { a.piece = (PieceType)in.piece; a.buildMode = true; }
+    if (in.piece >= 0) { 
+        if (a.buildMode) a.piece = (PieceType)in.piece; 
+        else { a.piece = (PieceType)in.piece; a.buildMode = true; } 
     }
     if (in.cycleMat) a.mat = (Mat)((a.mat + 1) % MAT_COUNT);
 
@@ -2928,11 +3203,11 @@ void Game::UpdateActor(int idx, const Input& in, float dt) {
     Vector3 f = {sinf(a.yaw), 0, cosf(a.yaw)}, r = RightOf(a.yaw);
     Vector3 wish = Vector3Add(Vector3Scale(f, in.move.y), Vector3Scale(r, in.move.x));
     float wl = Vector3Length(wish); if (wl > 1) wish = Vector3Scale(wish, 1.0f / wl);
-
+    
     float spd = 6.2f;
     if (a.useT > 0) spd *= 0.45f;
     if (a.isAiming) spd *= 0.4f;
-
+    
     a.pos = world.MoveSlide(a.pos, Vector3{wish.x * spd * dt, 0, wish.z * spd * dt}, 0.35f, 1.8f, 0.55f);
     a.pos.x = Clamp(a.pos.x, -world.half + 1, world.half - 1); a.pos.z = Clamp(a.pos.z, -world.half + 1, world.half - 1);
     float gy = world.GroundY(a.pos, a.pos.y, 0.55f);
@@ -2963,8 +3238,8 @@ void Game::UpdateActor(int idx, const Input& in, float dt) {
         if (in.fire && a.placeCd <= 0) {
             a.placeCd = 0.12f;
             if (a.mats[a.mat] < 10) { Toast(a, "Not enough materials"); }
-            else if (world.Place(a.piece, a.mat, a.pos, a.yaw)) {
-                a.mats[a.mat] -= 10;
+            else if (world.Place(a.piece, a.mat, a.pos, a.yaw)) { 
+                a.mats[a.mat] -= 10; 
                 gAudio.PlayRandomAt("Items/Fort_Bandage_Use_Athena_01", a.pos, a.camPos, 0.8f);
             }
         }
@@ -2980,18 +3255,18 @@ void Game::UpdateActor(int idx, const Input& in, float dt) {
     if (d.kind == K_WEAPON) {
         if (a.reloadT > 0) {
             a.reloadT -= dt;
-            if (a.reloadT <= 0) {
-                int take = std::min(d.mag - s.mag, a.ammo[d.ammo]);
-                s.mag += take;
-                a.ammo[d.ammo] -= take;
+            if (a.reloadT <= 0) { 
+                int take = std::min(d.mag - s.mag, a.ammo[d.ammo]); 
+                s.mag += take; 
+                a.ammo[d.ammo] -= take; 
                 gAudio.PlayRandomAt("Weapons/SMG/sfx_smg_singlefire_medium", a.pos, a.camPos, 0.8f);
             }
         } else if ((in.reload || (s.mag <= 0 && in.fire)) && s.mag < d.mag && a.ammo[d.ammo] > 0) {
             a.reloadT = d.reload;
             gAudio.PlayRandomAt("Weapons/SMG/sfx_smg_singlefire_medium", a.pos, a.camPos, 0.8f);
         } else if (in.fire && a.fireCd <= 0 && s.mag > 0 && (d.autoFire || in.firePressed)) {
-            a.fireCd = 1.0f / d.rate;
-            s.mag--;
+            a.fireCd = 1.0f / d.rate; 
+            s.mag--; 
             ItemDef dMod = d;
             if (a.isAiming) dMod.spread *= 0.1f;
             FireWeapon(idx, s, dMod);
@@ -3077,6 +3352,7 @@ void Game::BotThink(int i, float dt, Input& in) {
     b.interactT -= dt; if (b.interactT <= 0) { in.interact = true; b.interactT = 0.5f; }
 }
 
+// Sniper scope: black mask with a round lens, crosshair, mil-dots and thick outer posts.
 static void DrawScope(int W, int H, bool bolt) {
     float cx = W / 2.0f, cy = H / 2.0f, R = H * 0.46f;
     DrawRing({cx, cy}, R, sqrtf((float)(W * W + H * H)) / 2.0f * 1.05f + 8.0f, 0, 360, 72, BLACK);
@@ -3100,10 +3376,10 @@ void Game::RenderView(RenderTexture2D& rt, int W, int H, int ai) {
     cam.position = me.camPos; cam.target = Vector3Add(me.camPos, me.camFwd); cam.up = {0, 1, 0};
     bool scoped = me.isAiming && me.alive && !me.buildMode;
     float fov = 58.0f;
-    if (scoped) fov = (me.slots[me.sel].id == I_SNIPER) ? 12.0f : 20.0f;
+    if (scoped) fov = (me.slots[me.sel].id == I_SNIPER) ? 12.0f : 20.0f;     // bolt-action = high zoom, hunting rifle = medium
     cam.fovy = fov;
     cam.projection = CAMERA_PERSPECTIVE;
-
+    
     BeginTextureMode(rt);
     ClearBackground(gR.fogColor);
     DrawRectangleGradientV(0, 0, W, H / 2, C(230, 140, 92), gR.fogColor);
@@ -3115,8 +3391,9 @@ void Game::RenderView(RenderTexture2D& rt, int W, int H, int ai) {
         const Actor& a = actors[ak];
         const AirState& as = air[ak];
         if (!a.alive) continue;
-        if (as.phase == DropPhase::Bus) continue;
-        if (scoped && &a == &me) continue;
+        // Only hide the LOCAL player while inside the bus; remotes stay visible on the bus
+        if (as.phase == DropPhase::Bus && ak == ai) continue;
+        if (scoped && &a == &me) continue;      // eye is inside the model while scoped
         float gy = world.GroundY(a.pos, a.pos.y, 0.55f);
         const bool flying = as.phase == DropPhase::Freefall || as.phase == DropPhase::Glide;
         DrawCylinder({a.pos.x, gy + 0.06f, a.pos.z}, flying ? 1.1f : 0.45f, flying ? 1.1f : 0.45f, 0.01f, 8, Color{0, 0, 0, (unsigned char)(flying ? 60 : 90)});
@@ -3126,22 +3403,22 @@ void Game::RenderView(RenderTexture2D& rt, int W, int H, int ai) {
         if (!a.buildMode && a.sel == 0) p.pick = true;
         else if (!a.buildMode && !s.Empty() && GetItemDef(s.id).kind == K_WEAPON) {
             p.gun = true; p.gunTint = RarityColor(s.rar);
-            p.gunScale = 1.0f; p.weapon = (int)s.id;
+            p.gunScale = 1.0f; p.weapon = (int)s.id;      // every weapon has its own model, built at true size
         }
         p.ads = a.isAiming;
         CharacterDraw(chars[a.look], held, a.pos, a.yaw, p, a.hitFlash > 0 ? Color{255, 130, 130, 255} : WHITE);
         if (a.tracerT > 0) DrawLine3D(a.tA, a.tB, Color{255, 240, 150, 255});
-        if (as.fold > 0) {
+        if (as.fold > 0) {      // glider folding away above a player who just landed
             Matrix gf = MatrixMultiply(MatrixRotateY(a.yaw), MatrixTranslate(a.pos.x, a.pos.y + 2.05f + (1.0f - as.fold) * 1.2f, a.pos.z));
             DrawGlider(skyModels, as.glider, gf, as.fold, false, WHITE);
         }
     }
     for (const auto& g : grenades) DrawSphere(g.p, 0.12f, C(50, 80, 40));
     for (const auto& f : fx) { float k = f.t / f.life; DrawSphereEx(f.p, f.r * (0.3f + 0.7f * k), 6, 6, Color{255, (unsigned char)(190 - 120 * k), 60, (unsigned char)(200 * (1 - k))}); }
-
+    
     gVFX.Draw3D();
-    world.DrawStorm(stormR, cam);
-
+    world.DrawStorm(stormR, cam);      // translucent: after every opaque thing
+    
     if (!me.isBot && me.alive && me.buildMode) {
         Vector3 pos; int dir; world.GetPlacement(me.piece, me.pos, me.yaw, pos, dir);
         AABB bx = world.PieceBox(me.piece, pos, dir);
@@ -3149,7 +3426,7 @@ void Game::RenderView(RenderTexture2D& rt, int W, int H, int ai) {
         DrawCubeWiresV(c, sz, me.mats[me.mat] >= 10 ? Color{120, 255, 160, 255} : Color{255, 90, 90, 255});
     }
     EndMode3D();
-    {
+    {   // storm screen effect while standing in the storm + scope mask
         float dist = sqrtf(me.pos.x * me.pos.x + me.pos.z * me.pos.z);
         if (me.alive && dist > stormR) {
             float pulse = 0.5f + 0.5f * sinf((float)GetTime() * 3.0f);
@@ -3175,8 +3452,11 @@ void Game::DrawMatch() {
     BeginDrawing();
     ClearBackground(BLACK);
     int sw = GetScreenWidth(), sh = GetScreenHeight();
-    if (humans == 1) {
+    // Online always full-screen (party friend is another client, not split-screen)
+    const bool singleView = (humans <= 1) || (playType == PlayType::Online);
+    if (singleView) {
         RenderView(rtFull, 1920, 1080, 0);
+        // Fill the whole window, no letterbox.
         Present(rtFull, { 0, 0, (float)sw, (float)sh });
     } else {
         RenderView(rtHalf[0], 960, 1080, 0);
@@ -3187,6 +3467,7 @@ void Game::DrawMatch() {
     }
 
     if (pauseMenuOpen) {
+        // ... unchanged pause menu drawing ...
         int sw2 = GetScreenWidth(), sh2 = GetScreenHeight();
         DrawRectangle(0, 0, sw2, sh2, Color{0, 0, 0, 160});
         int pw = 280, ph = 160;
