@@ -61,9 +61,13 @@ struct LookTextures {
     const char* hairAlbedo;
     const char* hairMR;
     const char* hairNormal;
+    bool flipBody;               // ImageFlipVertical to match glTF V
+    bool flipHead;
+    bool flipHair;
 };
 
-// Ramirez — F_MED_Commando PBR set
+// Ramirez — F_MED_Commando PBR set. Body UVs need a V flip; head/hair maps
+// are already in OpenGL/top-left space so flipping them inverts the face.
 static const LookTextures kRamirezTex = {
     "F_Med_Soldier_01",
     "F_MED_Commando_01_baseColor.png",
@@ -75,10 +79,11 @@ static const LookTextures kRamirezTex = {
     "F_MED_Commando_Hair_01_baseColor.png",
     "F_MED_Commando_Hair_01_metallicRoughness.png",
     "F_MED_Commando_Hair_01_normal.png",
+    true, false, false,
 };
 
-// Jonesy — M_Med_Soldier_04 set.  No metallicRoughness maps provided;
-// hair has diffuse only.
+// Jonesy — M_Med_Soldier_04 set. No metallicRoughness maps provided;
+// hair has diffuse only. These PNGs already match the GLB UVs — do not flip.
 static const LookTextures kJonesyTex = {
     "M_Med_Soldier_04",
     "M_Med_Soldier_Body_01_C.png",
@@ -90,6 +95,7 @@ static const LookTextures kJonesyTex = {
     "M_SML_Survivor_Hair_02_d.png",
     nullptr,                                   // no hair MR
     nullptr,                                   // no hair normal
+    false, false, false,
 };
 
 static const LookTextures* kLookTex[kLookCount] = {
@@ -137,7 +143,7 @@ static std::vector<std::string> ModelRoots() {
 // ---------------------------------------------------------------------------
 // Texture helpers
 // ---------------------------------------------------------------------------
-static bool LoadTexFromRoots(const char* folder, const char* file, Texture2D& out) {
+static bool LoadTexFromRoots(const char* folder, const char* file, Texture2D& out, bool flipV) {
     for (const auto& root : ModelRoots()) {
         std::string candidates[2] = {
             root + folder + "/" + file,
@@ -146,12 +152,12 @@ static bool LoadTexFromRoots(const char* folder, const char* file, Texture2D& ou
         for (const auto& p : candidates) {
             if (!FileExists(p.c_str())) continue;
 
-            // Load the raw image so we can flip it (glTF/Unreal UV origin is
-            // bottom-left; raylib's image loader assumes top-left).
             Image img = LoadImage(p.c_str());
             if (img.data == nullptr) continue;
 
-            ImageFlipVertical(&img);   // <-- fix: match glTF V convention
+            // glTF/Unreal V origin is bottom-left; some Fortnite PNG sets are
+            // already authored that way, so only flip when the look asks for it.
+            if (flipV) ImageFlipVertical(&img);
 
             Texture2D t = LoadTextureFromImage(img);
             UnloadImage(img);
@@ -182,25 +188,26 @@ static void ApplyTextureSet(Material& mat,
                             const char* folder,
                             const char* albedo,
                             const char* mr,
-                            const char* nrm)
+                            const char* nrm,
+                            bool flipV)
 {
     Texture2D t;
 
-    if (albedo && LoadTexFromRoots(folder, albedo, t)) {
+    if (albedo && LoadTexFromRoots(folder, albedo, t, flipV)) {
         SetMapTexture(mat, MATERIAL_MAP_ALBEDO, t);
         mat.maps[MATERIAL_MAP_ALBEDO].color = WHITE;
     } else if (albedo) {
         TraceLog(LOG_WARNING, "Character: missing albedo %s/%s", folder, albedo);
     }
 
-    if (mr && LoadTexFromRoots(folder, mr, t)) {
+    if (mr && LoadTexFromRoots(folder, mr, t, flipV)) {
         SetMapTexture(mat, MATERIAL_MAP_METALNESS, t);
         mat.maps[MATERIAL_MAP_METALNESS].value = 1.0f;
     } else if (mr) {
         TraceLog(LOG_WARNING, "Character: missing MR %s/%s", folder, mr);
     }
 
-    if (nrm && LoadTexFromRoots(folder, nrm, t)) {
+    if (nrm && LoadTexFromRoots(folder, nrm, t, flipV)) {
         SetMapTexture(mat, MATERIAL_MAP_NORMAL, t);
     } else if (nrm) {
         TraceLog(LOG_WARNING, "Character: missing normal %s/%s", folder, nrm);
@@ -288,12 +295,13 @@ static void ApplyLookTextures(Model& model, const LookTextures& tex) {
         const char* a = nullptr;
         const char* r = nullptr;
         const char* n = nullptr;
+        bool flipV = false;
         switch (part[m]) {
-            case 0: a = tex.bodyAlbedo; r = tex.bodyMR; n = tex.bodyNormal; break;
-            case 1: a = tex.headAlbedo; r = tex.headMR; n = tex.headNormal; break;
-            case 2: a = tex.hairAlbedo; r = tex.hairMR; n = tex.hairNormal; break;
+            case 0: a = tex.bodyAlbedo; r = tex.bodyMR; n = tex.bodyNormal; flipV = tex.flipBody; break;
+            case 1: a = tex.headAlbedo; r = tex.headMR; n = tex.headNormal; flipV = tex.flipHead; break;
+            case 2: a = tex.hairAlbedo; r = tex.hairMR; n = tex.hairNormal; flipV = tex.flipHair; break;
         }
-        ApplyTextureSet(model.materials[m], tex.folder, a, r, n);
+        ApplyTextureSet(model.materials[m], tex.folder, a, r, n, flipV);
     }
 }
 

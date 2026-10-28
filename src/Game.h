@@ -12,7 +12,7 @@ struct Grenade { Vector3 p, v; float t; int owner; };
 struct Fx { Vector3 p; float t, life, r; };
 struct Hit3 { int kind = 0; int idx = -1; Vector3 p{}; float d = 0; bool head = false; };
 
-enum class State { Login, Lobby, Loading, Match, Over };
+enum class State { Booting, Login, Lobby, Loading, Match, Over };
 enum class LobbyTab { Play = 0, BattlePass, Locker, ItemShop, Profile, COUNT };
 enum class GameMode { Solo = 0, Duo, Private1v1, Private2v2, COUNT };
 enum class PlayType { Local = 0, Online };
@@ -143,6 +143,8 @@ private:
     // Mouse in lobby canvas coords
     Vector2 LobbyMouse() const;
 
+    void UpdateBoot(float dt);             // startup: load models / GPU resources with a loading screen
+    void DrawBoot();
     void BeginMatchLoad();                 // lobby -> loading screen (connection check, build, warm-up render)
     void UpdateLoading(float dt);
     void DrawLoading();
@@ -184,7 +186,7 @@ private:
         return gameMode == GameMode::Private1v1 || gameMode == GameMode::Private2v2;
     }
 
-    State state = State::Login;
+    State state = State::Booting;
     LobbyTab tab = LobbyTab::Play;
     GameMode gameMode = GameMode::Solo;
     PlayType playType = PlayType::Online;
@@ -266,6 +268,12 @@ private:
     int bpSelTier = 0;
     int bpSelRow = 0;
     int bpMaxTier = 70;
+
+    // Boot loading (State::Booting) — one asset group per frame so the bar can paint
+    int   bootStep = 0;
+    int   bootWait = 0;           // first frame of a step is draw-only
+    float bootShown = 0;
+    std::string bootStatus = "Loading...";
 
     // Loading screen (State::Loading)
     int   loadStage = 0;          // 0 connection check, 1 build world, 2 warm-up render, 3 wait for the bar

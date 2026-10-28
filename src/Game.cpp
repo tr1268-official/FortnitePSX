@@ -51,24 +51,12 @@ Game::Game() {
     gAudio.Init();
     gIcons.Init();
     SetExitKey(KEY_NULL);
-    for (int i = 0; i < kLookCount; i++) CharacterBuild(chars[i], i);
-    HeldBuild(held);
-    SkydiveBuild(skyModels);
-    world.gunModel = &held.guns[I_AR];
-    { MeshBuilder a, b;
-        a.Loft({{0, 1.0f, 1.0f, C(150, 150, 155)}, {0.14f, 1.0f, 1.0f, C(190, 190, 195)}, {0.14f, 0.82f, 0.82f, C(90, 235, 255)}}, 8);
-        b.Loft({{0, 1.0f, 1.0f, C(150, 150, 155)}, {0.14f, 1.0f, 1.0f, C(190, 190, 195)}, {0.14f, 0.82f, 0.82f, C(55, 62, 68)}}, 8);
-        padOn = gR.MakeModel(a); padOff = gR.MakeModel(b);
-    }
-    rtFull = LoadRenderTexture(1920, 1080);
-    rtHalf[0] = LoadRenderTexture(960, 1080);
-    rtHalf[1] = LoadRenderTexture(960, 1080);
-    rtLobby = LoadRenderTexture(1280, 720);
-    SetTextureFilter(rtLobby.texture, TEXTURE_FILTER_BILINEAR);
-    SetTextureFilter(rtFull.texture, TEXTURE_FILTER_BILINEAR);
-    SetTextureFilter(rtHalf[0].texture, TEXTURE_FILTER_BILINEAR);
-    SetTextureFilter(rtHalf[1].texture, TEXTURE_FILTER_BILINEAR);
     LoadCredentials();
+    bootStep = 0;
+    bootWait = 0;
+    bootShown = 0;
+    bootStatus = std::string("Loading ") + kLooks[0].name + "...";
+    state = State::Booting;
 }
 
 Game::~Game() {
@@ -78,8 +66,12 @@ Game::~Game() {
     for (int i = 0; i < kLookCount; i++) CharacterUnload(chars[i]);
     HeldUnload(held);
     SkydiveUnload(skyModels);
-    gR.FreeModel(padOn); gR.FreeModel(padOff);
-    UnloadRenderTexture(rtFull); UnloadRenderTexture(rtHalf[0]); UnloadRenderTexture(rtHalf[1]); UnloadRenderTexture(rtLobby);
+    if (padOn.meshCount > 0) gR.FreeModel(padOn);
+    if (padOff.meshCount > 0) gR.FreeModel(padOff);
+    if (rtFull.id) UnloadRenderTexture(rtFull);
+    if (rtHalf[0].id) UnloadRenderTexture(rtHalf[0]);
+    if (rtHalf[1].id) UnloadRenderTexture(rtHalf[1]);
+    if (rtLobby.id) UnloadRenderTexture(rtLobby);
     gIcons.Shutdown();
     UiTexUnloadAll();
     gAudio.Shutdown();
@@ -107,7 +99,8 @@ void Game::Run() {
                 RefreshFriends();
             }
         }
-        if (state == State::Login) { UpdateLogin(dt); DrawLogin(); }
+        if (state == State::Booting) { UpdateBoot(dt); DrawBoot(); }
+        else if (state == State::Login) { UpdateLogin(dt); DrawLogin(); }
         else if (state == State::Lobby) { UpdateLobby(dt); DrawLobby(); }
         else if (state == State::Loading) { UpdateLoading(dt); DrawLoading(); }
         else { UpdateMatch(dt); DrawMatch(); }
@@ -2177,6 +2170,103 @@ void Game::StartMatch() {
         humans = 1; // force single view for the rest of the match
     }
     // The loading screen (UpdateLoading) switches to State::Match once the first frames have rendered.
+}
+
+// =====================================================================
+//  BOOT LOADING (game launch)
+//  Same Battle Royale art as the match load, but no tips — just a full-width bar.
+// =====================================================================
+static const int kBootExtraSteps = 4;   // held items, skydive, pads, render targets
+static const int kBootSteps = kLookCount + kBootExtraSteps;
+
+void Game::UpdateBoot(float dt) {
+    float target = (float)(bootStep + 1) / (float)kBootSteps;
+    bootShown += (fminf(target, 1.0f) - bootShown) * fminf(1.0f, dt * 6.0f);
+
+    if (bootWait < 1) { bootWait++; return; }   // let the bar / status paint before blocking work
+
+    if (bootStep < kLookCount) {
+        CharacterBuild(chars[bootStep], bootStep);
+        bootStep++;
+        bootWait = 0;
+        if (bootStep < kLookCount)
+            bootStatus = std::string("Loading ") + kLooks[bootStep].name + "...";
+        else
+            bootStatus = "Loading items...";
+        return;
+    }
+    if (bootStep == kLookCount) {
+        HeldBuild(held);
+        world.gunModel = &held.guns[I_AR];
+        bootStep++; bootWait = 0; bootStatus = "Loading battle bus...";
+        return;
+    }
+    if (bootStep == kLookCount + 1) {
+        SkydiveBuild(skyModels);
+        bootStep++; bootWait = 0; bootStatus = "Loading world props...";
+        return;
+    }
+    if (bootStep == kLookCount + 2) {
+        MeshBuilder a, b;
+        a.Loft({{0, 1.0f, 1.0f, C(150, 150, 155)}, {0.14f, 1.0f, 1.0f, C(190, 190, 195)}, {0.14f, 0.82f, 0.82f, C(90, 235, 255)}}, 8);
+        b.Loft({{0, 1.0f, 1.0f, C(150, 150, 155)}, {0.14f, 1.0f, 1.0f, C(190, 190, 195)}, {0.14f, 0.82f, 0.82f, C(55, 62, 68)}}, 8);
+        padOn = gR.MakeModel(a); padOff = gR.MakeModel(b);
+        bootStep++; bootWait = 0; bootStatus = "Preparing renderer...";
+        return;
+    }
+    if (bootStep == kLookCount + 3) {
+        rtFull = LoadRenderTexture(1920, 1080);
+        rtHalf[0] = LoadRenderTexture(960, 1080);
+        rtHalf[1] = LoadRenderTexture(960, 1080);
+        rtLobby = LoadRenderTexture(1280, 720);
+        SetTextureFilter(rtLobby.texture, TEXTURE_FILTER_BILINEAR);
+        SetTextureFilter(rtFull.texture, TEXTURE_FILTER_BILINEAR);
+        SetTextureFilter(rtHalf[0].texture, TEXTURE_FILTER_BILINEAR);
+        SetTextureFilter(rtHalf[1].texture, TEXTURE_FILTER_BILINEAR);
+        bootStep++; bootWait = 0; bootStatus = "Ready!";
+        return;
+    }
+
+    if (bootShown > 0.985f) {
+        bootShown = 1.0f;
+        state = State::Login;
+    }
+}
+
+void Game::DrawBoot() {
+    BeginDrawing();
+    ClearBackground(BLACK);
+    const int sw = GetScreenWidth(), sh = GetScreenHeight();
+
+    const Texture2D* bg = UiTex("assets/ui/loadingscreens/FORT_Load_Atlas.png");
+    if (bg) {
+        float sc = fmaxf((float)sw / bg->width, (float)sh / bg->height);
+        float w = bg->width * sc, h = bg->height * sc;
+        DrawTexturePro(*bg, Rectangle{0, 0, (float)bg->width, (float)bg->height}, Rectangle{(sw - w) / 2, (sh - h) / 2, w, h}, {0, 0}, 0, WHITE);
+    }
+
+    const Texture2D* plate = UiTex("assets/ui/loadingscreens/T-Loading-EarlyAccessPlate.png");
+    if (plate) {
+        const float ph = 110.0f * (sh / 733.0f);
+        const float pw = ph * ((float)plate->width / (float)plate->height);
+        const float px = sw - pw - 18.0f * (sw / 1327.0f);
+        const float py = 18.0f * (sh / 733.0f);
+        DrawTexturePro(*plate,
+            Rectangle{0, 0, (float)plate->width, (float)plate->height},
+            Rectangle{px, py, pw, ph}, {0, 0}, 0, WHITE);
+        const char* tag = "EARLY ACCESS";
+        float fs = 40.0f * (sh / 733.0f);
+        Vector2 m = MeasureTextEx(gFont, tag, fs, 1.0f);
+        DrawTextEx(gFont, tag, {px + pw * 0.52f - m.x / 2, py + ph * 0.42f - m.y / 2}, fs, 1.0f, Color{12, 12, 16, 255});
+    }
+
+    const float bx = 40.0f * (sw / 1327.0f);
+    const float by = sh - 28.0f * (sh / 733.0f);
+    const float bw = sw - 80.0f * (sw / 1327.0f);
+    const float bh = fmaxf(6.0f, 10.0f * (sh / 733.0f));
+    DrawRectangle((int)bx, (int)by, (int)bw, (int)bh, Color{255, 255, 255, 60});
+    DrawRectangle((int)bx, (int)by, (int)(bw * fminf(bootShown, 1.0f)), (int)bh, WHITE);
+    EndDrawing();
 }
 
 // =====================================================================
