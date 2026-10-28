@@ -5,8 +5,10 @@
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/*.cpp")
 set(OLD_GLOB
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Audio.cpp"
+  "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/BattleBus.cpp"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Character.cpp"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Game.cpp"
+  "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Glider.cpp"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Hud.cpp"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/IconCache.cpp"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Items.cpp"
@@ -53,6 +55,8 @@ set(OLD_GLOB
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/MeshBuilder.h"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Net.h"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Renderer.h"
+  "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/SkyGeo.h"
+  "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Skydive.h"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/VFX.h"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/World.h"
   )

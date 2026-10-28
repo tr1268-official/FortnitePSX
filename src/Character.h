@@ -2,7 +2,7 @@
 #include "Common.h"
 #include "Items.h"
 
-constexpr int kLookCount = 4;
+constexpr int kLookCount = 12;
 struct Look {
     const char* name; Color skin, hair, top, vest, pants, boots, gloves, accent; bool female, ponytail, hasVest;
 };

@@ -3,6 +3,7 @@
 #include "Character.h"
 #include "Hud.h"
 #include "VFX.h"
+#include "Skydive.h"
 #include <deque>
 #include <string>
 #include <vector>
@@ -103,6 +104,7 @@ private:
     void DrawTabPlay(int W, int H);
     void DrawLobbyBackground(int W, int H, float t);
     void DrawModePicker(int W, int H);
+    void DrawFriendsPanel(int W, int H);
     void DrawProgressionWidget(int W, int H);
     void DrawTabBattlePass(int W, int H);
     void DrawTabLocker(int W, int H);
@@ -111,8 +113,16 @@ private:
 
     void BeginLobbyCanvas();
     void EndLobbyCanvas();
-    int LobbyW() const { return 960; }
+    // Lobby canvas: fixed 720 logical height, width follows the window's aspect ratio
+    // (16:9 -> 1280x720, 16:10 -> 1152x720, 4:3 -> 960x720). rtLobby is resized to match.
     int LobbyH() const { return 720; }
+    int LobbyW() const {
+        int sw = GetScreenWidth(), sh = GetScreenHeight();
+        if (sw <= 0 || sh <= 0) return 1280;
+        int w = (int)(720.0f * (float)sw / (float)sh + 0.5f);
+        w &= ~1;
+        return w < 960 ? 960 : (w > 2400 ? 2400 : w);
+    }
     // Mouse in lobby canvas coords
     Vector2 LobbyMouse() const;
 
@@ -125,6 +135,17 @@ private:
     void BotThink(int i, float dt, Input& in);
     Input ReadInput(int device, float dt);
     void ComputeCamera(Actor& a);
+
+    // Battle bus drop: bus -> jump -> freefall -> glider -> landed
+    void UpdateBus(float dt);
+    void EjectFromBus(int i);
+    void UpdateAerial(int i, const Input& in, float dt);   // runs instead of the normal actor update until landed
+    void BotAerial(int i, float dt, Input& in);
+    void ComputeBusCamera(Actor& a);
+    void ComputeAirCamera(Actor& a, float dist);
+    void DrawAirActor(const Actor& a, const AirState& s);
+    void DrawSkydiveHud(int ai, int W, int H);
+    bool InBus(int j) const { return j >= 0 && j < (int)air.size() && air[j].phase == DropPhase::Bus; }
     Hit3 TraceRay(Ray r, float range, int ignore);
     void FireWeapon(int i, Slot& s, const ItemDef& d);
     void Harvest(int i);
@@ -147,6 +168,7 @@ private:
     GameMode gameMode = GameMode::Solo;
     PlayType playType = PlayType::Local;
     bool modePickerOpen = false;
+    bool friendsOpen = false;     // centred friends list (F / controller Menu button)
     bool quit = false;
     bool pauseMenuOpen = false;
     MapId map = MAP_DUSTY;
@@ -159,6 +181,9 @@ private:
 
     CharacterModel chars[kLookCount];
     HeldModels held;
+    SkyModels skyModels;                 // battle bus + gliders
+    BattleBus bus;
+    std::vector<AirState> air;           // one per actor (same index as `actors`)
     Model padOn{}, padOff{};
     RenderTexture2D rtFull{}, rtHalf[2]{}, rtLobby{};
     World world;

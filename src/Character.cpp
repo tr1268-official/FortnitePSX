@@ -1,15 +1,193 @@
 #include "Character.h"
 #include "MeshBuilder.h"
 #include "Renderer.h"
+#include "Skydive.h"
 
 const Look kLooks[kLookCount] = {
     {"Jonesy",    C(214,160,120), C(224,192,92),  C(205,200,170), C(78,92,58),   C(138,108,64),  C(72,56,40),  C(38,38,40),  C(222,216,190), false, false, true},
     {"Ramirez",   C(206,150,114), C(104,58,38),   C(58,54,50),    C(58,54,50),   C(150,116,70),  C(82,62,42),  C(60,50,42),  C(90,80,70),    true,  true,  false},
     {"Headhunter",C(150,104,74),  C(26,20,20),    C(96,42,42),    C(62,62,72),   C(62,72,92),    C(40,40,46),  C(30,30,30),  C(204,62,50),   false, false, true},
     {"Wildcat",   C(236,190,160), C(190,62,40),   C(230,230,235), C(230,230,235),C(92,92,102),   C(50,50,56),  C(200,200,200),C(220,40,40),   true,  true,  false},
+    // ---- 4..11: same order as outfitCid[] / kOutfitNames[] in Game.cpp (CID_017, 028, 029, 030, 038, 044, 048, 049)
+    //  name                     skin            hair            top             vest            pants           boots           gloves          accent          F      pony   vest
+    {"Aerial Assault Trooper", C(206,160,124), C(70,52,36),    C(88,98,62),    C(60,68,48),    C(84,92,60),    C(46,42,36),    C(36,36,34),    C(120,128,92),  false, false, true},
+    {"Renegade Raider",        C(226,178,142), C(120,70,40),   C(150,108,66),  C(112,78,46),   C(96,86,64),    C(52,38,30),    C(60,44,34),    C(210,170,70),  true,  true,  true},
+    {"Ghoul Trooper",          C(150,170,140), C(40,36,34),    C(92,100,74),   C(70,78,58),    C(74,82,62),    C(40,38,34),    C(60,64,52),    C(110,120,90),  true,  false, false},
+    {"Skull Trooper",          C(232,230,218), C(20,20,22),    C(24,24,28),    C(24,24,28),    C(26,26,30),    C(20,20,22),    C(224,222,210), C(224,222,210), false, false, false},
+    {"Funk Ops",               C(176,120,86),  C(30,22,20),    C(236,206,96),  C(236,206,96),  C(70,56,140),   C(80,220,240),  C(176,120,86),  C(70,110,230),  false, false, false},
+    {"Sparkle Specialist",     C(236,196,166), C(240,90,170),  C(225,228,240), C(225,228,240), C(200,150,230), C(235,235,245), C(240,100,180), C(120,220,255), true,  true,  false},
+    {"Ginger Gunner",          C(186,120,66),  C(120,40,40),   C(168,104,56),  C(168,104,56),  C(150,92,50),   C(236,236,236), C(240,240,240), C(240,240,240), true,  false, false},
+    {"Merry Marauder",         C(186,120,66),  C(240,240,240), C(168,104,56),  C(168,104,56),  C(60,110,60),   C(180,40,40),   C(240,240,240), C(240,240,240), false, false, false},
 };
 
 static Model Mk(MeshBuilder& mb) { return gR.MakeModel(mb); }
+
+// ---------------------------------------------------------------------------------------- outfit extras
+// Headgear / face / chest details that make each outfit read like its in-game counterpart.
+// Hair-model coordinates are head-local (y 0..0.29, face looks down +Z); torso coordinates are torso-local (front = +Z).
+static const Color kWhite = C(240, 240, 240), kBone = C(226, 224, 210), kBlack = C(18, 18, 22);
+
+static void Dome(MeshBuilder& mb, float s, float y0, Color c) {            // helmet / cap shell over the top of the head
+    mb.Loft({{y0, 0.108f * s, 0.116f * s, c}, {0.20f, 0.116f * s, 0.122f * s, c}, {0.245f, 0.108f * s, 0.114f * s, c},
+             {0.278f, 0.072f * s, 0.082f * s, c}, {0.298f, 0.0f, 0.0f, c}}, 10, nullptr, false, true);
+}
+static void Band(MeshBuilder& mb, float y0, float y1, float s, Color c) {  // open ring (head band, fur trim, strap)
+    mb.Loft({{y0, 0.109f * s, 0.116f * s, c}, {y1, 0.109f * s, 0.116f * s, c}}, 10, nullptr, false, false);
+}
+
+static void ArmColors(int li, const Look& L, Color& up, Color& fore) {
+    switch (li) {
+        case 4: case 5: case 7: case 9: up = L.top; fore = L.top; break;   // long sleeves
+        case 6: up = L.top; fore = L.skin; break;                          // ragged sleeve, bare forearm
+        default: break;                                                    // original four + Funk Ops + gingerbread: bare / skin-coloured
+    }
+}
+
+static void ExtraHead(int li, MeshBuilder& mb) {
+    switch (li) {
+        case 6:   // Ghoul Trooper: glowing eyes
+            mb.Box({-0.034f, 0.135f, 0.103f}, {0.030f, 0.018f, 0.008f}, C(190, 255, 110));
+            mb.Box({ 0.034f, 0.135f, 0.103f}, {0.030f, 0.018f, 0.008f}, C(190, 255, 110));
+            break;
+        case 7:   // Skull Trooper: skull face
+            mb.Box({-0.036f, 0.135f, 0.100f}, {0.044f, 0.050f, 0.014f}, kBlack);
+            mb.Box({ 0.036f, 0.135f, 0.100f}, {0.044f, 0.050f, 0.014f}, kBlack);
+            mb.Box({0, 0.102f, 0.100f}, {0.022f, 0.030f, 0.014f}, kBlack);
+            mb.Box({0, 0.060f, 0.097f}, {0.074f, 0.024f, 0.012f}, C(238, 236, 224));
+            for (int k = 0; k < 5; k++) mb.Box({-0.030f + k * 0.015f, 0.060f, 0.101f}, {0.004f, 0.026f, 0.012f}, kBlack);
+            break;
+        case 10: case 11:   // gingerbread: icing eyes, smile and candy cheeks
+            for (int sgn = -1; sgn <= 1; sgn += 2) {
+                mb.Box({sgn * 0.034f, 0.135f, 0.100f}, {0.032f, 0.032f, 0.012f}, C(245, 245, 245));
+                mb.Box({sgn * 0.034f, 0.135f, 0.107f}, {0.014f, 0.016f, 0.008f}, kBlack);
+                mb.Box({sgn * 0.058f, 0.090f, 0.093f}, {0.020f, 0.020f, 0.012f}, C(220, 70, 70));
+                mb.Box({sgn * 0.032f, 0.080f, 0.100f}, {0.010f, 0.012f, 0.012f}, kWhite);
+            }
+            mb.Box({0, 0.072f, 0.100f}, {0.060f, 0.010f, 0.012f}, kWhite);
+            break;
+        default: break;
+    }
+}
+
+static void ExtraHair(int li, const Look& L, MeshBuilder& mb) {
+    switch (li) {
+        case 4: {   // Aerial Assault Trooper: olive helmet, brim, chin strap, goggles
+            Color hm = C(66, 78, 52);
+            Dome(mb, 1.0f, 0.14f, hm);
+            mb.Box({0, 0.205f, 0.118f}, {0.20f, 0.014f, 0.045f}, Mul(hm, 0.85f));
+            mb.Box({-0.108f, 0.10f, 0.0f}, {0.012f, 0.07f, 0.03f}, C(30, 30, 28));
+            mb.Box({ 0.108f, 0.10f, 0.0f}, {0.012f, 0.07f, 0.03f}, C(30, 30, 28));
+            mb.Box({-0.04f, 0.228f, 0.120f}, {0.05f, 0.03f, 0.02f}, C(150, 190, 200));
+            mb.Box({ 0.04f, 0.228f, 0.120f}, {0.05f, 0.03f, 0.02f}, C(150, 190, 200));
+            break;
+        }
+        case 5: {   // Renegade Raider: leather aviator cap, ear flaps, amber goggles
+            Color lc = C(112, 74, 44);
+            Dome(mb, 1.0f, 0.14f, lc);
+            mb.Box({-0.112f, 0.10f, 0.0f}, {0.02f, 0.10f, 0.09f}, lc);
+            mb.Box({ 0.112f, 0.10f, 0.0f}, {0.02f, 0.10f, 0.09f}, lc);
+            Band(mb, 0.195f, 0.215f, 1.02f, C(60, 42, 30));
+            for (int sgn = -1; sgn <= 1; sgn += 2) {
+                mb.Box({sgn * 0.04f, 0.205f, 0.122f}, {0.055f, 0.050f, 0.025f}, C(40, 40, 44));
+                mb.Box({sgn * 0.04f, 0.205f, 0.136f}, {0.040f, 0.036f, 0.010f}, C(240, 190, 70));
+            }
+            break;
+        }
+        case 6: {   // Ghoul Trooper: broken helmet shell + straggly hair
+            Dome(mb, 1.0f, 0.18f, C(66, 72, 54));
+            mb.Box({-0.10f, 0.08f, -0.04f}, {0.03f, 0.20f, 0.07f}, L.hair);
+            mb.Box({ 0.10f, 0.06f, -0.05f}, {0.03f, 0.22f, 0.07f}, L.hair);
+            mb.Box({0, 0.06f, -0.11f}, {0.16f, 0.22f, 0.03f}, L.hair);
+            break;
+        }
+        case 7:     // Skull Trooper: black cowl
+            Dome(mb, 1.0f, 0.14f, C(22, 22, 26));
+            break;
+        case 8: {   // Funk Ops: big afro, blue headband, sunglasses
+            Color h = L.hair;
+            mb.Loft({{0.06f, 0.10f, 0.07f, h, 0, -0.06f}, {0.12f, 0.19f, 0.13f, h, 0, -0.07f}, {0.19f, 0.22f, 0.15f, h, 0, -0.07f},
+                     {0.25f, 0.21f, 0.17f, h, 0, -0.05f}, {0.31f, 0.16f, 0.15f, h, 0, -0.04f}, {0.36f, 0.08f, 0.08f, h, 0, -0.03f},
+                     {0.385f, 0.0f, 0.0f, h, 0, -0.03f}}, 10, nullptr, false, true);
+            Band(mb, 0.185f, 0.205f, 1.0f, C(60, 110, 235));
+            Color gl = C(24, 24, 30);
+            mb.Box({-0.036f, 0.138f, 0.104f}, {0.052f, 0.040f, 0.012f}, gl);
+            mb.Box({ 0.036f, 0.138f, 0.104f}, {0.052f, 0.040f, 0.012f}, gl);
+            mb.Box({0, 0.145f, 0.104f}, {0.020f, 0.010f, 0.012f}, gl);
+            mb.Box({-0.092f, 0.140f, 0.05f}, {0.010f, 0.010f, 0.10f}, gl);
+            mb.Box({ 0.092f, 0.140f, 0.05f}, {0.010f, 0.010f, 0.10f}, gl);
+            break;
+        }
+        case 9: {   // Sparkle Specialist: cyan goggle band on the forehead + star hair clip
+            Band(mb, 0.19f, 0.21f, 1.0f, L.accent);
+            mb.Box({-0.04f, 0.225f, 0.112f}, {0.05f, 0.04f, 0.02f}, L.accent);
+            mb.Box({ 0.04f, 0.225f, 0.112f}, {0.05f, 0.04f, 0.02f}, L.accent);
+            mb.Box({-0.10f, 0.20f, 0.04f}, {0.02f, 0.04f, 0.04f}, C(255, 240, 120));
+            break;
+        }
+        case 10: {  // Ginger Gunner: icing band + red candy bow
+            Band(mb, 0.19f, 0.205f, 0.99f, kWhite);
+            mb.Box({0, 0.285f, 0.02f}, {0.04f, 0.03f, 0.03f}, C(210, 40, 50));
+            mb.Box({-0.04f, 0.285f, 0.02f}, {0.04f, 0.05f, 0.03f}, C(210, 40, 50));
+            mb.Box({ 0.04f, 0.285f, 0.02f}, {0.04f, 0.05f, 0.03f}, C(210, 40, 50));
+            break;
+        }
+        case 11: {  // Merry Marauder: red knit cap with white fur trim and pom
+            Dome(mb, 1.0f, 0.14f, C(190, 36, 40));
+            Band(mb, 0.13f, 0.19f, 1.05f, kWhite);
+            mb.Loft({{0.29f, 0.03f, 0.03f, kWhite}, {0.31f, 0.05f, 0.05f, kWhite}, {0.335f, 0.04f, 0.04f, kWhite}, {0.35f, 0.0f, 0.0f, kWhite}}, 8, nullptr, false, true);
+            break;
+        }
+        default: break;
+    }
+}
+
+static void ExtraTorso(int li, const Look& L, MeshBuilder& mb) {
+    switch (li) {
+        case 4:     // chest pouches + belt pouch
+            mb.Box({-0.09f, 0.34f, 0.115f}, {0.07f, 0.075f, 0.04f}, Mul(L.vest, 0.8f));
+            mb.Box({ 0.09f, 0.34f, 0.115f}, {0.07f, 0.075f, 0.04f}, Mul(L.vest, 0.8f));
+            mb.Box({0.13f, 0.12f, 0.04f}, {0.05f, 0.07f, 0.07f}, C(50, 50, 46));
+            break;
+        case 5: {   // bandolier across the chest
+            Matrix m = MatrixMultiply(MatrixRotateZ(0.7f), MatrixTranslate(0, 0.34f, 0.112f));
+            mb.Box({0, 0, 0}, {0.34f, 0.05f, 0.025f}, C(70, 48, 32), &m);
+            mb.Box({-0.06f, 0.28f, 0.122f}, {0.03f, 0.05f, 0.02f}, L.accent);
+            mb.Box({ 0.00f, 0.34f, 0.122f}, {0.03f, 0.05f, 0.02f}, L.accent);
+            mb.Box({ 0.06f, 0.40f, 0.122f}, {0.03f, 0.05f, 0.02f}, L.accent);
+            break;
+        }
+        case 6:     // torn shirt: a few exposed ribs
+            for (int k = 0; k < 3; k++) mb.Box({0.03f, 0.32f + k * 0.045f, 0.110f}, {0.12f, 0.012f, 0.02f}, kBone);
+            break;
+        case 7:     // skeleton print: ribs, sternum, spine, pelvis, collar bones
+            for (int k = 0; k < 4; k++) mb.Box({0, 0.30f + k * 0.045f, 0.108f}, {0.20f - k * 0.01f, 0.014f, 0.02f}, kBone);
+            mb.Box({0, 0.37f, 0.112f}, {0.02f, 0.16f, 0.02f}, kBone);
+            mb.Box({0, 0.33f, -0.108f}, {0.02f, 0.28f, 0.02f}, kBone);
+            mb.Box({0, 0.12f, 0.100f}, {0.14f, 0.05f, 0.02f}, kBone);
+            mb.Box({-0.07f, 0.53f, 0.09f}, {0.13f, 0.015f, 0.03f}, kBone);
+            mb.Box({ 0.07f, 0.53f, 0.09f}, {0.13f, 0.015f, 0.03f}, kBone);
+            break;
+        case 8:     // sparkly shirt, open collar, gold chain
+            for (int k = 0; k < 12; k++)
+                mb.Box({(((k * 37) % 17) - 8) * 0.014f, 0.20f + ((k * 53) % 11) * 0.03f, 0.108f}, {0.012f, 0.012f, 0.012f}, C(255, 250, 220));
+            mb.Box({0, 0.50f, 0.105f}, {0.07f, 0.09f, 0.02f}, L.skin);
+            mb.Box({0, 0.46f, 0.116f}, {0.03f, 0.03f, 0.01f}, C(255, 215, 80));
+            break;
+        case 9: {   // chest star + shoulder pads
+            mb.Box({0, 0.40f, 0.118f}, {0.07f, 0.07f, 0.012f}, C(240, 100, 180));
+            Matrix m = MatrixMultiply(MatrixRotateZ(0.785f), MatrixTranslate(0, 0.40f, 0.119f));
+            mb.Box({0, 0, 0}, {0.07f, 0.07f, 0.012f}, C(240, 100, 180), &m);
+            mb.Box({-0.185f, 0.53f, 0.0f}, {0.06f, 0.03f, 0.12f}, L.accent);
+            mb.Box({ 0.185f, 0.53f, 0.0f}, {0.06f, 0.03f, 0.12f}, L.accent);
+            break;
+        }
+        case 10: case 11:   // icing collar + candy buttons
+            for (int k = 0; k < 5; k++) mb.Box({-0.08f + k * 0.04f, 0.50f, 0.105f}, {0.035f, 0.02f, 0.015f}, kWhite);
+            for (int k = 0; k < 3; k++) mb.Box({0, 0.42f - k * 0.09f, 0.115f}, {0.03f, 0.03f, 0.015f}, (k % 2 == 0) ? C(210, 40, 50) : C(60, 150, 70));
+            break;
+        default: break;
+    }
+}
 
 void CharacterBuild(CharacterModel& cm, int li) {
     const Look& L = kLooks[li];
@@ -18,12 +196,15 @@ void CharacterBuild(CharacterModel& cm, int li) {
     const float shR = F ? 0.165f : 0.195f, chR = F ? 0.155f : 0.185f, waR = F ? 0.125f : 0.145f, hipR = F ? 0.158f : 0.150f;
     const Color belt = C(58, 44, 34), skinD = Mul(L.skin, 0.82f), dark = C(30, 25, 25);
     const Color shirt = L.top, vest = L.hasVest ? L.vest : L.top, collar = L.hasVest ? L.accent : L.top;
+    Color upC = L.skin, foreC = L.skin;
+    ArmColors(li, L, upC, foreC);
 
     { MeshBuilder mb;
         mb.Loft({{-0.10f, hipR, 0.10f, L.pants}, {0.05f, waR + 0.01f, 0.10f, L.pants}, {0.05f, waR + 0.012f, 0.102f, belt}, {0.10f, waR + 0.012f, 0.102f, belt},
                  {0.10f, waR, 0.095f, shirt}, {0.28f, waR + 0.005f, 0.100f, shirt}, {0.28f, waR + 0.010f, 0.104f, vest}, {0.46f, chR, 0.118f, vest},
                  {0.55f, shR, 0.105f, vest}, {0.58f, 0.085f, 0.07f, collar}, {0.62f, 0.07f, 0.06f, collar}, {0.62f, 0.052f, 0.05f, L.skin}, {0.68f, 0.05f, 0.05f, L.skin}}, 10);
         if (L.hasVest) mb.Box({0, 0.17f, -0.105f}, {0.2f, 0.22f, 0.05f}, Mul(L.vest, 0.7f));
+        ExtraTorso(li, L, mb);
         cm.torso = Mk(mb);
     }
     { MeshBuilder mb;
@@ -37,6 +218,7 @@ void CharacterBuild(CharacterModel& cm, int li) {
         mb.Box({0, 0.062f, 0.092f}, {0.05f, 0.01f, 0.01f}, F ? C(170, 70, 80) : skinD);
         mb.Box({-0.088f, 0.12f, 0.0f}, {0.014f, 0.04f, 0.03f}, skinD);
         mb.Box({0.088f, 0.12f, 0.0f}, {0.014f, 0.04f, 0.03f}, skinD);
+        ExtraHead(li, mb);
         cm.head = Mk(mb);
     }
     { MeshBuilder mb; Color h = L.hair;
@@ -44,6 +226,7 @@ void CharacterBuild(CharacterModel& cm, int li) {
                  {0.275f, 0.058f, 0.068f, h}, {0.295f, 0.0f, 0.0f, h}}, 9, nullptr, false, true);
         if (F) { mb.Box({-0.098f, 0.11f, -0.01f}, {0.02f, 0.13f, 0.1f}, h); mb.Box({0.098f, 0.11f, -0.01f}, {0.02f, 0.13f, 0.1f}, h); }
         else   { mb.Box({0, 0.19f, 0.075f}, {0.17f, 0.03f, 0.06f}, Mul(h, 1.08f)); }
+        ExtraHair(li, L, mb);
         cm.hair = Mk(mb);
     }
     { MeshBuilder mb;
@@ -54,11 +237,11 @@ void CharacterBuild(CharacterModel& cm, int li) {
     }
     for (int i = 0; i < 2; i++) {
         { MeshBuilder mb;
-            mb.Loft({{0.04f, 0.062f, 0.062f, L.skin}, {-0.03f, 0.056f, 0.056f, L.skin}, {-0.15f, 0.05f, 0.05f, L.skin}, {-0.28f, 0.043f, 0.043f, L.skin}}, 7);
+            mb.Loft({{0.04f, 0.062f, 0.062f, upC}, {-0.03f, 0.056f, 0.056f, upC}, {-0.15f, 0.05f, 0.05f, upC}, {-0.28f, 0.043f, 0.043f, upC}}, 7);
             cm.armU[i] = Mk(mb);
         }
         { MeshBuilder mb;
-            mb.Loft({{0.0f, 0.043f, 0.043f, L.skin}, {-0.10f, 0.038f, 0.038f, L.skin}, {-0.15f, 0.034f, 0.034f, L.skin}, {-0.15f, 0.037f, 0.037f, L.accent},
+            mb.Loft({{0.0f, 0.043f, 0.043f, foreC}, {-0.10f, 0.038f, 0.038f, foreC}, {-0.15f, 0.034f, 0.034f, foreC}, {-0.15f, 0.037f, 0.037f, L.accent},
                      {-0.19f, 0.037f, 0.037f, L.accent}, {-0.19f, 0.035f, 0.030f, L.gloves}, {-0.25f, 0.040f, 0.022f, L.gloves}, {-0.31f, 0.036f, 0.020f, L.gloves},
                      {-0.34f, 0.0f, 0.0f, L.gloves}}, 7);
             cm.armL[i] = Mk(mb);
@@ -321,4 +504,54 @@ void CharacterDraw(const CharacterModel& cm, const HeldModels& held, Vector3 pos
         Matrix g = MatrixMultiply(MatrixRotateX(2.3f), MatrixTranslate(0, -0.30f, 0));
         Part(held.pick, At(g, fore[0]), tint);
     }
+}
+
+// ---------------------------------------------------------------------------------------- skydiving / gliding pose
+// blend 0: freefall - belly-down, arms and legs spread, head lifted to look forward.
+// blend 1: hanging from a glider - arms overhead on the grip, legs dangling and swaying.
+// The whole body pivots around a point that slides from the pelvis (freefall) up to the grip (glider), so tilt/bank
+// look right in both modes. Returns the grip-frame matrix (feed it to DrawGlider).
+Matrix CharacterDrawAir(const CharacterModel& cm, Vector3 pos, float yaw, const AirPose& p, Color tint) {
+    const Look& L = kLooks[cm.look];
+    const float shX = L.female ? 0.165f : 0.19f;
+    const float k = Clamp(p.blend, 0.0f, 1.0f), t = p.time;
+    const float gripH = Lerp(0.93f, 2.05f, k);
+
+    Matrix grip = MatrixMultiply(MatrixMultiply(MatrixMultiply(MatrixRotateX(p.tilt), MatrixRotateZ(p.roll)), MatrixRotateY(yaw)),
+                                 MatrixTranslate(pos.x, pos.y + gripH, pos.z));
+    Matrix root = MatrixMultiply(MatrixTranslate(0, -gripH, 0), grip);
+
+    const float flap = sinf(t * 11.0f) * (1.0f - k);      // wind flutter while falling
+    const float sway = sinf(t * 1.7f) * k;                // gentle swing under the canopy
+
+    Matrix pelvis = At(MatrixTranslate(0, 0.93f, 0), root);
+    Matrix torso = At(MatrixRotateX(Lerp(-0.22f, 0.04f, k)), pelvis);                 // slight arch in freefall
+    Part(cm.torso, torso, tint);
+
+    const float headRot = -(p.tilt - 0.45f) * 0.8f * (1.0f - k);                       // lift the head to look ahead
+    Matrix hd = At(MatrixMultiply(MatrixRotateX(headRot), MatrixTranslate(0, 0.62f, 0)), torso);
+    Part(cm.head, hd, tint); Part(cm.hair, hd, tint);
+    const float tailA = Lerp(0.70f + 0.15f * flap, 0.30f + 0.10f * sway, k);
+    Part(cm.tail, At(MatrixMultiply(MatrixRotateX(tailA), MatrixTranslate(0, 0.2f, -0.09f)), hd), tint);
+
+    for (int i = 0; i < 2; i++) {
+        const float sx = (i == 0) ? -1.0f : 1.0f;
+        const float spread = Lerp(0.30f + 0.05f * flap, 0.05f, k);
+        const float th = Lerp(0.35f, 0.12f + 0.10f * sinf(t * 1.6f + i * 2.3f), k);
+        const float kn = Lerp(0.70f, 0.35f + 0.25f * fmaxf(0.0f, sinf(t * 1.6f + i * 2.3f + 1.0f)), k);
+        Matrix thigh = At(MatrixMultiply(MatrixMultiply(MatrixRotateZ(sx * spread), MatrixRotateX(th)), MatrixTranslate(sx * 0.085f, 0, 0)), pelvis);
+        Part(cm.legU[i], thigh, tint);
+        Part(cm.legL[i], At(MatrixMultiply(MatrixRotateX(kn), MatrixTranslate(0, -0.45f, 0)), thigh), tint);
+    }
+
+    for (int i = 0; i < 2; i++) {
+        const float sx = (i == 0) ? -1.0f : 1.0f;
+        const float aZ = Lerp(sx * (1.5708f + 0.45f + 0.10f * flap), sx * p.splay, k);   // out to the sides -> onto the grip
+        const float aX = Lerp(0.0f, -(kPi - 0.25f), k);                                   // hanging down -> straight overhead
+        Matrix u = At(MatrixMultiply(MatrixMultiply(MatrixRotateZ(aZ), MatrixRotateX(aX)), MatrixTranslate(sx * shX, 0.54f, 0)), torso);
+        Part(cm.armU[i], u, tint);
+        Matrix f = At(MatrixMultiply(MatrixRotateX(Lerp(0.15f, -0.12f, k)), MatrixTranslate(0, -0.28f, 0)), u);
+        Part(cm.armL[i], f, tint);
+    }
+    return grip;
 }

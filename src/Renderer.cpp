@@ -1,8 +1,6 @@
 #include "Renderer.h"
 Renderer gR;
 
-// Pull in the OpenGL function pointers we need for polygon offset.
-// Raylib uses GLAD internally, and it's exposed through this header.
 #include "external/glad.h"
 
 static const char* kVS = R"GLSL(#version 330
@@ -19,11 +17,6 @@ out float fragFog;
 void main() {
     vec4 p = mvp * vec4(vertexPosition, 1.0);
     fragFog = clamp((p.w - 22.0) / (105.0 - 22.0), 0.0, 1.0);
-    // PS1 "wobble": snap every vertex to the low-res pixel grid
-    vec2 grid = uRes * 0.5;
-    vec2 ndc = p.xy / p.w;
-    ndc = floor(ndc * grid + 0.5) / grid;
-    p.xy = ndc * p.w;
     gl_Position = p;
     vec3 n = normalize(mat3(matModel) * vertexNormal);
     float l = 0.52 + 0.48 * abs(dot(n, normalize(vec3(-0.4, 0.8, 0.35))));
@@ -40,14 +33,10 @@ uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 uniform vec3 uFog;
 out vec4 finalColor;
-const float bayer[16] = float[16](0.,8.,2.,10., 12.,4.,14.,6., 3.,11.,1.,9., 15.,7.,13.,5.);
 void main() {
     vec4 t = texture(texture0, fragUV) * colDiffuse * fragColor;
     if (t.a < 0.04) discard;
     vec3 c = mix(t.rgb, uFog, fragFog);
-    int i = int(mod(gl_FragCoord.x, 4.0)) + 4 * int(mod(gl_FragCoord.y, 4.0));
-    float d = (bayer[i] / 16.0 - 0.5) / 31.0;
-    c = floor((c + d) * 31.0 + 0.5) / 31.0;          // 5 bits per channel
     finalColor = vec4(c, t.a);
 }
 )GLSL";
@@ -65,13 +54,9 @@ out float fragMode;
 out float fragH;
 void main() {
     vec4 p = mvp * vec4(vertexPosition, 1.0);
-    vec2 grid = uRes * 0.5;
-    vec2 ndc = p.xy / p.w;
-    ndc = floor(ndc * grid + 0.5) / grid;          // same PS1 vertex snap as the world
-    p.xy = ndc * p.w;
     gl_Position = p;
     fragUV = vertexTexCoord;
-    fragMode = vertexColor.r;                      // 1 = storm wall, 0 = ground haze outside the wall
+    fragMode = vertexColor.r;
     fragH = (matModel * vec4(vertexPosition, 1.0)).y;
 }
 )GLSL";
@@ -82,12 +67,10 @@ in float fragMode;
 in float fragH;
 uniform float uTime;
 out vec4 finalColor;
-const float bayer[16] = float[16](0.,8.,2.,10., 12.,4.,14.,6., 3.,11.,1.,9., 15.,7.,13.,5.);
 float hash(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
 void main() {
     vec3 c; float a;
     if (fragMode > 0.5) {
-        // Fortnite storm wall: deep violet curtain with hard vertical streaks and bright bands rising up it
         float colId = floor(fragUV.x * 40.0);
         float sp = 0.6 + 0.4 * hash(colId);
         float stripe = step(0.55, fract(fragUV.x * 40.0 + uTime * 0.02));
@@ -102,10 +85,6 @@ void main() {
         c = vec3(0.28, 0.07, 0.48) + 0.03 * sin(uTime * 0.8);
         a = 0.55;
     }
-    c = floor(c * 15.0 + 0.5) / 15.0;                // chunky banding
-    int i = int(mod(gl_FragCoord.x, 4.0)) + 4 * int(mod(gl_FragCoord.y, 4.0));
-    float d = (bayer[i] / 16.0 - 0.5) / 31.0;
-    c = floor((c + d) * 31.0 + 0.5) / 31.0;          // 5 bits per channel
     finalColor = vec4(c, clamp(a, 0.0, 1.0));
 }
 )GLSL";
@@ -116,9 +95,9 @@ Texture2D Renderer::MakeTex(Color a, Color b, int pat) {
     for (int y = 0; y < S; y++)
         for (int x = 0; x < S; x++) {
             float t = Rand01(), f = 1.0f;
-            if (pat == 1) { if (y % 8 == 0) f = 0.55f; f *= 0.9f + 0.1f * (float)((y / 8) % 3); }          // planks
-            if (pat == 2) f = (x % 4 < 2) ? 1.0f : 0.80f;                                                  // corrugated metal
-            if (pat == 3) t = Rand01() * Rand01();                                                         // grass
+            if (pat == 1) { if (y % 8 == 0) f = 0.55f; f *= 0.9f + 0.1f * (float)((y / 8) % 3); }
+            if (pat == 2) f = (x % 4 < 2) ? 1.0f : 0.80f;
+            if (pat == 3) t = Rand01() * Rand01();
             ImageDrawPixel(&img, x, y, Mul(Mix(a, b, t), f));
         }
     Texture2D tex = LoadTextureFromImage(img);
@@ -136,14 +115,11 @@ void Renderer::Init() {
     SetShaderValue(shader, locFog, f, SHADER_UNIFORM_VEC3);
     rlDisableBackfaceCulling();
     rlSetClipPlanes(0.1, 300.0);
-    
-    // Floor layering: there is NO global polygon offset any more (it shifted every surface and the old
-    // 0.2 m raised "second ground" sank feet/shadows into the floor). Ground decals are drawn flush with
-    // the ground at y = 0 and are pulled forward only while they are drawn, via DecalBegin/DecalEnd.
+
     stormShader = LoadShaderFromMemory(kStormVS, kStormFS);
     locStormRes = GetShaderLocation(stormShader, "uRes");
     locStormTime = GetShaderLocation(stormShader, "uTime");
-    
+
     SetRandomSeed(7);
     texGrass = MakeTex(C(70, 95, 30), C(120, 140, 55), 3);
     texSand = MakeTex(C(176, 150, 112), C(210, 186, 145), 0);

@@ -9,6 +9,7 @@
 static const float kWait[4] = {80, 50, 40, 30}, kShrink[4] = {50, 40, 30, 25}, kRad[5] = {85, 52, 32, 16, 4};
 static const char* kTabNames[] = { "LOBBY", "BATTLE PASS", "LOCKER", "ITEM SHOP", "PROFILE" };
 static const char* kModeNames[] = { "SOLO", "DUO", "1V1 PRIVATE", "2V2 PRIVATE" };
+static const bool kUseBattleBus = true;     // false = spawn on the ground like before
 
 
 static void Present(RenderTexture2D& rt, Rectangle dest) {
@@ -24,20 +25,21 @@ Game::Game() {
     SetExitKey(KEY_NULL);
     for (int i = 0; i < kLookCount; i++) CharacterBuild(chars[i], i);
     HeldBuild(held);
+    SkydiveBuild(skyModels);
     world.gunModel = &held.guns[I_AR];
     { MeshBuilder a, b;
         a.Loft({{0, 1.0f, 1.0f, C(150, 150, 155)}, {0.14f, 1.0f, 1.0f, C(190, 190, 195)}, {0.14f, 0.82f, 0.82f, C(90, 235, 255)}}, 8);
         b.Loft({{0, 1.0f, 1.0f, C(150, 150, 155)}, {0.14f, 1.0f, 1.0f, C(190, 190, 195)}, {0.14f, 0.82f, 0.82f, C(55, 62, 68)}}, 8);
         padOn = gR.MakeModel(a); padOff = gR.MakeModel(b);
     }
-    rtFull = LoadRenderTexture(320, 240);
-    rtHalf[0] = LoadRenderTexture(214, 240);
-    rtHalf[1] = LoadRenderTexture(214, 240);
-    rtLobby = LoadRenderTexture(960, 720);
+    rtFull = LoadRenderTexture(1920, 1080);
+    rtHalf[0] = LoadRenderTexture(960, 1080);
+    rtHalf[1] = LoadRenderTexture(960, 1080);
+    rtLobby = LoadRenderTexture(1280, 720);
+    SetTextureFilter(rtLobby.texture, TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(rtFull.texture, TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(rtHalf[0].texture, TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(rtHalf[1].texture, TEXTURE_FILTER_BILINEAR);
-    SetTextureFilter(rtLobby.texture, TEXTURE_FILTER_BILINEAR);
     LoadCredentials();
 }
 
@@ -47,6 +49,7 @@ Game::~Game() {
     world.Unload();
     for (int i = 0; i < kLookCount; i++) CharacterUnload(chars[i]);
     HeldUnload(held);
+    SkydiveUnload(skyModels);
     gR.FreeModel(padOn); gR.FreeModel(padOff);
     UnloadRenderTexture(rtFull); UnloadRenderTexture(rtHalf[0]); UnloadRenderTexture(rtHalf[1]); UnloadRenderTexture(rtLobby);
     gIcons.Shutdown();
@@ -84,6 +87,59 @@ void Game::Run() {
 // =====================================================================
 //  LOGIN / ACCOUNT
 // =====================================================================
+
+// Canonical outfit names in the SAME ORDER as kLooks[] / chars[] / outfitCid[].
+// Used for name<->index mapping when saving/loading equipped outfits.
+static const char* kOutfitNames[kLookCount] = {
+    "jonesy",                 // 0
+    "ramirez",                // 1
+    "headhunter",             // 2
+    "wildcat",                // 3
+    "arial_assault_trooper",  // 4
+    "renegade_raider",        // 5
+    "ghoul_trooper",          // 6
+    "skull_trooper",          // 7
+    "brite_bomber",           // 8
+    "punk_funk",              // 9
+    "ginge",                  // 10
+    "merry_maruader"          // 11
+};
+
+// Convert an outfit name (with a few legacy aliases) to a look index in [0, kLookCount).
+static int OutfitNameToIndex(const std::string& name) {
+    if (name.empty()) return 0;
+    for (int i = 0; i < kLookCount; i++)
+        if (name == kOutfitNames[i]) return i;
+    // legacy aliases seen in older JSON
+    if (name == "ranger")  return 1;
+    if (name == "scout")   return 2;
+    if (name == "medic")   return 3;
+    return 0;
+}
+
+// Minimal JSON string-array reader: finds "key":[ "a", "b", ... ] and returns the strings.
+static std::vector<std::string> JsonGetStringArray(const std::string& json, const std::string& key) {
+    std::vector<std::string> out;
+    std::string pat = "\"" + key + "\"";
+    size_t k = json.find(pat);
+    if (k == std::string::npos) return out;
+    size_t lb = json.find('[', k);
+    if (lb == std::string::npos) return out;
+    size_t i = lb + 1;
+    while (i < json.size()) {
+        while (i < json.size() &&
+               (json[i]==' '||json[i]==','||json[i]=='\n'||json[i]=='\r'||json[i]=='\t'))
+            i++;
+        if (i >= json.size() || json[i] == ']') break;
+        if (json[i] != '"') break;                 // not a string array
+        size_t end = json.find('"', i + 1);
+        if (end == std::string::npos) break;
+        out.push_back(json.substr(i + 1, end - i - 1));
+        i = end + 1;
+    }
+    return out;
+}
+
 void Game::LoadAccountFromJson(const std::string& json) {
     account.id = JsonGetString(json, "id");
     account.username = JsonGetString(json, "username");
@@ -98,16 +154,47 @@ void Game::LoadAccountFromJson(const std::string& json) {
     account.battlePassTier = JsonGetInt(json, "battlePassTier", 1);
     account.battlePassOwned = JsonGetBool(json, "battlePassOwned");
     account.loggedIn = !account.id.empty();
-    // map outfit name to look index
+
+    // --- owned cosmetics ---
+    account.owned.clear();
+    for (auto& s : JsonGetStringArray(json, "owned"))
+        account.owned.push_back(s);
+    // Always own the four defaults + anything the server omitted
+    for (int i = 0; i < 4; i++)
+        if (std::find(account.owned.begin(), account.owned.end(), kOutfitNames[i]) == account.owned.end())
+            account.owned.push_back(kOutfitNames[i]);
+
+    // --- equipped outfit ---
     std::string eq = JsonGetObject(json, "equipped");
     std::string outfit = JsonGetString(eq, "outfit");
-    if (outfit == "ramirez" || outfit == "ranger") p1Look = 1;
-    else if (outfit == "headhunter" || outfit == "scout") p1Look = 2;
-    else if (outfit == "wildcat" || outfit == "medic") p1Look = 3;
-    else p1Look = 0;
-    account.outfit = outfit.empty() ? "jonesy" : outfit;
-}
+    int idx = OutfitNameToIndex(outfit);
 
+    // Guard: if the mapped index isn't actually owned, fall back to jonesy (0).
+    bool ownsEquipped = false;
+    for (auto& o : account.owned)
+        if (o == kOutfitNames[idx]) { ownsEquipped = true; break; }
+    if (!ownsEquipped) idx = 0;
+
+    p1Look = idx;
+    account.outfit = kOutfitNames[p1Look];
+
+    // Optional: also honor equipped glider/pickaxe/emote/banner if present in JSON.
+    if (!eq.empty()) {
+        std::string g = JsonGetString(eq, "glider");
+        std::string pk = JsonGetString(eq, "pickaxe");
+        std::string em = JsonGetString(eq, "emote");
+        std::string bn = JsonGetString(eq, "banner");
+        if (g == "mako")            equippedGlider = 1;
+        else if (g == "founder" || g == "founders_glider") equippedGlider = 2;
+        if (pk == "raiders_revenge" || pk == "raider_revenge") equippedPick = 1;
+        else if (pk == "candy_axe") equippedPick = 2;
+        if (em == "default_dance")  equippedEmote = 1;
+        else if (em == "ride_the_pony") equippedEmote = 2;
+        if (bn == "Banner_Trophy")  equippedBanner = 1;
+        else if (bn == "Banner_Season1") equippedBanner = 2;
+        if (!bn.empty()) account.banner = bn;
+    }
+}
 void Game::TryLogin() {
     authError.clear();
     if (loginUser[0] == 0 || loginPass[0] == 0) { authError = "Enter username and password"; authMsgT = 3; return; }
@@ -140,7 +227,7 @@ void Game::TryLogin() {
         account.id = "user_default"; account.username = "Player1"; account.displayName = "Player1";
         account.vbucks = 2500; account.level = 15; account.xp = 3200; account.wins = 3; account.kills = 47; account.matches = 28;
         account.battlePassTier = 12; account.battlePassOwned = false; account.loggedIn = true;
-        account.owned = {"jonesy","ramirez","headhunter","wildcat"};
+        account.owned = {"jonesy","ramirez","headhunter","wildcat", "arial_assault_trooper", "renegade_raider", "ghoul_trooper", "skull_trooper", "brite_bomber", "punk_funk", "ginge", "merry_maruader"};
         state = State::Lobby; tab = LobbyTab::Play;
         inParty=false; isPartyLeader=true; p2Joined=false; partyMemberUser.clear(); partyMemberName.clear();
         RefreshShop(); RefreshLeaderboards(); RefreshBattlePass(); RefreshFriends();
@@ -182,8 +269,8 @@ void Game::RefreshShop() {
     std::string resp = HttpGet("/api/shop", &st);
     if (st != 200 || resp.empty()) {
         // offline demo stock
-        shopFeatured.push_back({"renegade_raider","Renegade Raider","outfit","rare","Season 1 classic.","CID_028_Athena_Commando_F",1200});
-        shopFeatured.push_back({"aerial_assault_trooper","Aerial Assault Trooper","outfit","uncommon","Ready for drop.","CID_017_Athena_Commando_M",1200});
+        shopFeatured.push_back({"ghoul_trooper","Ghoul Trooper","outfit","epic","Nightmares.","CID_029_Athena_Commando_F_Halloween",1200});
+        shopFeatured.push_back({"skull_trooper","Skull Trooper","outfit","legendary","Skulls.","CID_030_Athena_Commando_M_Halloween",2000});
         shopDaily.push_back({"raider_revenge","Raider's Revenge","pickaxe","uncommon","Swing with style.","Pickaxe_Lockjaw",800});
         shopDaily.push_back({"candy_axe","Candy Axe","pickaxe","uncommon","Sweet swings.","Pickaxe_ID_015_HolidayPickaxe",800});
         shopDaily.push_back({"mako","Mako","glider","uncommon","Sleek and fast.","Glider_ID_002_Mako",500});
@@ -272,9 +359,9 @@ void Game::RefreshBattlePass() {
         bpTiers.push_back({1, R("aerial_assault_trooper","Aerial Assault Trooper","Outfit","rare","Rare aerial assault trooper outfit.","CID_017_Athena_Commando_M","CID_017_Athena_Commando_M"), {}});
         bpTiers.push_back({2, R("trophy","Victory Trophy","Banner","uncommon","Celebrate your wins.","Banner_Trophy","Banner_Trophy"), R("raiders_revenge","Raider's Revenge","Pickaxe","uncommon","Swing with style.","Pickaxe_Lockjaw","Pickaxe_Lockjaw")});
         bpTiers.push_back({3, R("renegade_raider","Renegade Raider","Outfit","rare","Classic Season 1 raider.","CID_028_Athena_Commando_F","CID_028_Athena_Commando_F"), R("vb50a","50 V-Bucks","Currency","common","50 V-Bucks.","VBucks","VBucks",50)});
-        bpTiers.push_back({4, R("helmet","Trooper Helmet","Style","uncommon","Helmet style.","CID_017_Athena_Commando_M_Helmet","CID_017_Athena_Commando_M_Helmet"), R("spider","Rogue Spider","Glider","uncommon","Creepy crawly.","Glider_ID_003_Spider","Glider_ID_003_Spider")});
+        bpTiers.push_back({4, R("helmet","Trooper Helmet","Style","uncommon","Helmet style.","CID_017_Athena_Commando_M_Helmet","CID_017_Athena_Commando_M_Helmet"), R("Founder","Founder Glider","Glider","uncommon","Founder's Pack.","Glider_ID_003_FounderGlider","Glider_ID_003_FounderGlider")});
         bpTiers.push_back({5, R("bush","Bush","Outfit","uncommon","Blend into the foliage.","CID_029_Athena_Commando_F_Halloween","CID_029_Athena_Commando_F_Halloween"), {}});
-        bpTiers.push_back({6, R("pizza","Pizza Party","Emote","uncommon","Slice of the action.","EID_PizzaParty","EID_PizzaParty"), R("vb50b","50 V-Bucks","Currency","common","50 V-Bucks.","VBucks","VBucks",50)});
+        bpTiers.push_back({6, R("ride_the_pony","Ride The Pony","Emote","rare","Express yourself on the battlefield.","EID_RideThePony","EID_RideThePony"), R("vb50b","50 V-Bucks","Currency","common","50 V-Bucks.","VBucks","VBucks",50)});
         bpTiers.push_back({7, R("llama","Loot Llama","Back Bling","rare","Pinata-powered back bling.","BID_001_Llama","BID_001_Llama"), {}});
     }
     bpSelTier = 0;
@@ -639,6 +726,84 @@ void Game::DrawLobbyBackground(int W, int H, float t) {
     DrawRectangleGradientV(0, H * 2 / 3, W, H / 3, Color{0, 0, 0, 0}, Color{0, 0, 0, 160});
 }
 
+// ---- Friends panel (centred on screen) ----
+struct FriendsGeo { int px, py, pw, ph, listY, rowH, visible, fieldX, fieldY, fieldW, fieldH; };
+static FriendsGeo FriendsLayout(int W, int H) {
+    FriendsGeo g;
+    g.pw = 480; g.ph = (H - 60 < 440) ? H - 60 : 440;
+    g.px = (W - g.pw) / 2; g.py = (H - g.ph) / 2;
+    g.rowH = 34; g.listY = g.py + 52;
+    g.fieldX = g.px + 20; g.fieldW = g.pw - 40; g.fieldH = 28; g.fieldY = g.py + g.ph - 50;
+    int listH = g.fieldY - 24 - g.listY;
+    g.visible = listH / g.rowH; if (g.visible < 1) g.visible = 1;
+    return g;
+}
+
+void Game::DrawFriendsPanel(int W, int H) {
+    FriendsGeo g = FriendsLayout(W, H);
+    DrawRectangle(0, 0, W, H, Color{0, 0, 0, 180});
+    DrawRectangle(g.px, g.py, g.pw, g.ph, Color{18, 28, 52, 255});
+    DrawRectangleLines(g.px, g.py, g.pw, g.ph, Color{250, 200, 40, 255});
+    DrawTextEx(gFont, "FRIENDS", {(float)(g.px + 20), (float)(g.py + 14)}, 22, 1, WHITE);
+
+    std::string partyTxt = inParty ? ("In party with " + partyMemberName) : std::string("Not in a party");
+    float ptw = MeasureTextEx(gFont, partyTxt.c_str(), 13, 1).x;
+    DrawTextEx(gFont, partyTxt.c_str(), {(float)(g.px + g.pw - 20) - ptw, (float)(g.py + 20)}, 13, 1, Color{160, 175, 200, 255});
+
+    int nReq = (int)incomingReqs.size(), nFr = (int)friends.size(), total = 1 + nReq + nFr;
+    if (friendSel >= total) friendSel = total - 1;
+    if (friendSel < 0) friendSel = 0;
+    int first = friendSel < g.visible ? 0 : friendSel - g.visible + 1;
+
+    for (int v = 0; v < g.visible; v++) {
+        int idx = first + v;
+        if (idx >= total) break;
+        int y = g.listY + v * g.rowH;
+        bool sel = idx == friendSel;
+        DrawRectangle(g.px + 20, y, g.pw - 40, g.rowH - 4, sel ? Color{250, 200, 30, 255} : Color{30, 45, 80, 255});
+        Color tc = sel ? BLACK : WHITE;
+        Color sc = sel ? Color{40, 40, 40, 255} : Color{160, 175, 200, 255};
+        std::string left, right;
+        int tx = g.px + 32;
+        if (idx == 0) {
+            left = "Local Player 2 (split-screen)";
+            right = inParty ? "LOCKED" : (p2Joined ? "ON" : "OFF");
+        } else if (idx - 1 < nReq) {
+            left = incomingReqs[idx - 1].from + " sent a friend request";
+            right = "A accept / X decline";
+        } else {
+            const FriendEntry& f = friends[idx - 1 - nReq];
+            Color dot = f.status != "online" ? Color{120, 125, 135, 255}
+                      : (f.activity == "match" ? Color{250, 200, 40, 255} : Color{90, 220, 90, 255});
+            DrawCircle(g.px + 36, y + 13, 5, dot);
+            tx = g.px + 50;
+            left = f.displayName;
+            if (inParty && f.username == partyMemberUser) right = "IN PARTY";
+            else if (f.status != "online") right = "Offline";
+            else if (f.activity == "match") right = "In match";
+            else if (f.activity == "lobby") right = f.joinable ? "In lobby - invite" : "In lobby";
+            else right = f.activity;
+        }
+        DrawTextEx(gFont, left.c_str(), {(float)tx, (float)(y + 6)}, 15, 1, tc);
+        float rw = MeasureTextEx(gFont, right.c_str(), 12, 1).x;
+        DrawTextEx(gFont, right.c_str(), {(float)(g.px + g.pw - 32) - rw, (float)(y + 8)}, 12, 1, sc);
+    }
+    if (nFr == 0 && nReq == 0)
+        DrawTextEx(gFont, "No friends yet - add one below", {(float)(g.px + 24), (float)(g.listY + g.rowH + 8)}, 13, 1, Color{150, 165, 190, 255});
+
+    // Add friend field
+    DrawTextEx(gFont, "ADD FRIEND", {(float)g.fieldX, (float)(g.fieldY - 18)}, 12, 1, Color{160, 175, 200, 255});
+    DrawRectangle(g.fieldX, g.fieldY, g.fieldW, g.fieldH, addFriendFocus ? C(40, 60, 100) : C(25, 35, 60));
+    DrawRectangleLines(g.fieldX, g.fieldY, g.fieldW, g.fieldH, addFriendFocus ? C(250, 200, 40) : C(70, 90, 130));
+    std::string ft = addFriendBuf;
+    if (addFriendFocus && fmodf((float)GetTime(), 1.0f) < 0.5f) ft += "|";
+    if (ft.empty()) DrawTextEx(gFont, "username  (TAB to type, ENTER to send)", {(float)(g.fieldX + 8), (float)(g.fieldY + 7)}, 13, 1, Color{110, 125, 150, 255});
+    else DrawTextEx(gFont, ft.c_str(), {(float)(g.fieldX + 8), (float)(g.fieldY + 6)}, 15, 1, WHITE);
+
+    DrawTextEx(gFont, "W/S select   ENTER/A invite   L leave party   R refresh   F/ESC/Menu close",
+               {(float)(g.px + 20), (float)(g.py + g.ph - 16)}, 11, 1, Color{150, 160, 180, 255});
+}
+
 void Game::DrawModePicker(int W, int H) {
     DrawRectangle(0, 0, W, H, Color{0, 0, 0, 180});
     int pw = 360, ph = 280;
@@ -668,16 +833,21 @@ void Game::DrawModePicker(int W, int H) {
 }
 
 Vector2 Game::LobbyMouse() const {
+    // Lobby canvas covers the whole window; map window pixels to canvas coords.
     int W = LobbyW(), H = LobbyH();
     int sw = GetScreenWidth(), sh = GetScreenHeight();
-    float lw = sh * 4.0f / 3.0f, lh = (float)sh;
-    if (lw > sw) { lw = (float)sw; lh = sw * 0.75f; }
-    float ox = (sw - lw) / 2, oy = (sh - lh) / 2;
     Vector2 m = GetMousePosition();
-    return { (m.x - ox) * (W / lw), (m.y - oy) * (H / lh) };
+    return { m.x * (W / (float)sw), m.y * (H / (float)sh) };
 }
 
 void Game::BeginLobbyCanvas() {
+    // Keep the lobby render target in step with the window's aspect ratio
+    int lw = LobbyW(), lh = LobbyH();
+    if (rtLobby.texture.width != lw || rtLobby.texture.height != lh) {
+        if (rtLobby.id) UnloadRenderTexture(rtLobby);
+        rtLobby = LoadRenderTexture(lw, lh);
+        SetTextureFilter(rtLobby.texture, TEXTURE_FILTER_BILINEAR);
+    }
     BeginTextureMode(rtLobby);
     ClearBackground(Color{10, 14, 28, 255});
 }
@@ -685,10 +855,8 @@ void Game::BeginLobbyCanvas() {
 void Game::EndLobbyCanvas() {
     EndTextureMode();
     int sw = GetScreenWidth(), sh = GetScreenHeight();
-    // Exact same 4:3 letterbox math as in-game Present()
-    float w = sh * 4.0f / 3.0f, h = (float)sh;
-    if (w > sw) { w = (float)sw; h = sw * 0.75f; }
-    Rectangle dest = { (sw - w) / 2, (sh - h) / 2, w, h };
+    // Native full-window draw — no letterbox, no black bars.
+    Rectangle dest = { 0, 0, (float)sw, (float)sh };
     Rectangle src = { 0, 0, (float)rtLobby.texture.width, -(float)rtLobby.texture.height };
     DrawTexturePro(rtLobby.texture, src, dest, {0, 0}, 0, WHITE);
 }
@@ -794,7 +962,8 @@ void Game::UpdateLobby(float dt) {
     }
 
     if (IsKeyPressed(KEY_ESCAPE)) {
-        if (modePickerOpen) modePickerOpen = false;
+        if (friendsOpen) { if (addFriendFocus) addFriendFocus = false; else friendsOpen = false; }
+        else if (modePickerOpen) modePickerOpen = false;
         else if (lockerBrowsing) lockerBrowsing = false;
         else if (matchmaking) { matchmaking = false; matchmakeT = 0; }
     }
@@ -832,6 +1001,81 @@ void Game::UpdateLobby(float dt) {
     stickDir = dir;
     (void)stickUp; (void)stickDown;
 
+    // Friends panel: F / controller Menu button opens a friends list in the centre of the screen
+    {
+        const int fw = LobbyW(), fh = LobbyH();
+        if (!friendsOpen) {
+            if (!modePickerOpen && (IsKeyPressed(KEY_F) || padPressed(GAMEPAD_BUTTON_MIDDLE_RIGHT))) {
+                friendsOpen = true; friendSel = 0; addFriendFocus = false;
+                while (GetCharPressed() > 0) {}
+                RefreshFriends();
+            }
+        } else {
+            const FriendsGeo g = FriendsLayout(fw, fh);
+            int nReq = (int)incomingReqs.size(), nFr = (int)friends.size(), total = 1 + nReq + nFr;
+            if (friendSel >= total) friendSel = total - 1;
+            if (friendSel < 0) friendSel = 0;
+
+            auto activate = [&](int idx) {
+                if (idx == 0) {
+                    if (inParty) { statusMsg = "Leave your party first (L)"; statusMsgT = 2; }
+                    else p2Joined = !p2Joined;
+                } else if (idx - 1 < nReq) {
+                    FriendRequest r = incomingReqs[idx - 1];
+                    RespondFriendRequest(r, true);
+                } else {
+                    FriendEntry f = friends[idx - 1 - nReq];
+                    JoinParty(f);
+                    if (inParty) friendsOpen = false;
+                }
+            };
+
+            if (addFriendFocus) {
+                int key = GetCharPressed();
+                while (key > 0) {
+                    int len = (int)strlen(addFriendBuf);
+                    if (key >= 33 && key < 127 && len < 30) { addFriendBuf[len] = (char)key; addFriendBuf[len + 1] = 0; }
+                    key = GetCharPressed();
+                }
+                if (IsKeyPressed(KEY_BACKSPACE)) { int len = (int)strlen(addFriendBuf); if (len > 0) addFriendBuf[len - 1] = 0; }
+                if (IsKeyPressed(KEY_ENTER)) { SendFriendRequest(); addFriendFocus = false; }
+            } else {
+                while (GetCharPressed() > 0) {}
+                if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W) || padPressed(GAMEPAD_BUTTON_LEFT_FACE_UP) || stickUp)
+                    friendSel = (friendSel + total - 1) % total;
+                if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S) || padPressed(GAMEPAD_BUTTON_LEFT_FACE_DOWN) || stickDown)
+                    friendSel = (friendSel + 1) % total;
+                if (IsKeyPressed(KEY_ENTER) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) activate(friendSel);
+                if ((IsKeyPressed(KEY_X) || IsKeyPressed(KEY_DELETE) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
+                    && friendSel >= 1 && friendSel - 1 < nReq) {
+                    FriendRequest r = incomingReqs[friendSel - 1];
+                    RespondFriendRequest(r, false);
+                }
+                if (IsKeyPressed(KEY_L) && inParty) LeaveParty();
+                if (IsKeyPressed(KEY_R)) RefreshFriends();
+                if (IsKeyPressed(KEY_TAB)) addFriendFocus = true;
+                if (IsKeyPressed(KEY_F) || padPressed(GAMEPAD_BUTTON_MIDDLE_RIGHT) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+                    friendsOpen = false;
+            }
+
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                Vector2 m = LobbyMouse();
+                bool inPanel = m.x >= g.px && m.x <= g.px + g.pw && m.y >= g.py && m.y <= g.py + g.ph;
+                if (!inPanel) { friendsOpen = false; addFriendFocus = false; }
+                else if (m.x >= g.fieldX && m.x <= g.fieldX + g.fieldW && m.y >= g.fieldY && m.y <= g.fieldY + g.fieldH) addFriendFocus = true;
+                else {
+                    addFriendFocus = false;
+                    if (m.x >= g.px + 20 && m.x <= g.px + g.pw - 20 && m.y >= g.listY && m.y < g.listY + g.visible * g.rowH) {
+                        int first = friendSel < g.visible ? 0 : friendSel - g.visible + 1;
+                        int idx = first + (int)((m.y - g.listY) / g.rowH);
+                        if (idx >= 0 && idx < total) { friendSel = idx; activate(idx); }
+                    }
+                }
+            }
+            return;   // panel swallows all other lobby input
+        }
+    }
+
     if (tab == LobbyTab::Play) {
         if (modePickerOpen) {
             if (IsKeyPressed(KEY_ONE) || stickUp) gameMode = GameMode::Solo;
@@ -848,9 +1092,9 @@ void Game::UpdateLobby(float dt) {
                 modePickerOpen = false;
         } else {
             if (IsKeyPressed(KEY_TAB)) map = (MapId)((map + 1) % MAP_COUNT);
-            if ((!inParty || isPartyLeader) && (IsKeyPressed(KEY_M) || padPressed(GAMEPAD_BUTTON_LEFT_FACE_UP)))
+            if ((!inParty || isPartyLeader) && (IsKeyPressed(KEY_M) || padPressed(GAMEPAD_BUTTON_LEFT_FACE_UP) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_LEFT)))
                 modePickerOpen = true;
-            if (!inParty && (IsKeyPressed(KEY_J) || padPressed(GAMEPAD_BUTTON_MIDDLE_RIGHT)))
+            if (!inParty && IsKeyPressed(KEY_J))
                 p2Joined = !p2Joined;
 
             Vector2 m = LobbyMouse();
@@ -883,7 +1127,7 @@ void Game::UpdateLobby(float dt) {
                 }
             }
 
-            if (!modePickerOpen && (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_P) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_DOWN))) {
+            if (!modePickerOpen && (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_P) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_DOWN) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_UP))) {
                 if (matchmaking) {
                     matchmaking = false; matchmakeT = 0;
                 } else if (inParty && !isPartyLeader) {
@@ -931,21 +1175,26 @@ void Game::UpdateLobby(float dt) {
             }
         } else {
             int count = (lockerCat == 0) ? kLookCount : 3;
+            const int COLS = 6;                                   // 6 items per row
             if (IsKeyPressed(KEY_LEFT) || stickLeft || padPressed(GAMEPAD_BUTTON_LEFT_FACE_LEFT))
                 lockerSel = (lockerSel + count - 1) % count;
             if (IsKeyPressed(KEY_RIGHT) || stickRight || padPressed(GAMEPAD_BUTTON_LEFT_FACE_RIGHT))
                 lockerSel = (lockerSel + 1) % count;
+            if (IsKeyPressed(KEY_UP) || padPressed(GAMEPAD_BUTTON_LEFT_FACE_UP))
+                lockerSel = (lockerSel - COLS + count) % count;
+            if (IsKeyPressed(KEY_DOWN) || padPressed(GAMEPAD_BUTTON_LEFT_FACE_DOWN))
+                lockerSel = (lockerSel + COLS) % count;
             if (IsKeyPressed(KEY_ESCAPE) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
                 lockerBrowsing = false;
             if (IsKeyPressed(KEY_ENTER) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) {
                 if (lockerCat == 0) {
                     p1Look = lockerSel;
-                    const char* names[] = {"jonesy","ramirez","headhunter","wildcat"};
+                    const char* names[] = {"jonesy","ramirez","headhunter","wildcat", "arial_assault_trooper", "renegade_raider", "ghoul_trooper", "skull_trooper", "brite_bomber", "punk_funk", "ginge", "merry_maruader"};
                     account.outfit = names[lockerSel];
                     statusMsg = std::string("Equipped ") + kLooks[lockerSel].name; statusMsgT = 2;
                 } else if (lockerCat == 1) {
                     equippedGlider = lockerSel;
-                    static const char* n[] = {"Default Glider","Mako","Rogue Spider"};
+                    static const char* n[] = {"Default Glider","Mako","Founder's Glider"};
                     statusMsg = std::string("Equipped ") + n[lockerSel]; statusMsgT = 2;
                 } else if (lockerCat == 2) {
                     equippedPick = lockerSel;
@@ -953,7 +1202,7 @@ void Game::UpdateLobby(float dt) {
                     statusMsg = std::string("Equipped ") + n[lockerSel]; statusMsgT = 2;
                 } else if (lockerCat == 3) {
                     equippedEmote = lockerSel;
-                    static const char* n[] = {"Wave","Default Dance","Pizza Party"};
+                    static const char* n[] = {"Wave","Default Dance","Ride The Pony"};
                     statusMsg = std::string("Equipped ") + n[lockerSel]; statusMsgT = 2;
                 } else {
                     equippedBanner = lockerSel;
@@ -988,7 +1237,7 @@ void Game::UpdateLobby(float dt) {
                 account = Account{};
                 account.loggedIn = false;
                 inParty = false; p2Joined = false;
-                state = State::Login;
+                state = State::Login; friendsOpen = false;
                 statusMsg = "Logged out"; statusMsgT = 2;
             }
         }
@@ -1007,14 +1256,10 @@ void Game::DrawLobbyNav(int W, int H) {
     total += gaps * ((int)LobbyTab::COUNT - 1);
 
     float x = (W - total) * 0.5f;
-    Vector2 mouse = GetMousePosition();
-    // Map mouse from screen letterbox to 640x480 canvas
+        Vector2 mouse = GetMousePosition();
     int sw = GetScreenWidth(), sh = GetScreenHeight();
-    float lw = sh * 4.0f / 3.0f, lh = (float)sh;
-    if (lw > sw) { lw = (float)sw; lh = sw * 0.75f; }
-    float ox = (sw - lw) / 2, oy = (sh - lh) / 2;
-    float mx = (mouse.x - ox) * (W / lw);
-    float my = (mouse.y - oy) * (H / lh);
+    float mx = mouse.x * (W / (float)sw);
+    float my = mouse.y * (H / (float)sh);
 
     for (int i = 0; i < (int)LobbyTab::COUNT; i++) {
         const char* name = kTabNames[i];
@@ -1022,7 +1267,7 @@ void Game::DrawLobbyNav(int W, int H) {
         bool active = (int)tab == i;
         Rectangle hit = { x - 10, 7, tw + 20, (float)barH - 14 };
         bool hover = mx >= hit.x && mx <= hit.x + hit.width && my >= hit.y && my <= hit.y + hit.height;
-        if (hover && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        if (hover && !friendsOpen && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             tab = (LobbyTab)i;
         if (active) {
             DrawRectangle((int)x - 10, 7, (int)tw + 20, barH - 14, Color{250, 200, 30, 255});
@@ -1060,7 +1305,7 @@ void Game::DrawLobbyNav(int W, int H) {
 
 void Game::DrawProgressionWidget(int W, int H) {
     // Season 1 level widget (bottom-left style reference)
-    int x = 20, y = H - 110;
+    int x = 20, y = 96;   // sits under the LOCAL/ONLINE + "F / Menu: Friends" text
     int ww = 220, hh = 78;
     DrawRectangle(x, y, ww, hh, Color{12, 28, 55, 235});
     DrawRectangleLines(x, y, ww, hh, Color{50, 90, 150, 255});
@@ -1101,6 +1346,8 @@ void Game::DrawTabPlay(int W, int H) {
     gR.SetResolution((float)W, (float)H);
     BeginMode3D(cam);
     float x1 = -1.55f, x2 = 1.55f;
+    // Solid grey floor across the whole bottom of the screen; the animated background shows above the horizon
+    DrawPlane({0, -0.01f, -20.0f}, {200.0f, 120.0f}, Color{96, 99, 107, 255});
     DrawModelEx(padOn, {x1, 0, 0}, {0, 1, 0}, 0, {1.1f, 1.1f, 1.1f}, WHITE);
     DrawModelEx((p2Joined || inParty) ? padOn : padOff, {x2, 0, 0}, {0, 1, 0}, 0, {1.1f, 1.1f, 1.1f}, WHITE);
     Pose p1; p1.idle = t;
@@ -1137,17 +1384,29 @@ void Game::DrawTabPlay(int W, int H) {
     if (matchmaking) {
         DrawTextEx(gFont, "waiting for server", {(float)(bx + 8), (float)(by + 46)}, 12, 1, Color{180, 200, 230, 255});
     }
+    // Controller hints
+    DrawTextEx(gFont, "Y  Ready", {(float)bx, (float)(by + 62)}, 12, 1, Color{250, 200, 40, 255});
+    DrawTextEx(gFont, "X  Game mode", {(float)(bx + 62), (float)(by + 62)}, 12, 1, Color{160, 190, 230, 255});
 
     DrawTextEx(gFont, playType == PlayType::Online ? "ONLINE" : "LOCAL", {20, 52}, 14, 1, Color{160, 190, 230, 255});
+    DrawTextEx(gFont, "F / Menu: Friends", {20, 72}, 12, 1, Color{130, 150, 185, 255});
 
     if (modePickerOpen) DrawModePicker(W, H);
 }
 
-static const char* kLookCid[4] = {
-    "CID_010_Athena_Commando_M_Default", // Jonesy
-    "CID_001_Athena_Commando_F_Default", // Ramirez
-    "CID_016_Athena_Commando_F",         // Headhunter
-    "CID_013_Athena_Commando_F"          // Wildcat
+static const char* kLookCid[12] = {
+    "CID_010_Athena_Commando_M_Default",
+    "CID_001_Athena_Commando_F_Default",
+    "CID_016_Athena_Commando_F",
+    "CID_013_Athena_Commando_F",
+    "CID_017_Athena_Commando_M",
+    "CID_028_Athena_Commando_F",
+    "CID_029_Athena_Commando_F_Halloween",
+    "CID_030_Athena_Commando_M_Halloween",
+    "CID_038_Athena_Commando_M_Disco",
+    "CID_044_Athena_Commando_F_SciPop",
+    "CID_048_Athena_Commando_F_HolidayGingerbread",
+    "CID_049_Athena_Commando_M_HolidayGingerbread"
 };
 
 static const Texture2D* LockerIcon(const char* cid) {
@@ -1284,27 +1543,27 @@ void Game::DrawTabLocker(int W, int H) {
     CharacterDraw(chars[p1Look], held, {0, 0.14f, 0}, sinf(t * 0.7f) * 0.2f, pose, WHITE);
     EndMode3D();
 
-    // Bottom-left selection overlay
-    int panelW = (int)(W * 0.50f);
-    int panelH = lockerBrowsing ? 200 : 125;
-    int panelX = 18;
-    int panelY = H - panelH - 18;
-    DrawRectangle(panelX, panelY, panelW, panelH, Color{10, 16, 32, 235});
-    DrawRectangleLines(panelX, panelY, panelW, panelH, Color{250, 200, 40, 180});
-
     const char* cats[] = { "OUTFIT", "GLIDER", "PICKAXE", "EMOTE", "BANNER" };
     static const char* outfitCid[] = {
         "CID_010_Athena_Commando_M_Default",
         "CID_001_Athena_Commando_F_Default",
         "CID_016_Athena_Commando_F",
-        "CID_013_Athena_Commando_F"
+        "CID_013_Athena_Commando_F",
+        "CID_017_Athena_Commando_M",
+        "CID_028_Athena_Commando_F",
+        "CID_029_Athena_Commando_F_Halloween",
+        "CID_030_Athena_Commando_M_Halloween",
+        "CID_038_Athena_Commando_M_Disco",
+        "CID_044_Athena_Commando_F_SciPop",
+        "CID_048_Athena_Commando_F_HolidayGingerbread",
+        "CID_049_Athena_Commando_M_HolidayGingerbread"
     };
-    static const char* gliderCid[] = { "Glider_ID_001", "Glider_ID_002_Mako", "Glider_ID_003_Spider" };
-    static const char* gliderName[] = { "Default Glider", "Mako", "Rogue Spider" };
+    static const char* gliderCid[] = { "Glider_ID_001", "Glider_ID_002_Mako", "Glider_ID_003_FounderGlider" };
+    static const char* gliderName[] = { "Default Glider", "Mako", "FounderGlider" };
     static const char* pickCid[] = { "Pickaxe_ID_001", "Pickaxe_Lockjaw", "Pickaxe_ID_015_HolidayPickaxe" };
     static const char* pickName[] = { "Default Pickaxe", "Raider's Revenge", "Candy Axe" };
-    static const char* emoteCid[] = { "EID_Wave", "EID_DanceMoves", "EID_PizzaParty" };
-    static const char* emoteName[] = { "Wave", "Default Dance", "Pizza Party" };
+    static const char* emoteCid[] = { "EID_Wave", "EID_DanceMoves", "EID_RideThePony" };
+    static const char* emoteName[] = { "Wave", "Default Dance", "Ride The Pony" };
     static const char* bannerCid[] = { "Banner_Default", "Banner_Trophy", "Banner_Season1" };
     static const char* bannerName[] = { "Default", "Victory Trophy", "Season 1" };
 
@@ -1323,43 +1582,70 @@ void Game::DrawTabLocker(int W, int H) {
         }
     };
 
+    // Selection grid layout: 6 items per row
+    const int COLS = 6;
+    const int slot = 50;      // icon tile size
+    const int gapX = 8;       // horizontal gap between tiles
+    const int rowGap = 18;    // extra vertical gap to leave room for labels
+    int count = (lockerCat == 0) ? kLookCount : 3;
+    int rows = lockerBrowsing ? ((count + COLS - 1) / COLS) : 0;
+
+    // Dynamic panel height so a 6-wide grid always fits (2 rows for outfits)
+    int panelW = (int)(W * 0.50f);
+    int baseHeader = 40;
+    int baseFooter = 22;
+    int gridH = lockerBrowsing
+        ? (rows * (slot + rowGap))
+        : 54 + 16;               // single preview row when not browsing
+    int panelH = baseHeader + gridH + baseFooter;
+    // Keep it from growing taller than the screen
+    if (panelH > H - 60) panelH = H - 60;
+    int panelX = 18;
+    int panelY = H - panelH - 18;
+    DrawRectangle(panelX, panelY, panelW, panelH, Color{10, 16, 32, 235});
+    DrawRectangleLines(panelX, panelY, panelW, panelH, Color{250, 200, 40, 180});
+
     DrawTextEx(gFont, "LOCKER", {(float)(panelX + 10), (float)(panelY + 6)}, 15, 1, WHITE);
 
     if (!lockerBrowsing) {
-        int slot = 54;
         int y = panelY + 32;
         int startX = panelX + 12;
         for (int c = 0; c < 5; c++) {
-            int x = startX + (c % 5) * (slot + 10);
+            int x = startX + (c % 5) * (54 + 10);
             bool sel = (lockerCat == c);
             const char* cid = (c == 0) ? kLookCid[p1Look] :
                               (c == 1) ? gliderCid[equippedGlider] :
                               (c == 2) ? pickCid[equippedPick] :
                               (c == 3) ? emoteCid[equippedEmote] :
                                          bannerCid[equippedBanner];
-            drawIcon(cid, x, y, slot, sel, true);
-            DrawTextEx(gFont, cats[c], {(float)x, (float)(y + slot + 3)}, 11, 1,
+            drawIcon(cid, x, y, 54, sel, true);
+            DrawTextEx(gFont, cats[c], {(float)x, (float)(y + 54 + 3)}, 11, 1,
                        sel ? Color{250, 200, 40, 255} : Color{190, 200, 220, 255});
         }
         DrawTextEx(gFont, "LEFT/RIGHT  ENTER open", {(float)(panelX + 10), (float)(panelY + panelH - 18)}, 11, 1, Color{150, 165, 190, 255});
     } else {
         DrawTextEx(gFont, cats[lockerCat], {(float)(panelX + 90), (float)(panelY + 8)}, 14, 1, Color{250, 200, 40, 255});
-        int count = (lockerCat == 0) ? kLookCount : 3;
         const char** cids = (lockerCat == 0) ? outfitCid : (lockerCat == 1) ? gliderCid : (lockerCat == 2) ? pickCid : (lockerCat == 3) ? emoteCid : bannerCid;
         const char** names = (lockerCat == 0) ? nullptr : (lockerCat == 1) ? gliderName : (lockerCat == 2) ? pickName : (lockerCat == 3) ? emoteName : bannerName;
         int equippedIdx = (lockerCat == 0) ? p1Look : (lockerCat == 1) ? equippedGlider : (lockerCat == 2) ? equippedPick : (lockerCat == 3) ? equippedEmote : equippedBanner;
         if (lockerSel < 0) lockerSel = 0;
         if (lockerSel >= count) lockerSel = count - 1;
-        int slot = 50;
-        int startX = panelX + 12, startY = panelY + 36;
+
+        int startX = panelX + 12;
+        int startY = panelY + 34;
         for (int i = 0; i < count; i++) {
-            int x = startX + i * (slot + 10);
-            drawIcon(cids[i], x, startY, slot, i == lockerSel, i == equippedIdx);
+            int col = i % COLS;
+            int row = i / COLS;
+            int x = startX + col * (slot + gapX);
+            int y = startY + row * (slot + rowGap);
+            // Bail if this row would overflow the panel (clamp panel already prevents most cases)
+            if (y + slot > panelY + panelH - 18) break;
+            drawIcon(cids[i], x, y, slot, i == lockerSel, i == equippedIdx);
             const char* nm = (lockerCat == 0) ? kLooks[i].name : names[i];
-            DrawTextEx(gFont, nm, {(float)x, (float)(startY + slot + 2)}, 10, 1,
+            DrawTextEx(gFont, nm, {(float)x, (float)(y + slot + 2)}, 10, 1,
                        (i == lockerSel) ? Color{250, 200, 40, 255} : Color{190, 200, 220, 255});
         }
-        DrawTextEx(gFont, "ARROWS  ENTER equip  ESC close", {(float)(panelX + 10), (float)(panelY + panelH - 18)}, 11, 1, Color{150, 165, 190, 255});
+        DrawTextEx(gFont, "ARROWS navigate   ENTER equip   ESC close", {(float)(panelX + 10), (float)(panelY + panelH - 18)}, 11, 1, Color{150, 165, 190, 255});
     }
 }
 
@@ -1451,6 +1737,7 @@ void Game::DrawLobby() {
         default: break;
     }
     DrawLobbyNav(W, H);
+    if (friendsOpen) DrawFriendsPanel(W, H);
     DrawNotifications(W);
     if (statusMsgT > 0) {
         DrawRectangle(0, 40, W, 24, Color{0, 0, 0, 180});
@@ -1461,6 +1748,7 @@ void Game::DrawLobby() {
 }
 
 void Game::StartMatch() {
+    friendsOpen = false; addFriendFocus = false;
     world.Build(map);
     const float ms = world.half / 60.0f;
     world.gunModel = &held.guns[I_AR];
@@ -1527,6 +1815,24 @@ void Game::StartMatch() {
         actors.push_back(a);
     }
 
+    // ---- Battle bus: everyone starts aboard and jumps over the map
+    air.assign(actors.size(), AirState());
+    bus = BattleBus();
+    if (kUseBattleBus) {
+        bus.Start(world.half, 100.0f + 0.6f * world.half);
+        for (int i = 0; i < (int)actors.size(); i++) {
+            Actor& a = actors[i]; AirState& s = air[i];
+            s.phase = DropPhase::Bus;
+            s.glider = a.isBot ? RandI(0, kGliderCount - 1) : (i == 0 ? Clamp(equippedGlider, 0, kGliderCount - 1) : 0);
+            s.deployAGL = a.isBot ? RandF(45.0f, 70.0f) : Sky::kAutoDeployAGL;
+            s.jumpAt = RandF(0.04f, 0.92f);
+            s.prevYaw = bus.yaw;
+            a.pos = bus.Seat(i);
+            a.yaw = bus.yaw; a.pitch = -0.18f; a.grounded = false;
+            if (a.isBot && !world.chests.empty()) a.goal = world.chests[RandI(0, (int)world.chests.size() - 1)].pos;   // bots drop on loot
+        }
+    }
+
     stormR = kRad[0] * ms; stormT = kWait[0]; stormPhase = 0; shrinking = false; matchT = 0; victory = false; humanPlacement = 0;
     state = State::Match;
     DisableCursor();
@@ -1538,6 +1844,7 @@ void Game::EndMatch() {
     gAudio.StopAmbience();
     world.Unload();
     actors.clear();
+    air.clear(); bus = BattleBus(); gSkyHud = SkyHud();
     AwardMatchRewards();
     DisconnectMatchmaker();
     matchmaking = false;
@@ -1643,11 +1950,13 @@ void Game::UpdateMatch(float dt) {
     }
     if (state == State::Over && IsKeyPressed(KEY_ENTER)) { EndMatch(); return; }
     matchT += dt;
-    if (state == State::Match) UpdateStorm(dt);
+    UpdateBus(dt);
+    if (state == State::Match && !bus.active) UpdateStorm(dt);       // storm timer starts once the bus is gone
     for (int i = 0; i < (int)actors.size(); i++) {
         Input in;
         if (state == State::Over && !actors[i].isBot) { UpdateActor(i, Input(), dt); continue; }
-        if (!actors[i].isBot) in = ReadInput(actors[i].device, dt); else BotThink(i, dt, in);
+        if (!actors[i].isBot) in = ReadInput(actors[i].device, dt);
+        else if (air[i].phase == DropPhase::Landed) BotThink(i, dt, in);     // bots in the air are steered by BotAerial
         UpdateActor(i, in, dt);
     }
     for (int i = (int)grenades.size() - 1; i >= 0; i--) {
@@ -1692,12 +2001,183 @@ void Game::ComputeCamera(Actor& a) {
     a.camPos = want; a.camFwd = fwd;
 }
 
+// =====================================================================
+//  BATTLE BUS / SKYDIVE
+//  Phases per actor (AirState::phase): Bus -> Freefall -> Glide -> Landed.
+//  While an actor is not Landed, UpdateActor hands over to UpdateAerial.
+// =====================================================================
+void Game::UpdateBus(float dt) {
+    if (!bus.active) return;
+    bus.Update(dt);
+    if (bus.MapProgress() >= 1.0f)                       // bus is leaving the map: everyone still aboard is dropped
+        for (int i = 0; i < (int)actors.size(); i++)
+            if (air[i].phase == DropPhase::Bus && actors[i].alive) EjectFromBus(i);
+    if (bus.Finished()) bus.active = false;
+}
+
+void Game::EjectFromBus(int idx) {
+    Actor& a = actors[idx]; AirState& s = air[idx];
+    s.phase = DropPhase::Freefall; s.t = 0; s.open = 0; s.fold = 0; s.tilt = 0.5f; s.roll = 0; s.prevYaw = a.yaw;
+    s.hvel = Vector3Scale(bus.dir, bus.speed * 0.8f);            // keep some of the bus's momentum
+    a.pos = {bus.pos.x + RandF(-0.8f, 0.8f), bus.pos.y - 0.5f, bus.pos.z + RandF(-0.8f, 0.8f)};
+    a.vel = {0, -4.0f, 0};
+    a.grounded = false;
+}
+
+void Game::ComputeBusCamera(Actor& a) {       // orbit the bus + balloon; mouse / right stick rotates the view
+    Vector3 target = {bus.pos.x, bus.pos.y + 6.5f, bus.pos.z};
+    Vector3 fwd = Fwd(a.yaw, a.pitch);
+    a.camPos = Vector3Subtract(target, Vector3Scale(fwd, 26.0f));
+    a.camFwd = fwd;
+}
+
+void Game::ComputeAirCamera(Actor& a, float dist) {       // third person, further back than on the ground
+    Vector3 head = {a.pos.x, a.pos.y + 1.3f, a.pos.z};
+    Vector3 fwd = Fwd(a.yaw, a.pitch), right = RightOf(a.yaw);
+    Vector3 want = Vector3Add(Vector3Subtract(head, Vector3Scale(fwd, dist)), Vector3Add(Vector3Scale(right, 0.6f), Vector3{0, 0.6f, 0}));
+    Vector3 d = Vector3Subtract(want, head); float L = Vector3Length(d);
+    if (L > 0.01f) {
+        RayHit h = world.Raycast(Ray{head, Vector3Scale(d, 1.0f / L)}, L);
+        if (h.hit) want = Vector3Add(head, Vector3Scale(d, fmaxf(0.4f, h.dist - 0.3f) / L));
+    }
+    want.y = fmaxf(want.y, 0.3f);
+    a.camPos = want; a.camFwd = fwd;
+}
+
+// Bots: steer towards their goal (a chest / landing spot). Dive when over it, glide level when far.
+void Game::BotAerial(int i, float dt, Input& in) {
+    Actor& b = actors[i]; AirState& s = air[i];
+    float dx = b.goal.x - b.pos.x, dz = b.goal.z - b.pos.z;
+    float d = sqrtf(dx * dx + dz * dz);
+    b.yaw += Clamp(WrapPi(atan2f(dx, dz) - b.yaw), -2.4f * dt, 2.4f * dt);
+    float tp;
+    if (s.phase == DropPhase::Freefall) tp = d > 45.0f ? -0.05f : -1.0f;
+    else tp = d > 28.0f ? -0.5f : (d > 10.0f ? -0.1f : 0.35f);
+    b.pitch = Lerp(b.pitch, tp, fminf(1.0f, 2.5f * dt));
+    in.move = {0.0f, 1.0f};
+}
+
+void Game::UpdateAerial(int idx, const Input& inIn, float dt) {
+    Actor& a = actors[idx];
+    AirState& s = air[idx];
+    Input in = inIn;
+    s.t += dt;
+    a.isAiming = false; a.useT = 0; a.prompt.clear();
+
+    const bool jumpPress = in.jump && !s.jumpPrev;     // jump / deploy is edge-triggered
+    s.jumpPrev = in.jump;
+
+    // ---- riding the bus: invisible, camera orbits the bus, jump when it is over the map
+    if (s.phase == DropPhase::Bus) {
+        a.pos = bus.Seat(idx); a.vel = {0, 0, 0}; a.grounded = false;
+        if (a.isBot) a.yaw = bus.yaw;
+        bool jump = false;
+        if (bus.OverMap()) jump = a.isBot ? (bus.MapProgress() >= s.jumpAt) : jumpPress;
+        if (jump) { EjectFromBus(idx); if (!a.isBot) ComputeAirCamera(a, 6.5f); }
+        else if (!a.isBot) ComputeBusCamera(a);
+        return;
+    }
+
+    if (a.isBot) BotAerial(idx, dt, in);
+
+    const Vector3 fwd = {sinf(a.yaw), 0, cosf(a.yaw)}, right = RightOf(a.yaw);
+    auto move = [&]() {
+        a.pos = world.MoveSlide(a.pos, Vector3{s.hvel.x * dt, 0, s.hvel.z * dt}, 0.35f, 1.8f, 0.55f);
+        a.pos.x = Clamp(a.pos.x, -world.half + 1, world.half - 1);
+        a.pos.z = Clamp(a.pos.z, -world.half + 1, world.half - 1);
+        a.pos.y += a.vel.y * dt;
+    };
+    float gy = 0.0f;
+    auto land = [&]() {
+        s.fold = s.open > 0.1f ? 1.0f : 0.0f;          // glider folds away
+        s.phase = DropPhase::Landed; s.open = 0; s.t = 0; s.hvel = {0, 0, 0};
+        a.pos.y = gy; a.vel = {0, 0, 0}; a.grounded = true;
+        a.pitch = Clamp(a.pitch, -0.6f, 0.6f);
+    };
+    const float yawRate = WrapPi(a.yaw - s.prevYaw) / fmaxf(dt, 0.0001f);
+    s.prevYaw = a.yaw;
+
+    // ---- freefall: look down to dive (fast, short range), look up / level to cover distance
+    if (s.phase == DropPhase::Freefall) {
+        const float k = Clamp(-a.pitch / 1.1f, -0.5f, 1.0f), kd = fmaxf(k, 0.0f);
+        const float vDown = 32.0f + 26.0f * k;
+        const float hSpeed = Lerp(26.0f, 8.0f, kd);
+        const float fw = Clamp(0.5f + 0.5f * in.move.y, 0.15f, 1.0f);
+        Vector3 target = Vector3Add(Vector3Scale(fwd, hSpeed * fw), Vector3Scale(right, in.move.x * hSpeed * 0.4f));
+        s.hvel = Vector3Lerp(s.hvel, target, fminf(1.0f, 2.0f * dt));
+        a.vel.y = Lerp(a.vel.y, -vDown, fminf(1.0f, 2.5f * dt));
+        move();
+        gy = world.GroundY(a.pos, a.pos.y, 0.55f);
+        float agl = a.pos.y - gy;
+        s.tilt = Lerp(s.tilt, Clamp(1.40f + 0.85f * k, 1.0f, 2.3f), fminf(1.0f, 5.0f * dt));
+        s.roll = Lerp(s.roll, Clamp(-yawRate * 0.10f, -0.5f, 0.5f) + in.move.x * 0.30f, fminf(1.0f, 6.0f * dt));
+        if (agl <= 0.0f) land();
+        else if ((jumpPress && s.t > 0.35f) || agl < s.deployAGL) { s.phase = DropPhase::Glide; s.t = 0; s.open = 0; }
+        if (!a.isBot) { if (s.phase == DropPhase::Landed) ComputeCamera(a); else ComputeAirCamera(a, 6.5f); }
+        return;
+    }
+
+    // ---- glider: steady descent, steer with the camera; look down to speed up, up to flare
+    s.open = fminf(1.0f, s.open + dt / 0.45f);
+    const float k = Clamp(-a.pitch / 0.9f, -1.0f, 1.0f);
+    const float vDown = fmaxf(3.0f, 8.0f + 5.5f * k);
+    const float hSpeed = 15.0f + 7.0f * k;
+    const float fw = Clamp(0.8f + 0.2f * in.move.y, 0.5f, 1.0f);
+    Vector3 target = Vector3Add(Vector3Scale(fwd, hSpeed * fw), Vector3Scale(right, in.move.x * 3.5f));
+    s.hvel = Vector3Lerp(s.hvel, target, fminf(1.0f, 1.6f * dt));
+    a.vel.y = Lerp(a.vel.y, -vDown, fminf(1.0f, 3.5f * dt));
+    move();
+    gy = world.GroundY(a.pos, a.pos.y, 0.55f);
+    s.tilt = Lerp(s.tilt, 0.04f + 0.42f * fmaxf(k, 0.0f) - 0.18f * fmaxf(-k, 0.0f), fminf(1.0f, 4.0f * dt));
+    s.roll = Lerp(s.roll, Clamp(-yawRate * 0.12f, -0.6f, 0.6f) + in.move.x * 0.25f, fminf(1.0f, 4.0f * dt));
+    if (a.pos.y <= gy) land();
+    if (!a.isBot) { if (s.phase == DropPhase::Landed) ComputeCamera(a); else ComputeAirCamera(a, 7.5f); }
+}
+
+void Game::DrawAirActor(const Actor& a, const AirState& s) {
+    AirPose p;
+    p.tilt = s.tilt; p.roll = s.roll; p.blend = s.open;
+    p.time = (float)GetTime();
+    p.splay = GliderGripSplay(s.glider);
+    Color tint = a.hitFlash > 0 ? Color{255, 130, 130, 255} : WHITE;
+    Matrix grip = CharacterDrawAir(chars[a.look], a.pos, a.yaw, p, tint);
+    if (s.phase == DropPhase::Glide) DrawGlider(skyModels, s.glider, grip, s.open, true, WHITE);
+}
+
+void Game::DrawSkydiveHud(int ai, int W, int H) {
+    const Actor& me = actors[ai];
+    const AirState& s = air[ai];
+    if (me.isBot || !me.alive || s.phase == DropPhase::Landed) return;
+    const float u = H / 1080.0f;
+    auto line = [&](const std::string& txt, float y, float sz, Color c) {
+        float fs = sz * u;
+        Vector2 m = MeasureTextEx(gFont, txt.c_str(), fs, 1.0f);
+        float x = (W - m.x) / 2;
+        DrawTextEx(gFont, txt.c_str(), {x + 2 * u, y + 2 * u}, fs, 1.0f, Color{0, 0, 0, 180});
+        DrawTextEx(gFont, txt.c_str(), {x, y}, fs, 1.0f, c);
+    };
+    const char* key = me.device == 0 ? "SPACE" : "A";
+    const Color hint = Color{255, 240, 120, 255};
+    float y = H * 0.62f;
+    if (s.phase == DropPhase::Bus) {
+        if (!bus.OverMap()) line("BATTLE BUS - APPROACHING THE ISLAND", y, 30, WHITE);
+        else {
+            line(TextFormat("PRESS [%s] TO JUMP", key), y, 34, hint);
+            line(TextFormat("The bus leaves the map in %d s", (int)ceilf(bus.SecondsToLeave())), y + 44 * u, 22, WHITE);
+        }
+    } else {
+        if (s.phase == DropPhase::Freefall && s.t > 0.35f) line(TextFormat("PRESS [%s] TO DEPLOY GLIDER", key), y, 30, hint);
+        float agl = fmaxf(0.0f, me.pos.y - world.GroundY(me.pos, me.pos.y, 0.55f));
+        line(TextFormat("ALTITUDE %d m", (int)agl), H * 0.70f, 22, WHITE);
+    }
+}
+
 Hit3 Game::TraceRay(Ray r, float range, int ignore) {
     Hit3 best; best.d = range; best.p = Vector3Add(r.position, Vector3Scale(r.direction, range));
     RayHit h = world.Raycast(r, range);
     if (h.hit) { best.kind = h.piece >= 0 ? 2 : (h.solid >= 0 ? 1 : 4); best.idx = h.piece >= 0 ? h.piece : h.solid; best.p = h.point; best.d = h.dist; }
     for (int j = 0; j < (int)actors.size(); j++) {
-        if (j == ignore || !actors[j].alive) continue;
+        if (j == ignore || !actors[j].alive || InBus(j)) continue;
         const Actor& o = actors[j];
         BoundingBox bb = {{o.pos.x - 0.35f, o.pos.y, o.pos.z - 0.35f}, {o.pos.x + 0.35f, o.pos.y + 1.8f, o.pos.z + 0.35f}};
         RayCollision c = GetRayCollisionBox(r, bb);
@@ -1868,6 +2348,11 @@ void Game::UpdateActor(int idx, const Input& in, float dt) {
     a.hitFlash = fmaxf(0, a.hitFlash - dt); a.toastT -= dt; a.tracerT -= dt;
     if (!a.alive) return;
     if (!a.isBot) { a.yaw -= in.look.x; a.pitch = Clamp(a.pitch - in.look.y, -1.3f, 1.3f); }
+    {   // drop state: glider fold-away timer, and the whole bus / freefall / glide flight until landed
+        AirState& as = air[idx];
+        if (as.fold > 0) as.fold = fmaxf(0.0f, as.fold - dt / 0.55f);
+        if (as.phase != DropPhase::Landed) { UpdateAerial(idx, in, dt); return; }
+    }
     a.fireCd = fmaxf(0, a.fireCd - dt); a.placeCd -= dt; a.idle += dt;
     if (a.swing >= 0) { a.swing += dt / 0.32f; if (a.swing >= 1) a.swing = -1; }
     
@@ -2090,11 +2575,17 @@ void Game::RenderView(RenderTexture2D& rt, int W, int H, int ai) {
     gR.SetResolution((float)W, (float)H);
     BeginMode3D(cam);
     world.Draw(cam.position, stormR, cam);
-    for (const auto& a : actors) {
+    if (bus.active) DrawBattleBus(skyModels, bus, WHITE);
+    for (int ak = 0; ak < (int)actors.size(); ak++) {
+        const Actor& a = actors[ak];
+        const AirState& as = air[ak];
         if (!a.alive) continue;
+        if (as.phase == DropPhase::Bus) continue;                // riding inside the bus
         if (scoped && &a == &me) continue;      // eye is inside the model while scoped
         float gy = world.GroundY(a.pos, a.pos.y, 0.55f);
-        DrawCylinder({a.pos.x, gy + 0.06f, a.pos.z}, 0.45f, 0.45f, 0.01f, 8, Color{0, 0, 0, 90});
+        const bool flying = as.phase == DropPhase::Freefall || as.phase == DropPhase::Glide;
+        DrawCylinder({a.pos.x, gy + 0.06f, a.pos.z}, flying ? 1.1f : 0.45f, flying ? 1.1f : 0.45f, 0.01f, 8, Color{0, 0, 0, (unsigned char)(flying ? 60 : 90)});
+        if (flying) { DrawAirActor(a, as); continue; }
         Pose p; p.phase = a.phase; p.moveAmt = a.moveAmt; p.swing = a.swing; p.pitch = a.pitch; p.idle = a.idle; p.airborne = !a.grounded;
         const Slot& s = a.slots[a.sel];
         if (!a.buildMode && a.sel == 0) p.pick = true;
@@ -2105,6 +2596,10 @@ void Game::RenderView(RenderTexture2D& rt, int W, int H, int ai) {
         p.ads = a.isAiming;
         CharacterDraw(chars[a.look], held, a.pos, a.yaw, p, a.hitFlash > 0 ? Color{255, 130, 130, 255} : WHITE);
         if (a.tracerT > 0) DrawLine3D(a.tA, a.tB, Color{255, 240, 150, 255});
+        if (as.fold > 0) {      // glider folding away above a player who just landed
+            Matrix gf = MatrixMultiply(MatrixRotateY(a.yaw), MatrixTranslate(a.pos.x, a.pos.y + 2.05f + (1.0f - as.fold) * 1.2f, a.pos.z));
+            DrawGlider(skyModels, as.glider, gf, as.fold, false, WHITE);
+        }
     }
     for (const auto& g : grenades) DrawSphere(g.p, 0.12f, C(50, 80, 40));
     for (const auto& f : fx) { float k = f.t / f.life; DrawSphereEx(f.p, f.r * (0.3f + 0.7f * k), 6, 6, Color{255, (unsigned char)(190 - 120 * k), 60, (unsigned char)(200 * (1 - k))}); }
@@ -2131,7 +2626,10 @@ void Game::RenderView(RenderTexture2D& rt, int W, int H, int ai) {
         if (scoped) DrawScope(W, H, me.slots[me.sel].id == I_SNIPER);
     }
     HudInfo info{AliveCount(), stormT, shrinking, stormR, &feed, state == State::Over, victory && me.alive, me.placement ? me.placement : humanPlacement};
+    gSkyHud.busActive = bus.active; gSkyHud.x = bus.pos.x; gSkyHud.z = bus.pos.z; gSkyHud.dirx = bus.dir.x; gSkyHud.dirz = bus.dir.z;
+    gSkyHud.airborne = air[ai].phase != DropPhase::Landed;
     DrawHud(me, world, W, H, info);
+    DrawSkydiveHud(ai, W, H);
     if (!me.isBot && me.alive) gVFX.Draw2D(cam, W, H);
     EndTextureMode();
 }
@@ -2141,22 +2639,23 @@ void Game::DrawMatch() {
     ClearBackground(BLACK);
     int sw = GetScreenWidth(), sh = GetScreenHeight();
     if (humans == 1) {
-        RenderView(rtFull, 320, 240, 0);
-        float w = sh * 4.0f / 3.0f, h = (float)sh; if (w > sw) { w = (float)sw; h = sw * 0.75f; }
-        Present(rtFull, {(sw - w) / 2, (sh - h) / 2, w, h});
+        RenderView(rtFull, 1920, 1080, 0);
+        // Fill the whole window, no letterbox.
+        Present(rtFull, { 0, 0, (float)sw, (float)sh });
     } else {
-        RenderView(rtHalf[0], 214, 240, 0);
-        RenderView(rtHalf[1], 214, 240, 1);
-        Present(rtHalf[0], {0, 0, sw / 2.0f, (float)sh});
-        Present(rtHalf[1], {sw / 2.0f, 0, sw / 2.0f, (float)sh});
+        RenderView(rtHalf[0], 960, 1080, 0);
+        RenderView(rtHalf[1], 960, 1080, 1);
+        Present(rtHalf[0], { 0, 0, sw / 2.0f, (float)sh });
+        Present(rtHalf[1], { sw / 2.0f, 0, sw / 2.0f, (float)sh });
         DrawRectangle(sw / 2 - 1, 0, 2, sh, BLACK);
     }
-    
+
     if (pauseMenuOpen) {
-        int sw = GetScreenWidth(), sh = GetScreenHeight();
-        DrawRectangle(0, 0, sw, sh, Color{0, 0, 0, 160});
+        // ... unchanged pause menu drawing ...
+        int sw2 = GetScreenWidth(), sh2 = GetScreenHeight();
+        DrawRectangle(0, 0, sw2, sh2, Color{0, 0, 0, 160});
         int pw = 280, ph = 160;
-        int px = (sw - pw) / 2, py = (sh - ph) / 2;
+        int px = (sw2 - pw) / 2, py = (sh2 - ph) / 2;
         DrawRectangle(px, py, pw, ph, Color{20, 28, 50, 245});
         DrawRectangleLines(px, py, pw, ph, Color{250, 200, 40, 255});
         DrawTextEx(gFont, "PAUSED", {(float)(px + 90), (float)(py + 20)}, 24, 1, WHITE);
@@ -2165,5 +2664,5 @@ void Game::DrawMatch() {
         DrawRectangle(px + 40, py + 104, 200, 32, Color{180, 50, 50, 255});
         DrawTextEx(gFont, "LEAVE MATCH (L)", {(float)(px + 55), (float)(py + 110)}, 16, 1, WHITE);
     }
-EndDrawing();
+    EndDrawing();
 }
