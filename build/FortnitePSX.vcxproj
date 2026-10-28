@@ -393,6 +393,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Renderer.h" />
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\SkyGeo.h" />
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Skydive.h" />
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\UiAssets.h" />
     <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\VFX.cpp" />
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\VFX.h" />
     <ClCompile Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\World.cpp" />

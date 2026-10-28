@@ -51,7 +51,7 @@ struct BattleBus {
 };
 
 // Read by the HUD (minimap marker, reticle hiding) so Hud.h / HudInfo do not need to change.
-struct SkyHud { bool busActive = false, airborne = false; float x = 0, z = 0, dirx = 0, dirz = 1; };
+struct SkyHud { bool busActive = false, airborne = false, onBus = false; float x = 0, z = 0, dirx = 0, dirz = 1, busSecs = 0; };
 extern SkyHud gSkyHud;
 
 // ---------------------------------------------------------------------------------------- models

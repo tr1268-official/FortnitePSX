@@ -57,6 +57,7 @@ set(OLD_GLOB
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Renderer.h"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/SkyGeo.h"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/Skydive.h"
+  "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/UiAssets.h"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/VFX.h"
   "C:/Users/timje/Downloads/FortnitePSX/FortniteGamePSX/FortnitePSX/src/World.h"
   )

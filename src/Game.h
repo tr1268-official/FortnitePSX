@@ -12,7 +12,7 @@ struct Grenade { Vector3 p, v; float t; int owner; };
 struct Fx { Vector3 p; float t, life, r; };
 struct Hit3 { int kind = 0; int idx = -1; Vector3 p{}; float d = 0; bool head = false; };
 
-enum class State { Login, Lobby, Match, Over };
+enum class State { Login, Lobby, Loading, Match, Over };
 enum class LobbyTab { Play = 0, BattlePass, Locker, ItemShop, Profile, COUNT };
 enum class GameMode { Solo = 0, Duo, Private1v1, Private2v2, COUNT };
 enum class PlayType { Local = 0, Online };
@@ -126,7 +126,11 @@ private:
     // Mouse in lobby canvas coords
     Vector2 LobbyMouse() const;
 
-    void StartMatch();
+    void BeginMatchLoad();                 // lobby -> loading screen (connection check, build, warm-up render)
+    void UpdateLoading(float dt);
+    void DrawLoading();
+    void AbortLoad(const char* presence);  // leave the loading screen and go back to the lobby
+    void StartMatch();                     // builds the world + actors (called by the loading screen)
     void EndMatch();
     void UpdateMatch(float dt);
     void DrawMatch();
@@ -232,6 +236,15 @@ private:
     int bpSelTier = 0;
     int bpSelRow = 0;
     int bpMaxTier = 70;
+
+    // Loading screen (State::Loading)
+    int   loadStage = 0;          // 0 connection check, 1 build world, 2 warm-up render, 3 wait for the bar
+    int   loadStageFrames = 0;    // frames the current stage's status has been on screen (work starts after the first)
+    int   loadWarm = 0;           // warm-up frames rendered
+    int   loadTip = 0;            // which loading-screen tip is shown
+    float loadT = 0, loadShown = 0;
+    bool  loadFailed = false, loadBuilt = false;
+    std::string loadStatus, loadErrTitle, loadErr;
 
     // Matchmaking
     bool matchmaking = false;

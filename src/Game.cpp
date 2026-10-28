@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Renderer.h"
 #include "IconCache.h"
+#include "UiAssets.h"
 #include "Audio.h"
 #include "Net.h"
 #include "JsonUtil.h"
@@ -53,6 +54,7 @@ Game::~Game() {
     gR.FreeModel(padOn); gR.FreeModel(padOff);
     UnloadRenderTexture(rtFull); UnloadRenderTexture(rtHalf[0]); UnloadRenderTexture(rtHalf[1]); UnloadRenderTexture(rtLobby);
     gIcons.Shutdown();
+    UiTexUnloadAll();
     gAudio.Shutdown();
     CloseAudioDevice();
     gR.Shutdown();
@@ -77,6 +79,7 @@ void Game::Run() {
         }
         if (state == State::Login) { UpdateLogin(dt); DrawLogin(); }
         else if (state == State::Lobby) { UpdateLobby(dt); DrawLobby(); }
+        else if (state == State::Loading) { UpdateLoading(dt); DrawLoading(); }
         else { UpdateMatch(dt); DrawMatch(); }
     }
     if (account.loggedIn) SetPresence("offline", "none", false);
@@ -931,7 +934,7 @@ void Game::DrawLogin() {
     if (authMsgT > 0 && !authError.empty()) {
         DrawTextEx(gFont, authError.c_str(), {(float)(cx + 30), (float)(cy + ch - 22)}, 13, 1, C(255, 100, 100));
     }
-    DrawTextEx(gFont, "Default: Player1 / password   |   Backend: localhost:3847", {(float)(cx), (float)(cy + ch + 10)}, 12, 1, C(100, 110, 140));
+    DrawTextEx(gFont, "Default: Player1 / password   |   Backend: 26.155.48.164:3847", {(float)(cx), (float)(cy + ch + 10)}, 12, 1, C(100, 110, 140));
     EndDrawing();
 }
 
@@ -948,7 +951,7 @@ void Game::UpdateLobby(float dt) {
             if (ConnectMatchmaker()) {
                 matchmaking = false;
                 matchmakeT = 0;
-                StartMatch();
+                BeginMatchLoad();
             } else {
                 matchmakeT = matchmakeMinWait - 0.5f;
             }
@@ -1834,9 +1837,244 @@ void Game::StartMatch() {
     }
 
     stormR = kRad[0] * ms; stormT = kWait[0]; stormPhase = 0; shrinking = false; matchT = 0; victory = false; humanPlacement = 0;
-    state = State::Match;
-    DisableCursor();
-    gAudio.StartAmbience("Wind_Falling/sfx_parachute_skydive_loop_3p");
+    // The loading screen (UpdateLoading) switches to State::Match once the first frames have rendered.
+}
+
+// =====================================================================
+//  LOADING SCREEN
+//  stage 0: check the connection   stage 1: build the world   stage 2: warm-up render (shaders / textures / GPU buffers)
+//  stage 3: hold until the bar is full, then drop in
+// =====================================================================
+static const float kMinLoadTime = 2.5f;
+
+void Game::BeginMatchLoad() {
+    friendsOpen = false; addFriendFocus = false; modePickerOpen = false;
+    matchmaking = false; matchmakeT = 0;
+    loadStage = 0; loadStageFrames = 0; loadWarm = 0; loadT = 0; loadShown = 0; loadTip = RandI(0, 5);
+    loadFailed = false; loadBuilt = false;
+    loadErrTitle.clear(); loadErr.clear();
+    loadStatus = playType == PlayType::Online ? "Checking connection to the game server..." : "Preparing local match...";
+    state = State::Loading;
+}
+
+void Game::AbortLoad(const char* presence) {
+    if (loadBuilt) {
+        world.Unload();
+        actors.clear(); air.clear(); grenades.clear(); fx.clear(); feed.clear();
+        bus = BattleBus(); gSkyHud = SkyHud();
+    }
+    loadBuilt = false;
+    DisconnectMatchmaker();
+    matchmaking = false; matchmakeT = 0;
+    EnableCursor();
+    gAudio.StopAmbience();
+    if (account.loggedIn) SetPresence("online", presence, true);
+    state = State::Lobby; tab = LobbyTab::Play;
+}
+
+void Game::UpdateLoading(float dt) {
+    loadT += dt;
+    auto padPressed = [](int btn) {
+        for (int g = 0; g < 4; g++) if (IsGamepadAvailable(g) && IsGamepadButtonPressed(g, btn)) return true;
+        return false;
+    };
+    const bool back = IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
+
+    // Smooth progress bar
+    static const float kTarget[4] = {0.15f, 0.40f, 0.70f, 1.0f};
+    float target = kTarget[loadStage < 0 ? 0 : (loadStage > 3 ? 3 : loadStage)];
+    if (loadStage == 2) target += 0.08f * (float)loadWarm;
+    loadShown += (fminf(target, 1.0f) - loadShown) * fminf(1.0f, dt * 5.0f);
+
+    if (loadFailed) {                                    // error screen: wait for the player
+        if (back || loadT > 12.0f) AbortLoad("lobby");
+        return;
+    }
+    if (IsKeyPressed(KEY_ESCAPE) || padPressed(GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) { AbortLoad("lobby"); return; }   // cancel
+
+    // Let every stage's status text reach the screen once before its (blocking) work runs
+    if (loadStageFrames < 1) { loadStageFrames++; return; }
+
+    switch (loadStage) {
+    case 0: {   // ---- connection check
+        std::string err;
+        if (playType == PlayType::Online) {
+            if (!mmConnected) err = "The game server connection was lost.";
+            else {
+                int st = 0;
+                HttpGet("/api/shop", &st);               // cheap request just to prove the backend is still answering
+                if (st != 200) err = "The backend is not responding. Make sure it is running and try again.";
+            }
+        }
+        if (!err.empty()) {
+            loadFailed = true; loadT = 0;
+            loadErrTitle = "CONNECTION ERROR"; loadErr = err;
+            backendOk = false;
+            DisconnectMatchmaker();
+            return;
+        }
+        loadStage = 1; loadStageFrames = 0; loadStatus = "Building the island...";
+        break;
+    }
+    case 1: {   // ---- build world, actors, bus
+        StartMatch();
+        loadBuilt = true;
+        if (world.spawns.empty() || actors.empty()) {
+            loadFailed = true; loadT = 0;
+            loadErrTitle = "FAILED TO LOAD MATCH"; loadErr = "The map did not load correctly (no spawn points).";
+            return;
+        }
+        for (int k = 0; k < humans && k < (int)actors.size(); k++) {          // give the warm-up render a valid camera
+            if (air[k].phase == DropPhase::Bus) ComputeBusCamera(actors[k]); else ComputeCamera(actors[k]);
+        }
+        loadStage = 2; loadStageFrames = 0; loadWarm = 0; loadStatus = "Rendering the world...";
+        break;
+    }
+    case 2: {   // ---- DrawLoading renders the match view offscreen each frame; here we only count + validate
+        if (loadWarm >= 3) {
+            bool ok = rtFull.id != 0 && rtFull.texture.id != 0;
+            if (humans > 1) ok = ok && rtHalf[0].id != 0 && rtHalf[1].id != 0;
+            if (!ok) {
+                loadFailed = true; loadT = 0;
+                loadErrTitle = "FAILED TO LOAD MATCH"; loadErr = "The game could not create its render targets.";
+                return;
+            }
+            loadStage = 3; loadStageFrames = 0; loadStatus = "Ready!";
+        }
+        break;
+    }
+    case 3: {   // ---- drop in once the bar has filled
+        if (loadShown > 0.985f && loadT >= kMinLoadTime) {
+            state = State::Match;
+            DisableCursor();
+            gAudio.StartAmbience("Wind_Falling/sfx_parachute_skydive_loop_3p");
+        }
+        break;
+    }
+    }
+}
+
+void Game::DrawLoading() {
+    BeginDrawing();
+    ClearBackground(BLACK);
+    const int sw = GetScreenWidth(), sh = GetScreenHeight();
+    const float k = sh / 720.0f;
+
+    if (loadStage == 2 && !loadFailed && loadBuilt) {    // warm-up: render the real match view (not shown) so the first in-game frame is smooth
+        if (humans == 1) RenderView(rtFull, 1920, 1080, 0);
+        else { RenderView(rtHalf[0], 960, 1080, 0); RenderView(rtHalf[1], 960, 1080, 1); }
+        loadWarm++;
+    }
+
+    // Background art, scaled to cover the whole window
+    const Texture2D* bg = UiTex("assets/ui/loadingscreens/FORT_Load_BattleRoyale.png");
+    if (bg) {
+        float sc = fmaxf((float)sw / bg->width, (float)sh / bg->height);
+        float w = bg->width * sc, h = bg->height * sc;
+        DrawTexturePro(*bg, Rectangle{0, 0, (float)bg->width, (float)bg->height}, Rectangle{(sw - w) / 2, (sh - h) / 2, w, h}, {0, 0}, 0, WHITE);
+    } else {
+        DrawRectangleGradientV(0, 0, sw, sh, Color{10, 40, 90, 255}, Color{2, 6, 20, 255});
+    }
+
+    auto T = [&](const char* s, float x, float y, float fs, Color col, bool centre) {
+        Vector2 sz = MeasureTextEx(gFont, s, fs, 1.0f);
+        if (centre) x -= sz.x / 2;
+        DrawTextEx(gFont, s, {x + 2, y + 2}, fs, 1.0f, Color{0, 0, 0, 190});
+        DrawTextEx(gFont, s, {x, y}, fs, 1.0f, col);
+    };
+
+    if (!loadFailed) {
+        // ---- Layout follows the reference screenshot (1327 x 733): black diagonal panel on the left, art on the right,
+        //      yellow tag top-right, purple tip bar along the bottom, white loading bar bottom-left.
+        const float fx = sw / 1327.0f, fy = sh / 733.0f, fk = sh / 733.0f;
+        auto P = [&](float x, float y) { return Vector2{x * fx, y * fy}; };
+        auto Tri2 = [](Vector2 a, Vector2 b, Vector2 c2, Color col) { DrawTriangle(a, b, c2, col); DrawTriangle(a, c2, b, col); };
+        auto Quad2 = [&](Vector2 a, Vector2 b, Vector2 c2, Vector2 d, Color col) { Tri2(a, b, c2, col); Tri2(a, c2, d, col); };
+        auto Bold = [&](const char* s, float x, float y, float fs, Color col) {        // heavy weight: draw twice, nudged
+            DrawTextEx(gFont, s, {x + 0.8f * fk, y}, fs, 1.0f, col);
+            DrawTextEx(gFont, s, {x, y}, fs, 1.0f, col);
+        };
+
+        // yellow "EARLY ACCESS" tag
+        Quad2(P(888, 38), P(1278, 26), P(1290, 124), P(890, 132), Color{255, 214, 20, 255});
+        { const char* tag = "EARLY ACCESS"; float fs = 40 * fk; Vector2 m = MeasureTextEx(gFont, tag, fs, 1.0f);
+          Bold(tag, 1086 * fx - m.x / 2, 80 * fy - m.y / 2, fs, Color{12, 12, 16, 255}); }
+
+        // purple tip bar (slanted top-left corner is hidden by the black panel's lower piece)
+        Quad2(P(495, 610), P(1327, 628), P(1327, 733), P(505, 733), Color{84, 78, 170, 255});
+        {
+            static const char* kTips[6] = {
+                "Place traps in places where other players won't see them.",
+                "Build walls for cover and stairs for height.",
+                "Harvest wood, brick and metal with your pickaxe to build.",
+                "The storm keeps shrinking. Stay inside the safe zone.",
+                "Open chests and search buildings for better weapons.",
+                "Aim down the sights to line up long-range shots."};
+            T(kTips[loadTip < 0 ? 0 : (loadTip > 5 ? 5 : loadTip)], 609 * fx, 672 * fy - 8 * fk, 15 * fk, WHITE, false);
+        }
+
+        // black left panel: upper piece with the diagonal edge + lower piece under the tip bar
+        Quad2(P(0, 0), P(580, 0), P(785, 612), P(0, 612), BLACK);
+        Quad2(P(0, 612), P(495, 612), P(505, 733), P(0, 733), BLACK);
+
+        // titles
+        static const char* kLoadMode[4] = {"Solo", "Duo", "Private 1v1", "Private 2v2"};
+        T(kLoadMode[(int)gameMode], 80 * fx, 59 * fy, 14 * fk, WHITE, false);
+        Bold("Battle Royale", 80 * fx, 92 * fy, 42 * fk, WHITE);
+
+        // the three objective rows
+        struct Row { const char* head; const char* body; const char* icon; float y; };
+        static const Row rows[3] = {
+            {"Drop In & Load Up", "Pick a landing spot and search for gear.", "assets/ui/loadingscreens/Icons/FORT_Load_Missions_PH1-256.png", 240},
+            {"Stay Inside the Eye of the Storm", "Deadly clouds are closing in. The Eye will shrink as the storm intensifies.", "assets/ui/loadingscreens/Icons/FORT_Load_Missions_PH2-256.png", 388},
+            {"Last One Standing Wins", "There can be only one winner.", "assets/ui/loadingscreens/Icons/FORT_Load_Missions_PH3-256.png", 536}};
+        for (const Row& r : rows) {
+            const float cy2 = r.y * fy, cx2 = 125 * fx;
+            const Texture2D* ic = UiTex(r.icon);
+            if (ic) {
+                float isz = 110 * fk;
+                DrawTexturePro(*ic, Rectangle{0, 0, (float)ic->width, (float)ic->height}, Rectangle{cx2 - isz / 2, cy2 - isz / 2, isz, isz}, {0, 0}, 0, WHITE);
+            } else {   // hand-drawn style circle fallback
+                DrawRing({cx2, cy2}, 40 * fk, 44 * fk, 20, 380, 48, WHITE);
+                DrawRing({cx2 + 2 * fk, cy2 - 1 * fk}, 38 * fk, 41 * fk, 200, 520, 48, WHITE);
+            }
+            Bold(r.head, 202 * fx, cy2 - 32 * fk, 25 * fk, WHITE);
+            // word-wrapped description
+            const float fs = 14 * fk, maxW = 385 * fx; float ly = cy2 + 2 * fk;
+            std::string line, word, text = r.body;
+            auto flush = [&]() { if (!line.empty()) { Bold(line.c_str(), 202 * fx, ly, fs, WHITE); ly += fs * 1.35f; line.clear(); } };
+            for (size_t i = 0; i <= text.size(); i++) {
+                if (i == text.size() || text[i] == ' ') {
+                    std::string trial = line.empty() ? word : line + " " + word;
+                    if (!line.empty() && MeasureTextEx(gFont, trial.c_str(), fs, 1.0f).x > maxW) { flush(); line = word; }
+                    else line = trial;
+                    word.clear();
+                } else word += text[i];
+            }
+            flush();
+        }
+
+        // LOADING. + white progress bar
+        Bold("LOADING.", 65 * fx, 645 * fy, 26 * fk, WHITE);
+        const float bx = 52 * fx, by = 688 * fy, bw = 416 * fx, bh = fmaxf(4.0f, 8 * fy);
+        DrawRectangle((int)bx, (int)by, (int)bw, (int)bh, Color{255, 255, 255, 60});
+        DrawRectangle((int)bx, (int)by, (int)(bw * fminf(loadShown, 1.0f)), (int)bh, WHITE);
+        DrawTextEx(gFont, loadStatus.c_str(), {bx, by + bh + 6 * fk}, 12 * fk, 1.0f, Color{190, 190, 200, 255});
+        { const char* esc = "ESC - cancel"; float ew = MeasureTextEx(gFont, esc, 12 * fk, 1.0f).x;
+          DrawTextEx(gFont, esc, {bx + bw - ew, by + bh + 6 * fk}, 12 * fk, 1.0f, Color{190, 190, 200, 255}); }
+    } else {
+        DrawRectangle(0, 0, sw, sh, Color{0, 0, 0, 200});
+        const float pw = 620 * k, ph = 320 * k, px = (sw - pw) / 2, py = (sh - ph) / 2;
+        DrawRectangle((int)px, (int)py, (int)pw, (int)ph, Color{18, 24, 48, 245});
+        DrawRectangleLinesEx(Rectangle{px, py, pw, ph}, fmaxf(1.0f, 2 * k), Color{250, 200, 40, 255});
+        const Texture2D* ic = UiTex("assets/ui/icons/ConnectionError_B.png");
+        float isz = 84 * k;
+        if (ic) DrawTexturePro(*ic, Rectangle{0, 0, (float)ic->width, (float)ic->height}, Rectangle{(sw - isz) / 2, py + 22 * k, isz, isz}, {0, 0}, 0, WHITE);
+        T(loadErrTitle.c_str(), sw / 2.0f, py + 122 * k, 28 * k, Color{255, 120, 120, 255}, true);
+        T(loadErr.c_str(), sw / 2.0f, py + 170 * k, 16 * k, WHITE, true);
+        T("ENTER - return to lobby", sw / 2.0f, py + ph - 52 * k, 16 * k, Color{250, 200, 40, 255}, true);
+    }
+    EndDrawing();
 }
 
 void Game::EndMatch() {
@@ -2628,6 +2866,8 @@ void Game::RenderView(RenderTexture2D& rt, int W, int H, int ai) {
     HudInfo info{AliveCount(), stormT, shrinking, stormR, &feed, state == State::Over, victory && me.alive, me.placement ? me.placement : humanPlacement};
     gSkyHud.busActive = bus.active; gSkyHud.x = bus.pos.x; gSkyHud.z = bus.pos.z; gSkyHud.dirx = bus.dir.x; gSkyHud.dirz = bus.dir.z;
     gSkyHud.airborne = air[ai].phase != DropPhase::Landed;
+    gSkyHud.onBus = air[ai].phase == DropPhase::Bus;
+    gSkyHud.busSecs = bus.SecondsToLeave();
     DrawHud(me, world, W, H, info);
     DrawSkydiveHud(ai, W, H);
     if (!me.isBot && me.alive) gVFX.Draw2D(cam, W, H);

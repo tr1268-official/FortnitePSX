@@ -119,11 +119,11 @@ std::string HttpRequest(const std::string& method, const std::string& host, int 
 }
 
 std::string HttpGet(const std::string& path, int* outStatus) {
-    return HttpRequest("GET", "127.0.0.1", 3847, path, "", outStatus);
+    return HttpRequest("GET", "26.155.48.164", 3847, path, "", outStatus);
 }
 
 std::string HttpPost(const std::string& path, const std::string& jsonBody, int* outStatus) {
-    return HttpRequest("POST", "127.0.0.1", 3847, path, jsonBody, outStatus);
+    return HttpRequest("POST", "26.155.48.164", 3847, path, jsonBody, outStatus);
 }
 
 
@@ -175,7 +175,7 @@ bool MatchmakerConnect(const std::string& playerName, const std::string& modeNam
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
     addr.sin_port = htons(3848);
-    if (inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, "26.155.48.164", &addr.sin_addr) <= 0) {
         CLOSESOCK(s);
         if (errorOut) *errorOut = "inet_pton failed";
         return false;

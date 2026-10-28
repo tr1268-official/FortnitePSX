@@ -1,5 +1,7 @@
 #include "Hud.h"
 #include "IconCache.h"
+#include "Skydive.h"     // gSkyHud: bus marker on the minimap, reticle hidden while airborne
+#include "UiAssets.h"   // minimap / reticle / phase art loaded by path
 
 // ---------------------------------------------------------------------------
 // UI scaling
@@ -63,8 +65,40 @@ static void ReticleDiagonals(float cx, float cy, float r0, float r1, float th, C
             ReticleLine(cx + sx * r0 * k, cy + sy * r0 * k, cx + sx * r1 * k, cy + sy * r1 * k, th, c);
 }
 
+
+// Draws a PNG from assets/ at (x,y) sized sz x sz. Returns false when the file is missing so the caller can draw a fallback.
+static bool TexIcon(const char* path, int x, int y, int sz, Color tint = WHITE) {
+    const Texture2D* t = UiTex(path);
+    if (!t) return false;
+    DrawTexturePro(*t, Rectangle{0, 0, (float)t->width, (float)t->height}, Rectangle{(float)x, (float)y, (float)sz, (float)sz}, {0, 0}, 0, tint);
+    return true;
+}
+
+// Shotgun reticle from the game art. The frame PNG is a single top-right corner arch, so it is drawn four times,
+// rotated 0/90/180/270 degrees around the centre; `gap` is the distance from the centre to each arch's inner corner and
+// `cornerW` the on-screen width of one arch. The centre-dot PNG uses the same scale so the two stay in proportion.
+// Returns false if neither texture exists.
+static bool ShotgunReticle(float cx, float cy, float cornerW, float gap, Color col) {
+    const Texture2D* fr = UiTex("assets/ui/reticles/HUD_Xhair_Shotgun_Frame.png");
+    const Texture2D* dt = UiTex("assets/ui/reticles/HUD_Xhair_Shotgun_CntDot.png");
+    if (!fr && !dt) return false;
+    const float sc = fr ? cornerW / (float)fr->width : cornerW / 64.0f;
+    if (fr) {
+        const float w = fr->width * sc, h = fr->height * sc;
+        for (int k = 0; k < 4; k++)
+            DrawTexturePro(*fr, Rectangle{0, 0, (float)fr->width, (float)fr->height},
+                           Rectangle{cx, cy, w, h}, Vector2{-gap, h + gap}, k * 90.0f, col);   // pivot = reticle centre
+    }
+    if (dt) {
+        const float w = dt->width * sc, h = dt->height * sc;
+        DrawTexturePro(*dt, Rectangle{0, 0, (float)dt->width, (float)dt->height},
+                       Rectangle{roundf(cx - w / 2), roundf(cy - h / 2), roundf(w), roundf(h)}, {0, 0}, 0, col);
+    }
+    return true;
+}
+
 // Weapon-type reticle. Scoped weapons (a.isAiming) are skipped: the scope overlay has its own.
-static void Reticle(const Actor& a, int W, int H) {
+static void ReticleImpl(const Actor& a, int W, int H) {
     float cx = W / 2.0f, cy = H / 2.0f;
     unsigned char al = a.reloadT > 0 ? 110 : 240;
     Color col = Color{255, 255, 255, al};
@@ -101,15 +135,19 @@ static void Reticle(const Actor& a, int W, int H) {
             ReticleCross(cx, cy, U(2.5f) + bloom * U(2), (float)U(4), th, col);
             break;
         case I_PUMP:
-            ReticleRing(cx, cy, U(14) + bloom * U(4), th, col);
-            ReticleDot(cx, cy, (float)U1(0.9f), col);
+            if (!ShotgunReticle(cx, cy, (float)U(10), U(5) + bloom * U(4), col)) {
+                ReticleRing(cx, cy, U(14) + bloom * U(4), th, col);
+                ReticleDot(cx, cy, (float)U1(0.9f), col);
+            }
             break;
         case I_TACTICAL: {
-            float r = U(11) + bloom * U(4);
-            ReticleRing(cx, cy, r, th, col);
-            ReticleLine(cx - r - U(5), cy, cx - r - U(1), cy, th, col);
-            ReticleLine(cx + r + U(1), cy, cx + r + U(5), cy, th, col);
-            ReticleDot(cx, cy, (float)U1(0.9f), col);
+            if (!ShotgunReticle(cx, cy, (float)U(8), U(4) + bloom * U(4), col)) {
+                float r = U(11) + bloom * U(4);
+                ReticleRing(cx, cy, r, th, col);
+                ReticleLine(cx - r - U(5), cy, cx - r - U(1), cy, th, col);
+                ReticleLine(cx + r + U(1), cy, cx + r + U(5), cy, th, col);
+                ReticleDot(cx, cy, (float)U1(0.9f), col);
+            }
             break;
         }
         case I_HUNTING:
@@ -132,6 +170,15 @@ static void Reticle(const Actor& a, int W, int H) {
     }
 }
 
+// All reticles are drawn at this fraction of the normal UI scale (lower = smaller).
+static const float kReticleScale = 0.65f;
+static void Reticle(const Actor& a, int W, int H) {
+    const float saved = gU;
+    gU *= kReticleScale;
+    ReticleImpl(a, W, H);
+    gU = saved;
+}
+
 // ---------------------------------------------------------------------------
 // HUD pieces
 // ---------------------------------------------------------------------------
@@ -150,28 +197,102 @@ static void Compass(const Actor& a, int W) {
     }
 }
 
+// Minimap placement. The frame art (minimap_Art_square.png) is drawn over the map and is a bit bigger than the map square,
+// centred on it; kMapFrameScale is how many times the map's width the frame is drawn at. Tweak it if the frame doesn't line up.
+static const float kMapFrameScale = 1.25f;
+static const char* kMapFramePath = "assets/ui/icons/minimap_Art_square.png";
+struct MapRect { int x0, y0, S, over, bottom; bool frame; };
+static MapRect MinimapRect(int W) {
+    MapRect m;
+    m.S = U(56);
+    m.frame = UiTex(kMapFramePath) != nullptr;
+    m.over = m.frame ? (int)lroundf((kMapFrameScale - 1.0f) * m.S * 0.5f) : 0;     // how far the frame sticks out past the map
+    m.x0 = W - m.S - U(4) - m.over;
+    m.y0 = U(4) + m.over;
+    m.bottom = m.y0 + m.S + m.over;
+    return m;
+}
+
 static void Minimap(const Actor& a, const World& w, int W, const HudInfo& info) {
-    const int S = U(56), x0 = W - S - U(4), y0 = U(4); const float sc = 0.9f * gU;
-    int b = U1(1);
-    DrawRectangle(x0 - b, y0 - b, S + 2 * b, S + 2 * b, Color{240, 240, 240, 220});
-    DrawRectangle(x0, y0, S, S, Color{92, 96, 40, 255});
-    auto clip = [&](float rx, float ry, float rw, float rh, Color c) {
-        float x1 = fmaxf(rx, (float)x0), y1 = fmaxf(ry, (float)y0), x2 = fminf(rx + rw, (float)(x0 + S)), y2 = fminf(ry + rh, (float)(y0 + S));
-        if (x2 > x1 && y2 > y1) DrawRectangle((int)x1, (int)y1, (int)(x2 - x1) + 1, (int)(y2 - y1) + 1, c);
-    };
-    float cx = x0 + S / 2.0f, cy = y0 + S / 2.0f;
-    for (const auto& s : w.solids) {
-        if (!s.alive || s.box.max.y < 0.5f) continue;
-        Color c = s.kind == SK_TREE ? Color{50, 90, 40, 255} : s.kind == SK_CONTAINER ? Color{120, 120, 130, 255} : s.kind == SK_CRATE ? Color{190, 120, 60, 255} : Color{200, 200, 205, 255};
-        clip(cx + (s.box.min.x - a.pos.x) * sc, cy + (s.box.min.z - a.pos.z) * sc, (s.box.max.x - s.box.min.x) * sc, (s.box.max.z - s.box.min.z) * sc, c);
+    const MapRect mr = MinimapRect(W);
+    const int S = mr.S, x0 = mr.x0, y0 = mr.y0; const float sc = 0.9f * gU;
+    const float half = fmaxf(w.half, 1.0f);
+    const float cx = x0 + S / 2.0f, cy = y0 + S / 2.0f;
+    const int b = U1(1);
+    // Top-down map art covering the whole play area (north up: world -Z is up, +X is right).
+    const Texture2D* map = UiTex("assets/ui/minimap/MiniMapAthena.png");
+
+    if (!mr.frame) DrawRectangle(x0 - b, y0 - b, S + 2 * b, S + 2 * b, Color{240, 240, 240, 220});   // plain border only without the frame art
+    DrawRectangle(x0, y0, S, S, map ? Color{34, 62, 98, 255} : Color{92, 96, 40, 255});      // shows outside the map edge
+
+    BeginScissorMode(x0, y0, S, S);                       // everything below is clipped to the minimap square
+    if (map) {
+        float size = 2.0f * half * sc;
+        DrawTexturePro(*map, Rectangle{0, 0, (float)map->width, (float)map->height},
+                       Rectangle{cx + (-half - a.pos.x) * sc, cy + (-half - a.pos.z) * sc, size, size}, {0, 0}, 0, WHITE);
+    } else {                                              // no art found: draw the buildings as coloured blocks
+        for (const auto& s : w.solids) {
+            if (!s.alive || s.box.max.y < 0.5f) continue;
+            Color c = s.kind == SK_TREE ? Color{50, 90, 40, 255} : s.kind == SK_CONTAINER ? Color{120, 120, 130, 255} : s.kind == SK_CRATE ? Color{190, 120, 60, 255} : Color{200, 200, 205, 255};
+            DrawRectangleRec(Rectangle{cx + (s.box.min.x - a.pos.x) * sc, cy + (s.box.min.z - a.pos.z) * sc, (s.box.max.x - s.box.min.x) * sc + 1, (s.box.max.z - s.box.min.z) * sc + 1}, c);
+        }
     }
-    for (const auto& p : w.pieces) if (p.alive) clip(cx + (p.box.min.x - a.pos.x) * sc, cy + (p.box.min.z - a.pos.z) * sc, (p.box.max.x - p.box.min.x) * sc, (p.box.max.z - p.box.min.z) * sc, Color{230, 190, 120, 255});
-    float cs = 3.0f * gU;
-    for (const auto& c : w.chests) if (!c.opened) clip(cx + (c.pos.x - a.pos.x) * sc - cs / 3, cy + (c.pos.z - a.pos.z) * sc - cs / 3, cs, cs, Color{255, 220, 40, 255});
-    Vector2 f = {sinf(a.yaw), cosf(a.yaw)}, r = {cosf(a.yaw), -sinf(a.yaw)};
-    float tipL = 5.0f * gU, backL = 3.0f * gU, sideL = 3.0f * gU;
-    Vector2 tip = {cx + f.x * tipL, cy + f.y * tipL}, l = {cx - f.x * backL + r.x * sideL, cy - f.y * backL + r.y * sideL}, rr = {cx - f.x * backL - r.x * sideL, cy - f.y * backL - r.y * sideL};
-    DrawTriangle(tip, rr, l, WHITE); DrawTriangle(tip, l, rr, WHITE);
+    for (const auto& p : w.pieces) if (p.alive)           // player-built structures
+        DrawRectangleRec(Rectangle{cx + (p.box.min.x - a.pos.x) * sc, cy + (p.box.min.z - a.pos.z) * sc, (p.box.max.x - p.box.min.x) * sc + 1, (p.box.max.z - p.box.min.z) * sc + 1}, Color{230, 190, 120, 255});
+    const float cs = 3.0f * gU;
+    for (const auto& c : w.chests) if (!c.opened)
+        DrawRectangleRec(Rectangle{cx + (c.pos.x - a.pos.x) * sc - cs / 2, cy + (c.pos.z - a.pos.z) * sc - cs / 2, cs, cs}, Color{255, 220, 40, 255});
+
+    if (info.stormR > 0) {                                // storm: tinted outside the safe zone, bright edge
+        Vector2 sc0 = {cx + (0.0f - a.pos.x) * sc, cy + (0.0f - a.pos.z) * sc};
+        float sr = info.stormR * sc;
+        DrawRing(sc0, sr, sr + S * 4.0f, 0, 360, 72, Color{110, 40, 190, 120});
+        DrawRing(sc0, sr - U1(1), sr + U1(1), 0, 360, 72, Color{210, 140, 255, 255});
+    }
+    EndScissorMode();
+
+    // Frame art over the map (a bit bigger than the map square, still centred on it)
+    if (mr.frame) {
+        const Texture2D* fr = UiTex(kMapFramePath);
+        float fs = S * kMapFrameScale;
+        DrawTexturePro(*fr, Rectangle{0, 0, (float)fr->width, (float)fr->height}, Rectangle{cx - fs / 2, cy - fs / 2, fs, fs}, {0, 0}, 0, WHITE);
+    }
+
+    // Icons are drawn pointing "up" in their PNGs; these offsets (degrees, clockwise) fix art that points another way.
+    const float kBusIconRot = 0.0f, kArrowIconRot = 0.0f;
+
+    // Battle bus: top-down icon, rotated to its heading and pinned inside the square so you always know where it is
+    if (gSkyHud.busActive) {
+        float m = (float)U(8);
+        float bx = fminf(fmaxf(cx + (gSkyHud.x - a.pos.x) * sc, x0 + m), x0 + S - m);
+        float bz = fminf(fmaxf(cy + (gSkyHud.z - a.pos.z) * sc, y0 + m), y0 + S - m);
+        const Texture2D* bt = UiTex("assets/ui/minimap/T_AthenaBus_Top.png");
+        if (bt) {
+            float bh = (float)U(18), bw = bh * (float)bt->width / (float)bt->height;
+            float ang = atan2f(gSkyHud.dirx, -gSkyHud.dirz) * RAD2DEG + kBusIconRot;
+            DrawTexturePro(*bt, Rectangle{0, 0, (float)bt->width, (float)bt->height}, Rectangle{bx, bz, bw, bh}, Vector2{bw / 2, bh / 2}, ang, WHITE);
+        } else {
+            Vector2 d = {gSkyHud.dirx, gSkyHud.dirz}, p = {-d.y, d.x};
+            float L = 5.0f * gU;
+            DrawTriangle({bx + d.x * L, bz + d.y * L}, {bx - d.x * L + p.x * L * 0.6f, bz - d.y * L + p.y * L * 0.6f}, {bx - d.x * L - p.x * L * 0.6f, bz - d.y * L - p.y * L * 0.6f}, Color{90, 170, 255, 255});
+        }
+    }
+
+    // Player arrow (hidden while riding the bus - the bus icon already shows where you are)
+    if (!gSkyHud.onBus) {
+        const Texture2D* arrow = UiTex("assets/ui/minimap/UI_Radar_AthenaPlayerArrow.png");
+        float hd = atan2f(sinf(a.yaw), -cosf(a.yaw)) * RAD2DEG + kArrowIconRot;     // clockwise from north, same as the compass
+        if (arrow) {
+            float ah = (float)U(12), aw = ah * (float)arrow->width / (float)arrow->height;
+            DrawTexturePro(*arrow, Rectangle{0, 0, (float)arrow->width, (float)arrow->height},
+                           Rectangle{cx, cy, aw, ah}, Vector2{aw / 2, ah / 2}, hd, WHITE);
+        } else {
+            Vector2 f = {sinf(a.yaw), cosf(a.yaw)}, r = {cosf(a.yaw), -sinf(a.yaw)};
+            float tipL = 5.0f * gU, backL = 3.0f * gU, sideL = 3.0f * gU;
+            Vector2 tip = {cx + f.x * tipL, cy + f.y * tipL}, l = {cx - f.x * backL + r.x * sideL, cy - f.y * backL + r.y * sideL}, rr = {cx - f.x * backL - r.x * sideL, cy - f.y * backL - r.y * sideL};
+            DrawTriangle(tip, rr, l, WHITE); DrawTriangle(tip, l, rr, WHITE);
+        }
+    }
     float dist = sqrtf(a.pos.x * a.pos.x + a.pos.z * a.pos.z);
     if (info.stormR - dist < 25) Txt("STORM", x0 + U(2), y0 + S - U(10), 10, Color{200, 120, 255, 255});
 }
@@ -237,22 +358,40 @@ void DrawHud(const Actor& a, const World& w, int W, int H, const HudInfo& info) 
     if (a.hitFlash > 0) DrawRectangle(0, 0, W, H, Color{255, 0, 0, (unsigned char)(90 * fminf(1.0f, a.hitFlash * 4))});
     if (a.alive) {
         // Scoped view draws its own reticle in the scope overlay
-        if (!a.isAiming || a.buildMode) Reticle(a, W, H);
+        if ((!a.isAiming || a.buildMode) && !gSkyHud.airborne) Reticle(a, W, H);
         Compass(a, W);
         Minimap(a, w, W, info);
 
-        // Storm timer / players alive / kills (under the minimap)
-        int sx = W - U(66), sy = U(64);
-        int t = (int)fmaxf(0, info.stormT); char buf[32]; snprintf(buf, sizeof buf, "%d:%02d", t / 60, t % 60);
-        DrawRectangle(sx, sy + U1(1), U(7), U(7), info.shrinking ? Color{200, 100, 255, 255} : Color{140, 200, 255, 255});
-        Txt(buf, sx + U(10), sy, 12, WHITE);
-        DrawCircle(sx + U(36), sy + U(4), (float)U(4), WHITE); snprintf(buf, sizeof buf, "%d", info.alive); Txt(buf, sx + U(43), sy, 12, WHITE);
-        DrawCircleLines(sx + U(56), sy + U(4), (float)U(4), WHITE); snprintf(buf, sizeof buf, "%d", a.kills); Txt(buf, sx + U(60), sy + U(14), 12, WHITE);
+        // Info row flush under the minimap (no background): [phase icon + time] [players left] [kills]
+        char buf[32];
+        {
+            const MapRect mr = MinimapRect(W);
+            const int rl = mr.x0 - mr.over, rw = mr.S + 2 * mr.over, ry = mr.bottom, rh = U(12), isz = U(9), fsz = 9;
+            const char* phaseIco; float secs = info.stormT;
+            if (gSkyHud.onBus)         { phaseIco = "assets/ui/phase/T_Bus.png"; secs = gSkyHud.busSecs; }    // riding the bus: time until it leaves
+            else if (gSkyHud.airborne) phaseIco = "assets/ui/phase/T_Jump.png";                              // skydiving / gliding
+            else if (info.shrinking)   phaseIco = "assets/ui/phase/T_StormMoving.png";                        // storm closing in
+            else                       phaseIco = "assets/ui/phase/T_StormHolding.png";                       // storm waiting
+            Color pc = (info.shrinking && !gSkyHud.onBus) ? Color{210, 140, 255, 255} : WHITE;
+            const int iy = ry + (rh - isz) / 2, ty = ry + (rh - (int)(fsz * gU)) / 2 - U1(1);
 
-        // Health / Shield (Bottom Center)
-        // Group = icon (16 units wide incl. gap) + bar; centre the whole group on screen.
-        int bw = U(108), iconW = U(16);
-        int bx = (W - (iconW + bw)) / 2 + iconW, by = H - U(26);
+            int c1 = rl + U(2);                                                                      // cell 1: phase + countdown
+            int t = (int)ceilf(fmaxf(0.0f, secs)); snprintf(buf, sizeof buf, "%d:%02d", t / 60, t % 60);
+            if (!TexIcon(phaseIco, c1, iy, isz, pc))
+                DrawRectangle(c1, iy + U1(1), U(7), U(7), info.shrinking ? Color{200, 100, 255, 255} : Color{140, 200, 255, 255});
+            Txt(buf, c1 + isz + U(2), ty, fsz, WHITE);
+
+            int c2 = rl + (int)(rw * 0.40f);                                                         // cell 2: players left
+            if (!TexIcon("assets/ui/icons/AliveIco.png", c2, iy, isz)) DrawCircle(c2 + U(4), iy + U(4), (float)U(3), WHITE);
+            snprintf(buf, sizeof buf, "%d", info.alive); Txt(buf, c2 + isz + U(2), ty, fsz, WHITE);
+
+            int c3 = rl + (int)(rw * 0.68f);                                                         // cell 3: kills
+            if (!TexIcon("assets/ui/icons/KillsIco.png", c3, iy, isz)) DrawCircleLines(c3 + U(4), iy + U(4), (float)U(3), WHITE);
+            snprintf(buf, sizeof buf, "%d", a.kills); Txt(buf, c3 + isz + U(2), ty, fsz, WHITE);
+        }
+
+        // Health / Shield (Bottom Left)
+        int bw = U(108), bx = (W - bw) / 2 + U(8), by = H - U(26);   // centred (the icon sits 16 units left of the bar)
 
         DrawRectangle(bx, by, bw, U(8), Color{20, 20, 20, 190});
         DrawRectangle(bx, by, (int)(bw * a.shield / 100.0f), U(8), Color{80, 160, 255, 255});

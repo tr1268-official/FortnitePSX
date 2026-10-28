@@ -8,6 +8,10 @@ class MeshBuilder {
 public:
     void Quad(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Color col, float tile = 2.0f);
     void Tri(Vector3 a, Vector3 b, Vector3 c, Color col);
+    // Same winding rules as Quad/Tri (normal = cross(b-a, d-a)), but with explicit texture coordinates per corner.
+    // Use these for atlas-mapped parts; pass WHITE so the texture shows unmodified.
+    void QuadUV(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector2 ta, Vector2 tb, Vector2 tc, Vector2 td, Color col = WHITE);
+    void TriUV(Vector3 a, Vector3 b, Vector3 c, Vector2 ta, Vector2 tb, Vector2 tc, Color col = WHITE);
     void Box(Vector3 center, Vector3 size, Color col, const Matrix* xf = nullptr, float tile = 2.0f);
     void Loft(const std::vector<Ring>& rings, int sides, const Matrix* xf = nullptr, bool capBottom = true, bool capTop = true);
     Mesh Build();

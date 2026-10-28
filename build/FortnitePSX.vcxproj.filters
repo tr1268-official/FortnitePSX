@@ -87,6 +87,9 @@
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\Skydive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\UiAssets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\timje\Downloads\FortnitePSX\FortniteGamePSX\FortnitePSX\src\VFX.h">
       <Filter>Header Files</Filter>
     </ClInclude>

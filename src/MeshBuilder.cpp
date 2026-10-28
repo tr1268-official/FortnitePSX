@@ -25,6 +25,18 @@ void MeshBuilder::Tri(Vector3 a, Vector3 b, Vector3 c, Color col) {
     T(i0, i1, i2);
 }
 
+void MeshBuilder::QuadUV(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector2 ta, Vector2 tb, Vector2 tc, Vector2 td, Color col) {
+    Vector3 n = Vector3Normalize(Vector3CrossProduct(Vector3Subtract(b, a), Vector3Subtract(d, a)));
+    int i0 = Add(a, n, ta, col), i1 = Add(b, n, tb, col), i2 = Add(c, n, tc, col), i3 = Add(d, n, td, col);
+    T(i0, i1, i2); T(i0, i2, i3);
+}
+
+void MeshBuilder::TriUV(Vector3 a, Vector3 b, Vector3 c, Vector2 ta, Vector2 tb, Vector2 tc, Color col) {
+    Vector3 n = Vector3Normalize(Vector3CrossProduct(Vector3Subtract(b, a), Vector3Subtract(c, a)));
+    int i0 = Add(a, n, ta, col), i1 = Add(b, n, tb, col), i2 = Add(c, n, tc, col);
+    T(i0, i1, i2);
+}
+
 void MeshBuilder::Box(Vector3 c, Vector3 s, Color col, const Matrix* xf, float tile) {
     float hx = s.x / 2, hy = s.y / 2, hz = s.z / 2;
     Vector3 p[8] = {
