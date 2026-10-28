@@ -18,12 +18,6 @@ static std::vector<std::string> BaseRoots() {
 
 void Audio::Init() { cache.clear(); }
 
-void Audio::Shutdown() {
-    StopAmbience();
-    for (auto& kv : cache) UnloadSound(kv.second);
-    cache.clear();
-}
-
 Sound Audio::Load(const std::string& name) {
     auto it = cache.find(name);
     if (it != cache.end()) return it->second;
@@ -116,4 +110,54 @@ void Audio::StopAmbience() {
         StopSound(currentAmbience);
         hasAmbience = false;
     }
+}
+
+void Audio::Shutdown() {
+    StopAmbience();
+    StopMusic();
+    if (musicLoaded) { UnloadMusicStream(music); musicLoaded = false; }
+    for (auto& kv : cache) UnloadSound(kv.second);
+    cache.clear();
+}
+
+bool Audio::LoadMusic(const std::string& name) {
+    if (musicLoaded) return true;
+    const char* exts[] = {".ogg", ".wav", ".mp3", ".flac"};
+    for (const auto& root : BaseRoots()) {
+        for (const char* ext : exts) {
+            std::string full = root + "assets/sounds/" + name + ext;
+            if (FileExists(full.c_str())) {
+                Music m = LoadMusicStream(full.c_str());
+                if (m.frameCount > 0 || m.stream.buffer != nullptr) {
+                    music = m;
+                    music.looping = true;
+                    musicLoaded = true;
+                    ::SetMusicVolume(music, musicVolume);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void Audio::PlayMusic() {
+    if (musicLoaded && !IsMusicStreamPlaying(music)) PlayMusicStream(music);
+}
+
+void Audio::StopMusic() {
+    if (musicLoaded && IsMusicStreamPlaying(music)) StopMusicStream(music);
+}
+
+void Audio::SetMusicVolume(float v) {
+    musicVolume = v < 0.0f ? 0.0f : (v > 1.0f ? 1.0f : v);
+    if (musicLoaded) ::SetMusicVolume(music, musicVolume);
+}
+
+void Audio::SetMusicPitch(float p) {
+    if (musicLoaded) ::SetMusicPitch(music, p);
+}
+
+void Audio::UpdateMusic() {
+    if (musicLoaded) UpdateMusicStream(music);   // safe even if not playing
 }

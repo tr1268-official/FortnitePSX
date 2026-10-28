@@ -98,6 +98,23 @@ private:
     bool ConnectMatchmaker();
     void DisconnectMatchmaker();
 
+    // Party ready + shared mode + matchmaking
+    void PushPartyState();
+    void SyncPartyFromJson(const std::string& partyObj);
+    void ToggleReady();
+    void TryStartMatchmaking();
+    void CancelMatchmaking();
+    bool PartyBothReady() const;
+    static const char* ModeToApiName(GameMode m);
+    static GameMode ModeFromApiName(const std::string& s);
+
+    // Online replication
+    void OnlineTick(float dt);
+    void OnlineApplySnapshot();
+    void OnlineHandleEvents();
+    int  ActorIndexFromNetId(int netId) const;
+    std::string WeaponNameForNet(const Actor& a) const;
+
     void UpdateLobby(float dt);
     void DrawLobby();
     void DrawLobbyNav(int W, int H);
@@ -170,7 +187,7 @@ private:
     State state = State::Login;
     LobbyTab tab = LobbyTab::Play;
     GameMode gameMode = GameMode::Solo;
-    PlayType playType = PlayType::Local;
+    PlayType playType = PlayType::Online;
     bool modePickerOpen = false;
     bool friendsOpen = false;     // centred friends list (F / controller Menu button)
     bool quit = false;
@@ -182,6 +199,24 @@ private:
     std::string partyMemberName;
     std::string partyMemberUser;
     int partyMemberLook = 1;
+
+    // Party ready-up
+    bool localReady = false;
+    bool partyMemberReady = false;
+    bool partyQueuing = false;
+    std::string matchmakeStatus;
+    float matchmakeRetryT = 0;
+    int   matchmakeAttempts = 0;
+    static constexpr float kMatchmakeConnectTimeout = 20.0f;
+
+    // Online net mapping
+    int netLocalId = -1;
+    std::vector<int> actorNetIds;
+
+    // Lobby music
+    void UpdateLobbyMusic(float dt);
+    bool  lobbyMusicLoaded = false;
+    float lobbyMusicVol = 0.0f;
 
     CharacterModel chars[kLookCount];
     HeldModels held;
